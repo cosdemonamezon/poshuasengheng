@@ -25,9 +25,9 @@ class Product {
   bool? select;
   String? createBy;
   String? updateBy;
-  ItemCategory? itemCategory;
+  // ItemCategory? itemCategory;
 
-  Product(this.id, this.atLeastStock, this.clientId, this.code, this.cost, this.createBy, this.details, this.image, this.itemCategory, this.memberId, this.name, this.price, this.profit, this.status,
+  Product(this.id, this.atLeastStock, this.clientId, this.code, this.cost, this.createBy, this.details, this.image, this.memberId, this.name, this.price, this.profit, this.status,
       this.stock, this.unit, this.unitId, this.updateBy,
       {this.select = false, this.qty = 1, this.qtyPack = 1});
 

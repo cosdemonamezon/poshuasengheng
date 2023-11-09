@@ -360,6 +360,7 @@ class _ProductPageState extends State<ProductPage> {
                                         List<String> substring2 = element.split('x');
                                         //products[index];
                                         final newProduct = Product.fromJson(products[index].toJson());
+                                        inspect(newProduct);
                                         newProduct.qty = int.parse(substring2[0]);
                                         newProduct.qtyPack = int.parse(substring2[1]);
                                         finalListProducts.add(newProduct);
