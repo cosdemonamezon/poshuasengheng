@@ -13,10 +13,10 @@ class ProductApi {
   const ProductApi();
 
   //get Product
-  static Future<List<Product>> getProductCategory() async {
+  static Future<List<Product>> getProductCategory({required int categoryId}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    final url = Uri.https(publicUrl, 'api/item', {'clientId': 'S0001'});
+    final url = Uri.https(publicUrl, 'api/item', {'clientId': 'S0001', 'categoryId': categoryId.toString()});
     final response = await http.get(
       url,
       headers: {'Authorization': 'Bearer $token'},
@@ -36,7 +36,7 @@ class ProductApi {
   static Future<List<Category>> getCategorys() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    final url = Uri.https(publicUrl, 'api/item', {'clientId': 'S0001'});
+    final url = Uri.https(publicUrl, 'api/item-category', {'clientId': 'S0001'});
     final response = await http.get(
       url,
       headers: {'Authorization': 'Bearer $token'},

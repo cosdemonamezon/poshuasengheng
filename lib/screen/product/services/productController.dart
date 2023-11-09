@@ -13,8 +13,13 @@ class ProductController extends ChangeNotifier {
 
   getListProductCategory(Category category) async{
     products.clear();
-    final _products = await ProductApi.getProductCategory();
-    products = _products.where((element) => element.name == category.name).toList();
+    final _products = await ProductApi.getProductCategory(categoryId: category.id!);
+    
+    if (_products.isNotEmpty) {    
+      products = _products; 
+      //products = _products.where((element) => element.name == 'กระเทียม').toList();
+      //products = _products.where((element) => element.itemCategory!.name == category.name).toList();
+    }    
     notifyListeners();
   }
 

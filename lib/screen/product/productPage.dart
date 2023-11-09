@@ -388,13 +388,15 @@ class _ProductPageState extends State<ProductPage> {
                                     }
                                     
                                   } catch (e) {
+                                    _myNumber.clear();
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (BuildContext context) {
                                         return AlertDialogYes(
                                           title: 'แจ้งเตือน',
-                                          description: 'รูปแบบข้อมูลไม่ถูกต้อง',
+                                          //description: 'รูปแบบข้อมูลไม่ถูกต้อง',
+                                          description: e.toString(),
                                           pressYes: () {
                                             Navigator.pop(context, true);
                                           },
