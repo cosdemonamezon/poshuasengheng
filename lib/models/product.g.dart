@@ -22,6 +22,9 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       json['status'] as bool?,
       json['stock'] as int?,
       json['unit'] as String?,
+      (json['itemUnitPrices'] as List<dynamic>?)
+          ?.map((e) => ItemUnitPrices.fromJson(e as Map<String, dynamic>))
+          .toList(),
       json['unitId'] as int?,
       json['updateBy'] as String?,
       select: json['select'] as bool? ?? false,
@@ -50,4 +53,5 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'select': instance.select,
       'createBy': instance.createBy,
       'updateBy': instance.updateBy,
+      'itemUnitPrices': instance.itemUnitPrices,
     };

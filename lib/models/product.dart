@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:poshuasengheng/models/itemcate.dart';
 import 'package:poshuasengheng/models/itemcategorys.dart';
+import 'package:poshuasengheng/models/itemunitprices.dart';
 
 part 'product.g.dart';
 
@@ -26,10 +27,11 @@ class Product {
   bool? select;
   String? createBy;
   String? updateBy;
+  List<ItemUnitPrices>? itemUnitPrices;
   // ItemCategorys? itemCategory;
 
   Product(this.id, this.atLeastStock, this.clientId, this.code, this.cost, this.createBy, this.details, this.image, this.memberId, this.name, this.price, this.profit, this.status,
-      this.stock, this.unit, this.unitId, this.updateBy, 
+      this.stock, this.unit, this.itemUnitPrices, this.unitId, this.updateBy,
       {this.select = false, this.qty = 1, this.qtyPack = 1,});
 
   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:poshuasengheng/constants/constants.dart';
+import 'package:poshuasengheng/models/itemunitprices.dart';
 import 'package:poshuasengheng/models/product.dart';
 
 class InputNumberDialog extends StatefulWidget {
@@ -42,7 +43,7 @@ class _InputNumberDialogState extends State<InputNumberDialog> {
     return AlertDialog(
       title: Text('สินค้า: ${widget.product.name}'),
       content: Column(
-        mainAxisSize: MainAxisSize.min,
+        //mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -84,9 +85,9 @@ class _InputNumberDialogState extends State<InputNumberDialog> {
                     builder: (BuildContext context) {
                       return Container(
                         height: size.height * 0.90,
-                        padding: EdgeInsets.symmetric(horizontal: 50.0),
+                        //padding: EdgeInsets.symmetric(horizontal: 50.0),
                         child: Column(
-                          children: [                            
+                          children: [
                             Padding(
                               padding: EdgeInsets.all(10),
                               child: SizedBox(
@@ -102,24 +103,24 @@ class _InputNumberDialogState extends State<InputNumberDialog> {
                                 )),
                               ),
                             ),
-                            NumPad(
-                              buttonSize: 70,
-                              buttonColor: Colors.black,
-                              iconColor: Colors.deepOrange,
-                              controller: _myNumber,
-                              delete: () {
-                                if (_myNumber.text != null) {
-                                  if (_myNumber.text.length > 0) {
-                                    _myNumber.text = _myNumber.text.substring(0, _myNumber.text.length - 1);
-                                  }
-                                }
-                              },
-                              // do something with the input numbers
-                              onSubmit: () {
-                                debugPrint('Your code: ${_myNumber.text}');
-                                Navigator.pop(context, _myNumber.text);
-                              },
-                            ),
+                            // NumPad(
+                            //   buttonSize: 20,
+                            //   buttonColor: Colors.black,
+                            //   iconColor: Colors.deepOrange,
+                            //   controller: _myNumber,
+                            //   delete: () {
+                            //     if (_myNumber.text != null) {
+                            //       if (_myNumber.text.length > 0) {
+                            //         _myNumber.text = _myNumber.text.substring(0, _myNumber.text.length - 1);
+                            //       }
+                            //     }
+                            //   },
+                            //   // do something with the input numbers
+                            //   onSubmit: () {
+                            //     debugPrint('Your code: ${_myNumber.text}');
+                            //     Navigator.pop(context, _myNumber.text);
+                            //   },
+                            // ),
                           ],
                         ),
                       );
@@ -310,22 +311,24 @@ class NumPad extends StatelessWidget {
   final TextEditingController controller;
   final Function delete;
   final Function onSubmit;
+  final List<ItemUnitPrices> itemUnitPrices;
 
-  const NumPad({
-    Key? key,
-    this.buttonSize = 70,
-    this.buttonColor = Colors.indigo,
-    this.iconColor = Colors.amber,
-    required this.delete,
-    required this.onSubmit,
-    required this.controller,
-  }) : super(key: key);
+  const NumPad(
+      {Key? key,
+      this.buttonSize = 10,
+      this.buttonColor = Colors.indigo,
+      this.iconColor = Colors.amber,
+      required this.delete,
+      required this.onSubmit,
+      required this.controller,
+      required this.itemUnitPrices})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    //final size = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.only(left: 5, right: 5),
+      //margin: const EdgeInsets.only(left:1, right: 1),
       child: Column(
         children: [
           //const SizedBox(height: 40),
@@ -354,7 +357,7 @@ class NumPad extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -378,7 +381,7 @@ class NumPad extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -402,11 +405,10 @@ class NumPad extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // this button is used to delete the last number
               NumberButton(
                 number: '0',
                 size: buttonSize,
@@ -427,7 +429,34 @@ class NumPad extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 15),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   children: List.generate(itemUnitPrices.length, (index) => NumberButton1(
+          //       number: '${itemUnitPrices[index].value}',
+          //       size: buttonSize,
+          //       color: buttonColor,
+          //       controller: controller,
+          //       name: '${itemUnitPrices[index].name}',
+          //       price: '${itemUnitPrices[index].price}',
+          //     ),),
+          // ),
+          //ส่วนที่โชว์ ปุ่ม สามปุ่ม
+          Wrap(
+            alignment: WrapAlignment.start,
+            children: List.generate(
+                itemUnitPrices.length,
+                (index) => Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      child: NumKeyShortcut(
+                        number: itemUnitPrices[index].value.toString(),
+                        price: itemUnitPrices[index].price.toString(),
+                        name: itemUnitPrices[index].name.toString(),
+                        controller: controller,
+                      ),
+                    )),
+          ),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -446,38 +475,43 @@ class NumPad extends StatelessWidget {
                   height: 60,
                   width: 150,
                   child: Center(
-                    child: Text('ยืนยัน',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),),
+                    child: Text(
+                      'ยืนยัน',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
                   ),
                 ),
               ),
-              // Container(
-              //   decoration: BoxDecoration(color: kSecondaryColor, borderRadius: BorderRadius.all(Radius.circular(20))),
-              //   height: size.height * 0.05,
-              //   width: size.height * 0.08,
-              //   child: Center(
-              //       child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Text(
-              //         'ยืนยันรายการ',
-              //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-              //       ),
-                    
-              //     ],
-              //   )),
-              // ),
-              // IconButton(
-              //   onPressed: () => onSubmit(),
-              //   icon: Icon(
-              //     Icons.confirmation_number,
-              //     color: iconColor,
-              //   ),
-              //   iconSize: buttonSize,
-              // ),
-              //CircleAvatar(radius: 32,),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class NumKeyShortcut extends StatelessWidget {
+  const NumKeyShortcut({super.key, required this.number, required this.controller, this.name, this.price});
+  final String number;
+  final TextEditingController controller;
+  final String? price;
+  final String? name;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        controller.text += number.toString();
+      },
+      child: Container(
+        height: 50,
+        width: 80,
+        decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.all(Radius.circular(20))),
+        child: Center(
+            child: Text(
+          name.toString(),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+        )),
       ),
     );
   }
@@ -515,7 +549,43 @@ class NumberButton extends StatelessWidget {
         child: Center(
           child: Text(
             number.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 30),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 25),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NumberButton1 extends StatelessWidget {
+  final String number;
+  final double size;
+  final Color color;
+  final TextEditingController controller;
+  final String? price;
+  final String? name;
+
+  const NumberButton1({Key? key, required this.number, required this.size, required this.color, required this.controller, this.name, this.price}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(size / 2),
+          ),
+        ),
+        onPressed: () {
+          controller.text += number.toString();
+        },
+        child: Center(
+          child: Text(
+            name.toString(),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
           ),
         ),
       ),

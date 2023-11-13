@@ -447,12 +447,12 @@ class _CartProductsState extends State<CartProducts> {
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
                                                           Expanded(
-                                                            flex: 7,
+                                                            flex: 6,
                                                             child: Text(
                                                                 '(${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack}) x ${groupProduct[index].value[index2].price}'),
                                                           ),
                                                           Expanded(
-                                                              flex: 3,
+                                                              flex: 4,
                                                               child: Row(
                                                                 mainAxisAlignment: MainAxisAlignment.end,
                                                                 children: [

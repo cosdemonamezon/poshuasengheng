@@ -296,45 +296,48 @@ class _ProductPageState extends State<ProductPage> {
                                 builder: (BuildContext context) {
                                   return Container(
                                     height: size.height * 0.90,
-                                    padding: EdgeInsets.symmetric(horizontal: 50.0),
-                                    child: Column(
-                                      children: [
-                                        SizedBox(height: 40),
-                                        Padding(
-                                          padding: EdgeInsets.all(20),
-                                          child: SizedBox(
-                                            height: size.height * 0.05,
-                                            child: Center(
-                                                child: TextField(
-                                              controller: _myNumber,
-                                              textAlign: TextAlign.center,
-                                              showCursor: false,
-                                              style: TextStyle(fontSize: 20),
-                                              // Disable the default soft keybaord
-                                              keyboardType: TextInputType.none,
-                                            )),
+                                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          SizedBox(height: 25),
+                                          Padding(
+                                            padding: EdgeInsets.all(5),
+                                            child: SizedBox(
+                                              height: size.height * 0.05,
+                                              child: Center(
+                                                  child: TextField(
+                                                controller: _myNumber,
+                                                textAlign: TextAlign.center,
+                                                showCursor: false,
+                                                style: TextStyle(fontSize: 20),
+                                                // Disable the default soft keybaord
+                                                keyboardType: TextInputType.none,
+                                              )),
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        NumPad(
-                                          buttonSize: 70,
-                                          buttonColor: Colors.grey,
-                                          iconColor: Colors.red,
-                                          controller: _myNumber,
-                                          delete: () {
-                                            if (_myNumber.text != null) {
-                                              if (_myNumber.text.length > 0) {
-                                                _myNumber.text = _myNumber.text.substring(0, _myNumber.text.length - 1);
+                                          SizedBox(height: 10),
+                                          NumPad(
+                                            buttonSize: 70,
+                                            buttonColor: Colors.grey,
+                                            iconColor: Colors.red,
+                                            controller: _myNumber,
+                                            itemUnitPrices: products[index].itemUnitPrices!,
+                                            delete: () {
+                                              if (_myNumber.text != null) {
+                                                if (_myNumber.text.length > 0) {
+                                                  _myNumber.text = _myNumber.text.substring(0, _myNumber.text.length - 1);
+                                                }
                                               }
-                                            }
-                                          },
-                                          // do something with the input numbers
-                                          onSubmit: () {
-                                            debugPrint('Your code: ${_myNumber.text}');
-                                            Navigator.pop(context, _myNumber.text);
-                                          },
-                                        ),
-                                      ],
+                                            },
+                                            // do something with the input numbers
+                                            onSubmit: () {
+                                              debugPrint('Your code: ${_myNumber.text}');
+                                              Navigator.pop(context, _myNumber.text);
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -356,21 +359,93 @@ class _ProductPageState extends State<ProductPage> {
                                     if (a == true) {
                                       print('สุตรเดิม');
                                       List<String> substrings = addQty.split('/');
-                                      for (var element in substrings) {
-                                        List<String> substring2 = element.split('x');
-                                        //products[index];
-                                        final newProduct = Product.fromJson(products[index].toJson());
-                                        inspect(newProduct);
-                                        newProduct.qty = int.parse(substring2[0]);
-                                        newProduct.qtyPack = int.parse(substring2[1]);
-                                        finalListProducts.add(newProduct);
-                                        _myNumber.clear();
+                                      if (substrings.contains("")) {
+                                        substrings.removeAt(1);
+                                        for (var element in substrings) {
+                                          List<String> substring2 = element.split('x');
+                                          //products[index];
+                                          //final newProduct = Product.fromJson(products[index].toJson());
+                                          final newProduct = Product(
+                                              products[index].id,
+                                              products[index].atLeastStock,
+                                              products[index].clientId,
+                                              products[index].code,
+                                              products[index].cost,
+                                              products[index].createBy,
+                                              products[index].details,
+                                              products[index].image,
+                                              products[index].memberId,
+                                              products[index].name,
+                                              products[index].price,
+                                              products[index].profit,
+                                              products[index].status,
+                                              products[index].stock,
+                                              products[index].unit,
+                                              products[index].itemUnitPrices,
+                                              products[index].unitId,
+                                              products[index].updateBy);
+                                          inspect(newProduct);
+                                          newProduct.qty = int.parse(substring2[0]);
+                                          newProduct.qtyPack = int.parse(substring2[1]);
+                                          finalListProducts.add(newProduct);
+                                          _myNumber.clear();
+                                        }
+                                        inspect(finalListProducts);
+                                      } else {
+                                        for (var element in substrings) {
+                                          List<String> substring2 = element.split('x');
+                                          //products[index];
+                                          //final newProduct = Product.fromJson(products[index].toJson());
+                                          final newProduct = Product(
+                                              products[index].id,
+                                              products[index].atLeastStock,
+                                              products[index].clientId,
+                                              products[index].code,
+                                              products[index].cost,
+                                              products[index].createBy,
+                                              products[index].details,
+                                              products[index].image,
+                                              products[index].memberId,
+                                              products[index].name,
+                                              products[index].price,
+                                              products[index].profit,
+                                              products[index].status,
+                                              products[index].stock,
+                                              products[index].unit,
+                                              products[index].itemUnitPrices,
+                                              products[index].unitId,
+                                              products[index].updateBy);
+                                          inspect(newProduct);
+                                          newProduct.qty = int.parse(substring2[0]);
+                                          newProduct.qtyPack = int.parse(substring2[1]);
+                                          finalListProducts.add(newProduct);
+                                          _myNumber.clear();
+                                        }
+                                        inspect(finalListProducts);
                                       }
-                                      inspect(finalListProducts);
                                     } else {
                                       print('สุตรใหม่');
                                       List<String> substrings = addQty.split('/');
-                                      final newProduct = Product.fromJson(products[index].toJson());
+                                      //final newProduct = Product.fromJson(products[index].toJson());
+                                      final newProduct = Product(
+                                          products[index].id,
+                                          products[index].atLeastStock,
+                                          products[index].clientId,
+                                          products[index].code,
+                                          products[index].cost,
+                                          products[index].createBy,
+                                          products[index].details,
+                                          products[index].image,
+                                          products[index].memberId,
+                                          products[index].name,
+                                          products[index].price,
+                                          products[index].profit,
+                                          products[index].status,
+                                          products[index].stock,
+                                          products[index].unit,
+                                          products[index].itemUnitPrices,
+                                          products[index].unitId,
+                                          products[index].updateBy);
                                       newProduct.qty = int.parse(substrings[0]);
                                       newProduct.qtyPack = 1;
                                       finalListProducts.add(newProduct);
@@ -386,7 +461,6 @@ class _ProductPageState extends State<ProductPage> {
                                       // }
                                       inspect(finalListProducts);
                                     }
-                                    
                                   } catch (e) {
                                     _myNumber.clear();
                                     showDialog(
