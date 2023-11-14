@@ -249,9 +249,10 @@ class _CartProducts2State extends State<CartProducts2> {
                                                       height: size.height * 0.12,
                                                     )
                                                   : Image.asset(
-                                                      'assets/images/noimage.jpg',
+                                                      'assets/images/Screenshot.png',
                                                       fit: BoxFit.fill,
                                                       height: size.height * 0.12,
+                                                      width: size.height * 0.115,
                                                     ),
                                             ],
                                           ),
