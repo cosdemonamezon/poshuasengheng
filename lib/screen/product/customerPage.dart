@@ -152,9 +152,9 @@ class _CustomerPageState extends State<CustomerPage> {
                       controller: name,
                       hintText: '',
                       validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return 'กรุณากรอก';
-                        }
+                        // if (val == null || val.isEmpty) {
+                        //   return 'กรุณากรอก';
+                        // }
                         // else if (RegExp(r'\s').hasMatch(val)) {
                         //   return 'รูปแบบไม่ถูกต้อง';
                         // }
@@ -180,11 +180,11 @@ class _CustomerPageState extends State<CustomerPage> {
                       hintText: '',
                       keyboardType: TextInputType.number,
                       validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return 'กรุณากรอก';
-                        } else if (RegExp(r'\s').hasMatch(val)) {
-                          return 'รูปแบบไม่ถูกต้อง';
-                        }
+                        // if (val == null || val.isEmpty) {
+                        //   return 'กรุณากรอก';
+                        // } else if (RegExp(r'\s').hasMatch(val)) {
+                        //   return 'รูปแบบไม่ถูกต้อง';
+                        // }
                         return null;
                       },
                     ),
