@@ -995,7 +995,7 @@ class _CartProducts2State extends State<CartProducts2> {
               enable == false
                   ? InkWell(
                       onTap: () async {
-                        _capturePngPag();
+                        await _capturePngPag();
                         if (pngBytesPag != null) {
                           await PrinterService().print(widget.customer, pngBytesPag!);
                           setState(() {
@@ -1048,6 +1048,7 @@ class _CartProducts2State extends State<CartProducts2> {
                             if (order != null) {
                               setState(() {
                                 product2.clear();
+                                _finalListProducts.clear();
                                 groupProduct.clear();
                               });
                               final ok = await showDialog(
