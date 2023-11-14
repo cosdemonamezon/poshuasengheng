@@ -7,6 +7,7 @@ import 'package:poshuasengheng/models/category.dart';
 import 'package:poshuasengheng/models/customer.dart';
 import 'package:poshuasengheng/models/product.dart';
 import 'package:poshuasengheng/screen/product/cartProducts.dart';
+import 'package:poshuasengheng/screen/product/cartProducts2.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
 import 'package:poshuasengheng/widgets/LoadingDialog.dart';
 import 'package:poshuasengheng/widgets/inputNumberDialog.dart';
@@ -170,7 +171,7 @@ class _ProductPageState extends State<ProductPage> {
                         final cartProduct = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CartProducts(
+                                builder: (context) => CartProducts2(
                                       finalListProducts: finalListProducts,
                                       customer: widget.customer,
                                     )));
@@ -326,7 +327,8 @@ class _ProductPageState extends State<ProductPage> {
                                             delete: () {
                                               if (_myNumber.text != null) {
                                                 if (_myNumber.text.length > 0) {
-                                                  _myNumber.text = _myNumber.text.substring(0, _myNumber.text.length - 1);
+                                                  _myNumber.text =
+                                                      _myNumber.text.substring(0, _myNumber.text.length - 1);
                                                 }
                                               }
                                             },
@@ -366,24 +368,25 @@ class _ProductPageState extends State<ProductPage> {
                                           //products[index];
                                           //final newProduct = Product.fromJson(products[index].toJson());
                                           final newProduct = Product(
-                                              products[index].id,
-                                              products[index].atLeastStock,
-                                              products[index].clientId,
-                                              products[index].code,
-                                              products[index].cost,
-                                              products[index].createBy,
-                                              products[index].details,
-                                              products[index].image,
-                                              products[index].memberId,
-                                              products[index].name,
-                                              products[index].price,
-                                              products[index].profit,
-                                              products[index].status,
-                                              products[index].stock,
-                                              products[index].unit,
-                                              products[index].itemUnitPrices,
-                                              products[index].unitId,
-                                              products[index].updateBy);
+                                            products[index].id,
+                                            products[index].atLeastStock,
+                                            products[index].clientId,
+                                            products[index].code,
+                                            products[index].cost,
+                                            products[index].createBy,
+                                            products[index].details,
+                                            products[index].image,
+                                            products[index].memberId,
+                                            products[index].name,
+                                            products[index].price,
+                                            products[index].profit,
+                                            products[index].status,
+                                            products[index].stock,
+                                            products[index].unit,
+                                            products[index].itemUnitPrices,
+                                            products[index].unitId,
+                                            products[index].updateBy,
+                                          );
                                           inspect(newProduct);
                                           newProduct.qty = int.parse(substring2[0]);
                                           newProduct.qtyPack = int.parse(substring2[1]);
@@ -578,7 +581,7 @@ class _ProductPageState extends State<ProductPage> {
                   final cartProduct = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CartProducts(
+                          builder: (context) => CartProducts2(
                                 finalListProducts: finalListProducts,
                                 customer: widget.customer,
                               )));

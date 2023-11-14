@@ -6,7 +6,9 @@ import 'package:poshuasengheng/models/category.dart';
 import 'package:poshuasengheng/models/customer.dart';
 import 'package:poshuasengheng/models/item.dart';
 import 'package:poshuasengheng/models/orderdraft.dart';
+import 'package:poshuasengheng/models/priceUint.dart';
 import 'package:poshuasengheng/models/product.dart';
+import 'package:poshuasengheng/models/product2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductApi {
@@ -51,7 +53,6 @@ class ProductApi {
       throw Exception(data['message']);
     }
   }
-
 
   //add Order-darf
   static Future<OrderDraft> addOrderDarf({required List<Item> item, required Customer customer}) async {
@@ -118,4 +119,52 @@ class ProductApi {
     }
   }
 
+/////////getPriceUnit
+  // static Future<PriceUint> getPriceUint({
+  //   required int itemId,
+  //   required int value,
+  // }) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final token = prefs.getString('token');
+  //   var headers = {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'};
+  //   final apiUrl = Uri.https(publicUrl, '/api/item/get_price_unit');
+  //   final response = await http.post(
+  //     apiUrl,
+  //     headers: headers,
+  //     body: convert.jsonEncode({
+  //       'itemId': itemId,
+  //       'value': value,
+  //     }),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     final data = convert.jsonDecode(response.body);
+  //     return PriceUint.fromJson(data['data']);
+  //   } else {
+  //     final data = convert.jsonDecode(response.body);
+  //     throw Exception(data['message']);
+  //   }
+  // }
+  static Future<List<Product2>> getListPriceUint({
+    required List<Product> item,
+  }) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    var headers = {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'};
+    final apiUrl = Uri.https(publicUrl, '/api/item/get_multiple_price_unit');
+    final response = await http.post(
+      apiUrl,
+      headers: headers,
+      body: convert.jsonEncode({
+        'item': item,
+      }),
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final data = convert.jsonDecode(response.body);
+      final list = data['data'] as List;
+      return list.map((e) => Product2.fromJson(e)).toList();
+    } else {
+      final data = convert.jsonDecode(response.body);
+      throw Exception(data['message']);
+    }
+  }
 }

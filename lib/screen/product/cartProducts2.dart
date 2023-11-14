@@ -22,16 +22,16 @@ import 'package:poshuasengheng/widgets/materialDialog.dart';
 import 'package:provider/provider.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
-class CartProducts extends StatefulWidget {
-  CartProducts({super.key, required this.finalListProducts, required this.customer});
+class CartProducts2 extends StatefulWidget {
+  CartProducts2({super.key, required this.finalListProducts, required this.customer});
   List<Product> finalListProducts;
   Customer customer;
 
   @override
-  State<CartProducts> createState() => _CartProductsState();
+  State<CartProducts2> createState() => _CartProducts2State();
 }
 
-class _CartProductsState extends State<CartProducts> {
+class _CartProducts2State extends State<CartProducts2> {
   int qty = 1;
   int qtyPack = 1;
   bool printBinded = false;
@@ -49,7 +49,7 @@ class _CartProductsState extends State<CartProducts> {
   List<Item> items = [];
   Map<String?, List<Product>>? newGroup;
   //List<GroupProduct>? groupProduct;
-  List<MapEntry<String, List<Product>>> groupProduct = [];
+  List<MapEntry<String, List<Product2>>> groupProduct = [];
   bool enable = false;
   List<PriceUint> qtyPrice = [];
   List<Product2> product2 = [];
@@ -57,7 +57,6 @@ class _CartProductsState extends State<CartProducts> {
   @override
   void initState() {
     super.initState();
-    priceUnit();
     inspect(widget.finalListProducts);
     _bindingPrinter().then((bool? isBind) async {
       SunmiPrinter.paperSize().then((int size) {
@@ -77,40 +76,38 @@ class _CartProductsState extends State<CartProducts> {
           serialNumber = serial;
         });
       });
+      final qty2 = await ProductApi.getListPriceUint(
+        item: widget.finalListProducts,
+      );
 
       setState(() {
+        product2 = qty2;
+        inspect(product2);
         printBinded = isBind!;
         _finalListProducts = widget.finalListProducts;
-        if (_finalListProducts.isNotEmpty) {
-          groupProduct = groupBy(_finalListProducts, (e) => '${e.name}').entries.toList();
+        if (product2.isNotEmpty) {
+          groupProduct = groupBy(product2, (e) => '${e.name}').entries.toList();
           // inspect(groupProduct);
           // print(groupProduct[0].key);
           // print(groupProduct[0].value[0].qty);
           // print(groupProduct[1].key);
           // print(groupProduct[1].value[1].qty);
         }
-        inspect(groupProduct);
+        // inspect(groupProduct);
       });
     });
   }
 
-  Future<void> priceUnit() async {
-    final qty2 = await ProductApi.getListPriceUint(
-      item: widget.finalListProducts,
-    );
-    inspect(qty);
-    setState(() {
-      product2 = qty2;
-    });
-    // final qty = await context
-    //     .read<ProductController>()
-    //     .getPriceUint(widget.finalListProducts[i].id, widget.finalListProducts[i].qtyPack ?? 0);
-    // inspect(qty);
-    // setState(() {
-    //   qtyPrice.add(qty);
-    //   // inspect(qtyPrice);
-    // });
-  }
+  // Future<void> priceUnit() async {
+  //   // final qty = await context
+  //   //     .read<ProductController>()
+  //   //     .getPriceUint(widget.finalListProducts[i].id, widget.finalListProducts[i].qtyPack ?? 0);
+  //   // inspect(qty);
+  //   // setState(() {
+  //   //   qtyPrice.add(qty);
+  //   //   // inspect(qtyPrice);
+  //   // });
+  // }
 
   Future<bool?> _bindingPrinter() async {
     final bool? result = await SunmiPrinter.bindingPrinter();
@@ -165,20 +162,21 @@ class _CartProductsState extends State<CartProducts> {
     symbol: '', // Thai Baht symbol
   );
 
-  double sum(List<Product> product) => product.fold(
+  double sum(List<Product2> product) => product.fold(
       0,
       (
         previous,
         o,
       ) =>
-          previous + ((o.qty! * o.qtyPack!) * o.price!));
+          previous + ((o.qty! * o.qtyPack!) * o.current_price_per_unit!));
 
-  double newtotal(Product orders) => double.parse(((orders.qty! * orders.qtyPack!) * orders.price!).toString());
-  double sumQty(List<Product> productQty) =>
+  double newtotal(Product2 orders) =>
+      double.parse(((orders.qty! * orders.qtyPack!) * orders.current_price_per_unit!).toString());
+  double sumQty(List<Product2> productQty) =>
       productQty.fold(0, (previousValue, element) => previousValue + double.parse(element.qty.toString()));
-  double sumQtyPack(List<Product> productQtyPack) =>
+  double sumQtyPack(List<Product2> productQtyPack) =>
       productQtyPack.fold(0, (previousValue, element) => previousValue + double.parse(element.qtyPack.toString()));
-  double sumPrice(List<Product> productPrice) =>
+  double sumPrice(List<Product2> productPrice) =>
       productPrice.fold(0, (previousValue, element) => previousValue + newtotal(element));
 
   @override
@@ -230,10 +228,10 @@ class _CartProductsState extends State<CartProducts> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              _finalListProducts.isNotEmpty
+              product2.isNotEmpty
                   ? Column(
                       children: List.generate(
-                          _finalListProducts.length,
+                          product2.length,
                           (index) => Card(
                                 child: Row(
                                   children: [
@@ -243,10 +241,10 @@ class _CartProductsState extends State<CartProducts> {
                                           padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
                                           child: Column(
                                             children: [
-                                              Text('${widget.finalListProducts[index].name}'),
-                                              _finalListProducts[index].image != null
+                                              Text('${product2[index].name}'),
+                                              product2[index].image != null
                                                   ? Image.network(
-                                                      _finalListProducts[index].image!,
+                                                      product2[index].image!,
                                                       fit: BoxFit.fill,
                                                       height: size.height * 0.12,
                                                     )
@@ -276,9 +274,8 @@ class _CartProductsState extends State<CartProducts> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        if (_finalListProducts[index].qty! > 1) {
-                                                          _finalListProducts[index].qty =
-                                                              _finalListProducts[index].qty! - 1;
+                                                        if (product2[index].qty! > 1) {
+                                                          product2[index].qty = product2[index].qty! - 1;
                                                         } else {}
                                                       });
                                                     },
@@ -297,7 +294,7 @@ class _CartProductsState extends State<CartProducts> {
                                                       width: size.width * 0.11,
                                                       child: Center(
                                                           child: Text(
-                                                        '${_finalListProducts[index].qty}',
+                                                        '${product2[index].qty}',
                                                         style: TextStyle(fontSize: 15),
                                                       )),
                                                     ),
@@ -305,8 +302,7 @@ class _CartProductsState extends State<CartProducts> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        _finalListProducts[index].qty =
-                                                            _finalListProducts[index].qty! + 1;
+                                                        product2[index].qty = product2[index].qty! + 1;
                                                       });
                                                     },
                                                     child: Container(
@@ -321,10 +317,10 @@ class _CartProductsState extends State<CartProducts> {
                                                   // )
                                                 ],
                                               ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
-                                                child: Text('ราคา ${_finalListProducts[index].price} บาท'),
-                                              ),
+                                              // Padding(
+                                              //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+                                              //   child: Text('ราคา ${product2[index].current_price_per_unit} บาท'),
+                                              // ),
                                               Divider(),
                                               Text(
                                                 'ถุง',
@@ -335,9 +331,8 @@ class _CartProductsState extends State<CartProducts> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        if (_finalListProducts[index].qtyPack! > 1) {
-                                                          _finalListProducts[index].qtyPack =
-                                                              _finalListProducts[index].qtyPack! - 1;
+                                                        if (product2[index].qtyPack! > 1) {
+                                                          product2[index].qtyPack = product2[index].qtyPack! - 1;
                                                         } else {}
                                                       });
                                                     },
@@ -356,7 +351,7 @@ class _CartProductsState extends State<CartProducts> {
                                                       width: size.width * 0.11,
                                                       child: Center(
                                                           child: Text(
-                                                        '${_finalListProducts[index].qtyPack}',
+                                                        '${product2[index].qtyPack}',
                                                         style: TextStyle(fontSize: 15),
                                                       )),
                                                     ),
@@ -364,8 +359,7 @@ class _CartProductsState extends State<CartProducts> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        _finalListProducts[index].qtyPack =
-                                                            _finalListProducts[index].qtyPack! + 1;
+                                                        product2[index].qtyPack = product2[index].qtyPack! + 1;
                                                       });
                                                     },
                                                     child: Container(
@@ -379,32 +373,35 @@ class _CartProductsState extends State<CartProducts> {
                                               Padding(
                                                 padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
                                                 child: Text(
-                                                    'ราคา ${_finalListProducts[index].price} บาท'), //${qtyPrice[index].price_per_unit}
+                                                    'ราคา ${product2[index].current_price_per_unit} บาท'), //${qtyPrice[index].price_per_unit}
                                               ),
                                               Divider(),
                                             ],
                                           ),
                                         )),
-                                    Expanded(
-                                        flex: 2,
-                                        child: IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _finalListProducts.removeAt(index);
-                                                if (_finalListProducts.isNotEmpty) {
-                                                  groupProduct =
-                                                      groupBy(_finalListProducts, (e) => '${e.name}').entries.toList();
-                                                } else {
-                                                  groupProduct.clear();
-                                                }
-                                              });
-                                              //inspect(widget.finalListProducts);
-                                            },
-                                            icon: Icon(
-                                              Icons.delete,
-                                              color: Colors.red,
-                                              size: 32,
-                                            )))
+                                    enable == false
+                                        ? Expanded(
+                                            flex: 2,
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    product2.removeAt(index);
+                                                    _finalListProducts.removeAt(index);
+                                                    if (product2.isNotEmpty) {
+                                                      groupProduct =
+                                                          groupBy(product2, (e) => '${e.name}').entries.toList();
+                                                    } else {
+                                                      groupProduct.clear();
+                                                    }
+                                                  });
+                                                  //inspect(widget.finalListProducts);
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                  size: 32,
+                                                )))
+                                        : SizedBox.shrink()
                                   ],
                                 ),
                               )),
@@ -495,7 +492,7 @@ class _CartProductsState extends State<CartProducts> {
                                                           Expanded(
                                                             flex: 6,
                                                             child: Text(
-                                                                '(${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack}) x ${groupProduct[index].value[index2].price}'), //${groupProduct[index].value[index2].price}${qtyPrice[index2].price_per_unit}
+                                                                '(${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack}) x ${groupProduct[index].value[index2].current_price_per_unit}'), //${groupProduct[index].value[index2].price}${qtyPrice[index2].price_per_unit}
                                                           ),
                                                           Expanded(
                                                               flex: 4,
@@ -535,7 +532,7 @@ class _CartProductsState extends State<CartProducts> {
                                         Expanded(
                                             flex: 5,
                                             child: Text(
-                                              'รวามรายการ',
+                                              'รวมรายการ',
                                               style: TextStyle(fontSize: 16),
                                             )),
                                         Expanded(
@@ -572,7 +569,7 @@ class _CartProductsState extends State<CartProducts> {
                                                 enable == false
                                                     ? Text('0')
                                                     : Text(
-                                                        '${currencyFormat.format(sum(_finalListProducts))}',
+                                                        '${currencyFormat.format(sum(product2))}',
                                                         style: TextStyle(fontSize: 16),
                                                       )
                                               ],
@@ -637,7 +634,7 @@ class _CartProductsState extends State<CartProducts> {
                                                 enable == false
                                                     ? Text('0')
                                                     : Text(
-                                                        '${currencyFormat.format(sum(_finalListProducts))}',
+                                                        '${currencyFormat.format(sum(product2))}',
                                                         style: TextStyle(fontSize: 16),
                                                       )
                                               ],
@@ -1032,13 +1029,13 @@ class _CartProductsState extends State<CartProducts> {
                         if (pngBytes != null) {
                           items.clear();
                           await PrinterService().print(widget.customer, pngBytes!);
-                          for (var i = 0; i < _finalListProducts.length; i++) {
+                          for (var i = 0; i < product2.length; i++) {
                             final item = Item(0, 0, 0, 0);
                             setState(() {
-                              item.itemId = _finalListProducts[i].id;
-                              item.qty = _finalListProducts[i].qty;
-                              item.unitItemId = _finalListProducts[i].unitId;
-                              item.bag = _finalListProducts[i].qtyPack;
+                              item.itemId = product2[i].id;
+                              item.qty = product2[i].qty;
+                              item.unitItemId = product2[i].unitId;
+                              item.bag = product2[i].qtyPack;
                               items.add(item);
                             });
                             //inspect(items);
@@ -1050,7 +1047,7 @@ class _CartProductsState extends State<CartProducts> {
                             LoadingDialog.close(context);
                             if (order != null) {
                               setState(() {
-                                _finalListProducts.clear();
+                                product2.clear();
                                 groupProduct.clear();
                               });
                               final ok = await showDialog(
@@ -1165,6 +1162,7 @@ class _CartProductsState extends State<CartProducts> {
               InkWell(
                 onTap: () async {
                   setState(() {
+                    product2.clear();
                     _finalListProducts.clear();
                     groupProduct.clear();
                   });

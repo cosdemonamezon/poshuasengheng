@@ -1,12 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:poshuasengheng/models/itemcate.dart';
-import 'package:poshuasengheng/models/itemcategorys.dart';
 import 'package:poshuasengheng/models/itemunitprices.dart';
 
-part 'product.g.dart';
+part 'product2.g.dart';
 
 @JsonSerializable()
-class Product {
+class Product2 {
   final int id;
   String? code;
   int? stock;
@@ -29,8 +27,11 @@ class Product {
   String? updateBy;
   List<ItemUnitPrices>? itemUnitPrices;
   // ItemCategorys? itemCategory;
+  int? current_price;
+  int? current_price_per_unit;
+  int? current_total_price;
 
-  Product(
+  Product2(
     this.id,
     this.atLeastStock,
     this.clientId,
@@ -48,13 +49,16 @@ class Product {
     this.unit,
     this.itemUnitPrices,
     this.unitId,
+    this.current_price,
+    this.current_price_per_unit,
+    this.current_total_price,
     this.updateBy, {
     this.select = false,
     this.qty = 1,
     this.qtyPack = 1,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+  factory Product2.fromJson(Map<String, dynamic> json) => _$Product2FromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductToJson(this);
+  Map<String, dynamic> toJson() => _$Product2ToJson(this);
 }
