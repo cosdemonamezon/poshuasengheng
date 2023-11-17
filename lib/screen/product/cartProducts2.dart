@@ -481,7 +481,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                          '${groupProduct[index].key}  ${sumQty(groupProduct[index].value)} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}'),
+                                                          '${groupProduct[index].key}  ${sumQty(groupProduct[index].value).toInt()} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}'),
                                                     ],
                                                   ),
                                                   Column(
@@ -503,7 +503,9 @@ class _CartProducts2State extends State<CartProducts2> {
                                                                   enable == false
                                                                       ? Text('')
                                                                       : Text(
-                                                                          '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
+                                                                          '${newtotal(groupProduct[index].value[index2]).toInt()}'),
+                                                                  // : Text(
+                                                                  //     '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
                                                                 ],
                                                               )),
                                                         ],
@@ -515,8 +517,9 @@ class _CartProducts2State extends State<CartProducts2> {
                                                     children: [
                                                       enable == false
                                                           ? Text('')
-                                                          : Text(
-                                                              'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
+                                                          : Text('รวม ${sumPrice(groupProduct[index].value).toInt()}'),
+                                                      // : Text(
+                                                      //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
                                                       //Text('${sumPrice(groupProduct[index].value)}'),
                                                     ],
                                                   ),
@@ -570,7 +573,9 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 enable == false
                                                     ? Text('0')
                                                     : Text(
-                                                        '${currencyFormat.format(sum(product2))}',
+                                                        '${sum(product2).toInt()}',
+                                                        // : Text(
+                                                        //     '${currencyFormat.format(sum(product2))}',
                                                         style: TextStyle(fontSize: 16),
                                                       )
                                               ],
@@ -635,9 +640,13 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 enable == false
                                                     ? Text('0')
                                                     : Text(
-                                                        '${currencyFormat.format(sum(product2))}',
+                                                        '${sum(product2).toInt()}',
                                                         style: TextStyle(fontSize: 16),
                                                       )
+                                                // : Text(
+                                                //     '${currencyFormat.format(sum(product2))}',
+                                                //     style: TextStyle(fontSize: 16),
+                                                //   )
                                               ],
                                             ))
                                       ],
@@ -998,7 +1007,7 @@ class _CartProducts2State extends State<CartProducts2> {
                       onTap: () async {
                         await _capturePngPag();
                         if (pngBytesPag != null) {
-                          await PrinterService().print(widget.customer, pngBytesPag!);
+                          // await PrinterService().print(widget.customer, pngBytesPag!);
                           setState(() {
                             enable = true;
                           });
@@ -1026,7 +1035,7 @@ class _CartProducts2State extends State<CartProducts2> {
                     )
                   : InkWell(
                       onTap: () async {
-                        _capturePng();
+                        await _capturePng();
                         if (pngBytes != null) {
                           items.clear();
                           await PrinterService().print(widget.customer, pngBytes!);

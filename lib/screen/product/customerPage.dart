@@ -19,9 +19,9 @@ class CustomerPage extends StatefulWidget {
 
 class _CustomerPageState extends State<CustomerPage> {
   final GlobalKey<FormState> customerFormKey = GlobalKey<FormState>();
-  final TextEditingController licensePlate = TextEditingController();
-  final TextEditingController name = TextEditingController();
-  final TextEditingController tel = TextEditingController();
+  final TextEditingController? licensePlate = TextEditingController();
+  final TextEditingController? name = TextEditingController();
+  final TextEditingController? tel = TextEditingController();
   final TextEditingController searchlicensePage = TextEditingController();
   Customer customer = Customer('', '', '', null);
   @override
@@ -35,7 +35,8 @@ class _CustomerPageState extends State<CustomerPage> {
           IconButton(
               onPressed: () async {
                 context.read<LoginController>().clearToken().then((value) {
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
+                  Navigator.pushAndRemoveUntil(
+                      context, MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
                 });
               },
               icon: Icon(Icons.logout)),
@@ -63,9 +64,9 @@ class _CustomerPageState extends State<CustomerPage> {
                       LoadingDialog.close(context);
                       if (_search.isNotEmpty) {
                         setState(() {
-                          licensePlate.text = _search[0].licensePage ?? '';
-                          name.text = _search[0].name ?? '';
-                          tel.text = _search[0].tel ?? '';
+                          licensePlate?.text = _search[0].licensePage ?? ' - ';
+                          name?.text = _search[0].name ?? ' - ';
+                          tel?.text = _search[0].tel ?? ' - ';
                           customer.licensePage = _search[0].licensePage;
                           customer.name = _search[0].name;
                           customer.tel = _search[0].tel;
@@ -125,9 +126,9 @@ class _CustomerPageState extends State<CustomerPage> {
                       controller: licensePlate,
                       hintText: '',
                       validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return 'กรุณากรอก';
-                        }
+                        // if (val == null || val.isEmpty) {
+                        //   return 'กรุณากรอก';
+                        // }
                         // else if (RegExp(r'\s').hasMatch(val)) {
                         //   return 'รูปแบบไม่ถูกต้อง';
                         // }
@@ -199,9 +200,9 @@ class _CustomerPageState extends State<CustomerPage> {
                     onTap: () async {
                       if (customerFormKey.currentState!.validate()) {
                         setState(() {
-                          customer.licensePage = licensePlate.text;
-                          customer.name = name.text;
-                          customer.tel = tel.text;
+                          customer.licensePage = licensePlate?.text ?? ' - ';
+                          customer.name = name?.text ?? ' - ';
+                          customer.tel = tel?.text ?? ' - ';
                         });
                         Navigator.push(
                             context,

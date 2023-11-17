@@ -42,9 +42,13 @@ class PrinterService {
     await SunmiPrinter.printText(
       'ร้านค้า เล้าเซี่ยงเฮง',
     );
+    // await SunmiPrinter.setCustomFontSize(22);
+    // await SunmiPrinter.printText(
+    //   'ที่อยู่ 255 – 257 อาคารเล้าเซี่ยงเฮง 2 ชั้น 2 ถนนเยาวราช แขวง/เขตสัมพันธวงศ์ กรุงเทพฯ 10100 โทร  02 112 2222',
+    // );
     await SunmiPrinter.setCustomFontSize(22);
     await SunmiPrinter.printText(
-      'ที่อยู่ 255 – 257 อาคารเล้าเซี่ยงเฮง 2 ชั้น 2 ถนนเยาวราช แขวง/เขตสัมพันธวงศ์ กรุงเทพฯ 10100 โทร  02 112 2222',
+      'โทร  02 112 2222',
     );
     await SunmiPrinter.line();
     // await SunmiPrinter.setCustomFontSize(25);
@@ -53,13 +57,17 @@ class PrinterService {
     // );
     await SunmiPrinter.setCustomFontSize(24);
     await SunmiPrinter.printText(
+      'ชื่อ: ${customer.name}',
+    );
+    await SunmiPrinter.setCustomFontSize(24);
+    await SunmiPrinter.printText(
       'ทะเบียนรถ: ${customer.licensePage}',
     );
     // await SunmiPrinter.setCustomFontSize(24);
     // await SunmiPrinter.printText(
     //   'เบอร์โทร: ${customer.tel}',
     // );
-    
+
     await SunmiPrinter.line();
     await SunmiPrinter.printImage(pngBytes);
     //await SunmiPrinter.setCustomFontSize(20);
