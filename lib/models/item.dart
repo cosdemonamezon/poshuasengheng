@@ -7,9 +7,20 @@ class Item {
   int? itemId;
   int? qty;
   int? unitItemId;
-  int? bag;
+  num? bag;
+  num? price;
+  num? discount;
+  num? total;
 
-  Item(this.itemId, this.bag, this.qty, this.unitItemId);
+  Item(
+    this.itemId,
+    this.bag,
+    this.qty,
+    this.unitItemId,
+    this.price,
+    this.discount,
+    this.total,
+  );
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 

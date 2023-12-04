@@ -26,13 +26,13 @@ Product2 _$Product2FromJson(Map<String, dynamic> json) => Product2(
           ?.map((e) => ItemUnitPrices.fromJson(e as Map<String, dynamic>))
           .toList(),
       json['unitId'] as int?,
-      json['current_price'] as int?,
-      json['current_price_per_unit'] as int?,
-      json['current_total_price'] as int?,
+      json['current_price'] as num?,
+      json['current_price_per_unit'] as num?,
+      json['current_total_price'] as num?,
       json['updateBy'] as String?,
       select: json['select'] as bool? ?? false,
       qty: json['qty'] as int? ?? 1,
-      qtyPack: json['qtyPack'] as int? ?? 1,
+      qtyPack: json['qtyPack'] as num? ?? 1,
     );
 
 Map<String, dynamic> _$Product2ToJson(Product2 instance) => <String, dynamic>{

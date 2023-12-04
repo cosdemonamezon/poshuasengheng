@@ -7,14 +7,10 @@ class Customer {
   String? licensePage;
   String? name;
   String? tel;
+  String? payMentType;
   int? id;
 
-  Customer(
-    this.licensePage,
-    this.name,
-    this.tel,
-    this.id
-  );
+  Customer(this.licensePage, this.name, this.tel, this.payMentType, this.id);
 
   factory Customer.fromJson(Map<String, dynamic> json) => _$CustomerFromJson(json);
 

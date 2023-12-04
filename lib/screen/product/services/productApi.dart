@@ -55,7 +55,12 @@ class ProductApi {
   }
 
   //add Order-darf
-  static Future<OrderDraft> addOrderDarf({required List<Item> item, required Customer customer}) async {
+  static Future<OrderDraft> addOrderDarf({
+    required List<Item> item,
+    required Customer customer,
+    required int price,
+    required int total,
+  }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final url = Uri.https(publicUrl, 'api/order-darf');
@@ -67,6 +72,9 @@ class ProductApi {
           "licensePage": customer.licensePage,
           "name": customer.name,
           "tel": customer.tel,
+          "paymentType": customer.payMentType,
+          "price": price,
+          "total": total,
           "item": item
         }));
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -99,11 +107,30 @@ class ProductApi {
     }
   }
 
-  //ค้นหาทะเบียรถลูกค้า
-  static Future<List<Customer>> getLicensePage({required String licensePage}) async {
+  // //ค้นหาทะเบียรถลูกค้า
+  // static Future<List<Customer>> getLicensePage({required String licensePage}) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final token = prefs.getString('token');
+  //   final url = Uri.https(publicUrl, 'api/customer', {'name': licensePage});
+  //   final response = await http.get(
+  //     url,
+  //     headers: {'Authorization': 'Bearer $token'},
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     final data = convert.jsonDecode(response.body);
+  //     final list = data['data'] as List;
+  //     return list.map((e) => Customer.fromJson(e)).toList();
+  //   } else {
+  //     final data = convert.jsonDecode(response.body);
+  //     throw Exception(data['message']);
+  //   }
+  // }
+
+  static Future<List<Customer>> getLicensePage({String? licensePage}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    final url = Uri.https(publicUrl, 'api/customer', {'licensePage': licensePage});
+    final url = Uri.https(publicUrl, 'api/customer', {'name': licensePage});
     final response = await http.get(
       url,
       headers: {'Authorization': 'Bearer $token'},

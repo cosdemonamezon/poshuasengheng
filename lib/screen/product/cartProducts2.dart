@@ -87,6 +87,7 @@ class _CartProducts2State extends State<CartProducts2> {
         _finalListProducts = widget.finalListProducts;
         if (product2.isNotEmpty) {
           groupProduct = groupBy(product2, (e) => '${e.name}').entries.toList();
+
           // inspect(groupProduct);
           // print(groupProduct[0].key);
           // print(groupProduct[0].value[0].qty);
@@ -236,9 +237,10 @@ class _CartProducts2State extends State<CartProducts2> {
                                 child: Row(
                                   children: [
                                     Expanded(
-                                        flex: 3,
+                                        flex: 4,
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: size.width * 0.01, vertical: size.width * 0.01),
                                           child: Column(
                                             children: [
                                               Text('${product2[index].name}'),
@@ -266,65 +268,65 @@ class _CartProducts2State extends State<CartProducts2> {
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                'จำนวน',
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        if (product2[index].qty! > 1) {
-                                                          product2[index].qty = product2[index].qty! - 1;
-                                                        } else {}
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      decoration:
-                                                          BoxDecoration(border: Border.all(color: kDisableColor)),
-                                                      child: Icon(Icons.remove),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(color: kDisableColor),
-                                                          color: Colors.white),
-                                                      width: size.width * 0.11,
-                                                      child: Center(
-                                                          child: Text(
-                                                        '${product2[index].qty}',
-                                                        style: TextStyle(fontSize: 15),
-                                                      )),
-                                                    ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        product2[index].qty = product2[index].qty! + 1;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      decoration:
-                                                          BoxDecoration(border: Border.all(color: kDisableColor)),
-                                                      child: Icon(Icons.add),
-                                                    ),
-                                                  ),
-                                                  // Padding(
-                                                  //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
-                                                  //   child: Text('${_finalListProducts[index].unit}'),
-                                                  // )
-                                                ],
-                                              ),
-                                              // Padding(
-                                              //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
-                                              //   child: Text('ราคา ${product2[index].current_price_per_unit} บาท'),
+                                              // Text(
+                                              //   'จำนวน',
+                                              //   style: TextStyle(fontSize: 14),
                                               // ),
-                                              Divider(),
+                                              // Row(
+                                              //   children: [
+                                              //     InkWell(
+                                              //       onTap: () {
+                                              //         setState(() {
+                                              //           if (product2[index].qty! > 1) {
+                                              //             product2[index].qty = product2[index].qty! - 1;
+                                              //           } else {}
+                                              //         });
+                                              //       },
+                                              //       child: Container(
+                                              //         decoration:
+                                              //             BoxDecoration(border: Border.all(color: kDisableColor)),
+                                              //         child: Icon(Icons.remove),
+                                              //       ),
+                                              //     ),
+                                              //     Padding(
+                                              //       padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
+                                              //       child: Container(
+                                              //         decoration: BoxDecoration(
+                                              //             border: Border.all(color: kDisableColor),
+                                              //             color: Colors.white),
+                                              //         width: size.width * 0.11,
+                                              //         child: Center(
+                                              //             child: Text(
+                                              //           '${product2[index].qty}',
+                                              //           style: TextStyle(fontSize: 15),
+                                              //         )),
+                                              //       ),
+                                              //     ),
+                                              //     InkWell(
+                                              //       onTap: () {
+                                              //         setState(() {
+                                              //           product2[index].qty = product2[index].qty! + 1;
+                                              //         });
+                                              //       },
+                                              //       child: Container(
+                                              //         decoration:
+                                              //             BoxDecoration(border: Border.all(color: kDisableColor)),
+                                              //         child: Icon(Icons.add),
+                                              //       ),
+                                              //     ),
+                                              //     // Padding(
+                                              //     //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+                                              //     //   child: Text('${_finalListProducts[index].unit}'),
+                                              //     // )
+                                              //   ],
+                                              // ),
+                                              // // Padding(
+                                              // //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+                                              // //   child: Text('ราคา ${product2[index].current_price_per_unit} บาท'),
+                                              // // ),
+                                              // Divider(),
                                               Text(
-                                                'ถุง',
+                                                'กิโลกรัม',
                                                 style: TextStyle(fontSize: 14),
                                               ),
                                               Row(
@@ -332,8 +334,8 @@ class _CartProducts2State extends State<CartProducts2> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        if (product2[index].qtyPack! > 1) {
-                                                          product2[index].qtyPack = product2[index].qtyPack! - 1;
+                                                        if (product2[index].qtyPack! > 0.5) {
+                                                          product2[index].qtyPack = product2[index].qtyPack! - 0.5;
                                                         } else {}
                                                       });
                                                     },
@@ -360,7 +362,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        product2[index].qtyPack = product2[index].qtyPack! + 1;
+                                                        product2[index].qtyPack = product2[index].qtyPack! + 0.5;
                                                       });
                                                     },
                                                     child: Container(
@@ -376,7 +378,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 child: Text(
                                                     'ราคา ${product2[index].current_price_per_unit} บาท'), //${qtyPrice[index].price_per_unit}
                                               ),
-                                              Divider(),
+                                              // Divider(),
                                             ],
                                           ),
                                         )),
@@ -439,7 +441,7 @@ class _CartProducts2State extends State<CartProducts2> {
                             child: RepaintBoundary(
                               key: globalKey,
                               child: Container(
-                                width: size.width * 0.60,
+                                width: size.width * 0.65,
                                 color: Colors.white,
                                 child: Column(
                                   children: [
@@ -480,44 +482,110 @@ class _CartProducts2State extends State<CartProducts2> {
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                     children: [
-                                                      Text(
-                                                          '${groupProduct[index].key}  ${sumQty(groupProduct[index].value).toInt()} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}'),
+                                                      // ${sumQty(groupProduct[index].value).toInt()} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}
+                                                      Text('${groupProduct[index].key} '),
                                                     ],
                                                   ),
+                                                  //  Row(
+                                                  //   children: [
+                                                  //     Row(
+                                                  //       children: List.generate(
+                                                  //         groupProduct[index].value.length,
+                                                  //         (index2) => Row(
+                                                  //           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  //           children: [
+                                                  //             Text(
+                                                  //               ' + (${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack})',
+                                                  //             ),
+                                                  //             // Expanded(
+                                                  //             //     flex: 4,
+                                                  //             //     child: Row(
+                                                  //             //       mainAxisAlignment: MainAxisAlignment.end,
+                                                  //             //       children: [
+                                                  //             //         enable == false
+                                                  //             //             ? Text('')
+                                                  //             //             : Text(
+                                                  //             //                 '${newtotal(groupProduct[index].value[index2]).toInt()}'),
+                                                  //             //         // : Text(
+                                                  //             //         //     '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
+                                                  //             //       ],
+                                                  //             //     )),
+                                                  //           ],
+                                                  //         ),
+                                                  //       ),
+                                                  //     ),
+                                                  //     Text(' x ${groupProduct[0].value[0].current_price_per_unit}'),
+                                                  //   ],
+                                                  // ),
+                                                  SizedBox(
+                                                    width: size.width * 0.65,
+                                                    child: Row(
+                                                      children: List.generate(
+                                                        groupProduct[index].value.length,
+                                                        (index2) => Text(
+                                                          '${groupProduct[index].value[index2] == groupProduct[index].value[0] ? '' : '+'} ${groupProduct[index].value[index2].qtyPack} ',
+                                                          style: TextStyle(fontSize: 13),
+                                                          maxLines: 5,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+
                                                   Column(
                                                     children: List.generate(
-                                                      groupProduct[index].value.length,
+                                                      1,
                                                       (index2) => Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        mainAxisAlignment: MainAxisAlignment.center,
                                                         children: [
-                                                          Expanded(
-                                                            flex: 6,
-                                                            child: Text(
-                                                                '(${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack}) x ${groupProduct[index].value[index2].current_price_per_unit}'), //${groupProduct[index].value[index2].price}${qtyPrice[index2].price_per_unit}
-                                                          ),
-                                                          Expanded(
-                                                              flex: 4,
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                                children: [
-                                                                  enable == false
-                                                                      ? Text('')
-                                                                      : Text(
-                                                                          '${newtotal(groupProduct[index].value[index2]).toInt()}'),
-                                                                  // : Text(
-                                                                  //     '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
-                                                                ],
-                                                              )),
+                                                          Text(
+                                                              '= ${num.parse(sumQtyPack(groupProduct[index].value).toString())} x ${groupProduct[index].value[index2].price}'),
                                                         ],
                                                       ),
                                                     ),
                                                   ),
+                                                  // Row(
+                                                  //   mainAxisAlignment: MainAxisAlignment.center,
+                                                  //   children: [
+                                                  //     // ${sumQty(groupProduct[index].value).toInt()} x
+                                                  //     Text(
+                                                  //         '= ${num.parse(sumQtyPack(groupProduct[index].value).toString())} x ${groupProduct[index].value[index].price}'),
+                                                  //   ],
+                                                  // ),
+                                                  //// ผลรวมแยก
+                                                  // Column(
+                                                  //   children: List.generate(
+                                                  //     groupProduct[index].value.length,
+                                                  //     (index2) => Row(
+                                                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  //       children: [
+                                                  //         Expanded(
+                                                  //           flex: 6,
+                                                  //           child: Text(
+                                                  //               '(${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack}) x ${groupProduct[index].value[index2].current_price_per_unit}'), //${groupProduct[index].value[index2].price}${qtyPrice[index2].price_per_unit}
+                                                  //         ),
+                                                  //         Expanded(
+                                                  //             flex: 4,
+                                                  //             child: Row(
+                                                  //               mainAxisAlignment: MainAxisAlignment.end,
+                                                  //               children: [
+                                                  //                 enable == false
+                                                  //                     ? Text('')
+                                                  //                     : Text(
+                                                  //                         '${newtotal(groupProduct[index].value[index2]).toInt()}'),
+                                                  //                 // : Text(
+                                                  //                 //     '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
+                                                  //               ],
+                                                  //             )),
+                                                  //       ],
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
                                                       enable == false
                                                           ? Text('')
-                                                          : Text('รวม ${sumPrice(groupProduct[index].value).toInt()}'),
+                                                          : Text('= ${sumPrice(groupProduct[index].value).toInt()}'),
                                                       // : Text(
                                                       //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
                                                       //Text('${sumPrice(groupProduct[index].value)}'),
@@ -539,17 +607,17 @@ class _CartProducts2State extends State<CartProducts2> {
                                               'รวมรายการ',
                                               style: TextStyle(fontSize: 16),
                                             )),
-                                        Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  '1',
-                                                  style: TextStyle(fontSize: 16),
-                                                )
-                                              ],
-                                            ))
+                                        // Expanded(
+                                        //     flex: 5,
+                                        //     child: Row(
+                                        //       mainAxisAlignment: MainAxisAlignment.end,
+                                        //       children: [
+                                        //         Text(
+                                        //           '1',
+                                        //           style: TextStyle(fontSize: 16),
+                                        //         )
+                                        //       ],
+                                        //     ))
                                       ],
                                     ),
                                     Divider(
@@ -1040,19 +1108,26 @@ class _CartProducts2State extends State<CartProducts2> {
                           items.clear();
                           await PrinterService().print(widget.customer, pngBytes!);
                           for (var i = 0; i < product2.length; i++) {
-                            final item = Item(0, 0, 0, 0);
+                            final item = Item(0, 0, 0, 0, 0, 0, 0);
                             setState(() {
                               item.itemId = product2[i].id;
                               item.qty = product2[i].qty;
                               item.unitItemId = product2[i].unitId;
                               item.bag = product2[i].qtyPack;
+                              item.price = product2[i].price;
+                              item.total = product2[i].price! * product2[i].qtyPack!;
                               items.add(item);
                             });
-                            //inspect(items);
+                            inspect(items);
                           }
                           try {
                             LoadingDialog.open(context);
-                            final order = await ProductApi.addOrderDarf(item: items, customer: widget.customer);
+                            final order = await ProductApi.addOrderDarf(
+                              item: items,
+                              customer: widget.customer,
+                              total: sum(product2).toInt(),
+                              price: sum(product2).toInt(),
+                            );
                             if (!mounted) return;
                             LoadingDialog.close(context);
                             if (order != null) {

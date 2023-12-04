@@ -21,15 +21,15 @@ class Product2 {
   String? clientId;
   bool? status;
   int? qty;
-  int? qtyPack;
+  num? qtyPack;
   bool? select;
   String? createBy;
   String? updateBy;
   List<ItemUnitPrices>? itemUnitPrices;
   // ItemCategorys? itemCategory;
-  int? current_price;
-  int? current_price_per_unit;
-  int? current_total_price;
+  num? current_price;
+  num? current_price_per_unit;
+  num? current_total_price;
 
   Product2(
     this.id,

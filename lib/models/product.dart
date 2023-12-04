@@ -14,8 +14,8 @@ class Product {
   String? unit;
   int? unitId;
   String? name;
-  int? cost;
-  int? profit;
+  num? cost;
+  num? profit;
   int? price;
   String? details;
   String? image;
@@ -23,7 +23,7 @@ class Product {
   String? clientId;
   bool? status;
   int? qty;
-  int? qtyPack;
+  num? qtyPack;
   bool? select;
   String? createBy;
   String? updateBy;

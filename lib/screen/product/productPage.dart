@@ -35,6 +35,8 @@ class _ProductPageState extends State<ProductPage> {
   Product? selectProduct;
   //List<Category> categorys = [];
   Category? dropdownValue;
+  String titleProduct = '';
+  int selectIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -107,6 +109,7 @@ class _ProductPageState extends State<ProductPage> {
       await context.read<ProductController>().getListProductCategory(category);
       setState(() {
         listProducts = context.read<ProductController>().products;
+        titleProduct = category.name!;
       });
       LoadingDialog.close(context);
     } on Exception catch (e) {
@@ -130,6 +133,7 @@ class _ProductPageState extends State<ProductPage> {
       await context.read<ProductController>().getCategory();
       setState(() {
         dropdownValue = context.read<ProductController>().categorys[0];
+        titleProduct = context.read<ProductController>().categorys[0].name!;
       });
       getListProducts(dropdownValue!);
     } on Exception catch (e) {
@@ -229,54 +233,94 @@ class _ProductPageState extends State<ProductPage> {
                 //     print('object');
                 //   },
                 // ),
-                SizedBox(
-                  height: size.height * 0.10,
-                  width: size.width * 0.65,
-                  child: DropdownButtonFormField<Category>(
-                    value: dropdownValue,
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      size: 30,
-                    ),
-                    elevation: 16,
-                    style: TextStyle(color: Colors.deepPurple),
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    onChanged: (Category? value) {
-                      setState(() {
-                        dropdownValue = value;
-                      });
-                      reGetListProducts(dropdownValue!);
-                    },
-                    items: categorys.map<DropdownMenuItem<Category>>((Category value) {
-                      return DropdownMenuItem<Category>(
-                        value: value,
-                        child: Text(
-                          value.name!,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      );
-                    }).toList(),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                        categorys.length,
+                        (index) => GestureDetector(
+                              onTap: () {
+                                reGetListProducts(categorys[index]);
+                                print(index);
+                                setState(() {
+                                  selectIndex = index;
+                                });
+                              },
+                              child: Container(
+                                width: 80,
+                                height: 50,
+                                margin: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: selectIndex == index ? kSecondaryColor : Color.fromARGB(255, 234, 247, 246),
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(color: Colors.grey, width: 2)),
+                                child: Center(
+                                    child: Text(
+                                  categorys[index].name ?? '',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                              ),
+                            )),
                   ),
                 ),
+                Text(
+                  titleProduct,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // SizedBox(
+                //   height: size.height * 0.10,
+                //   width: size.width * 0.65,
+                //   child: DropdownButtonFormField<Category>(
+                //     value: dropdownValue,
+                //     icon: Icon(
+                //       Icons.arrow_drop_down,
+                //       size: 30,
+                //     ),
+                //     elevation: 16,
+                //     style: TextStyle(color: Colors.deepPurple),
+                //     decoration: InputDecoration(
+                //       enabledBorder: OutlineInputBorder(
+                //         borderSide: BorderSide(color: Colors.black, width: 1),
+                //       ),
+                //       focusedBorder: OutlineInputBorder(
+                //         borderSide: BorderSide(color: Colors.black, width: 1),
+                //       ),
+                //       filled: true,
+                //       fillColor: Colors.white,
+                //     ),
+                //     onChanged: (Category? value) {
+                //       setState(() {
+                //         dropdownValue = value;
+                //       });
+                //       reGetListProducts(dropdownValue!);
+                //     },
+                //     items: categorys.map<DropdownMenuItem<Category>>((Category value) {
+                //       return DropdownMenuItem<Category>(
+                //         value: value,
+                //         child: Text(
+                //           value.name!,
+                //           style: TextStyle(color: Colors.black),
+                //         ),
+                //       );
+                //     }).toList(),
+                //   ),
+                // ),
+
                 Column(
                   children: [
                     GridView.count(
                         primary: false,
                         shrinkWrap: true,
                         physics: ClampingScrollPhysics(),
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.all(10),
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        crossAxisCount: 1,
+                        crossAxisCount: 2,
                         children: List.generate(
                           products.length,
                           (index) => GestureDetector(
@@ -344,8 +388,7 @@ class _ProductPageState extends State<ProductPage> {
                                   );
                                 },
                               );
-                              //print(addQty);
-                              //inspect(products[index]);
+
                               if (addQty != null) {
                                 setState(() {
                                   //finalListProducts.clear();
@@ -357,112 +400,37 @@ class _ProductPageState extends State<ProductPage> {
                                       check.add(singleCharacter);
                                     }
                                     //inspect(check);
-                                    final a = check.contains('x');
-                                    if (a == true) {
-                                      print('สุตรเดิม');
-                                      List<String> substrings = addQty.split('/');
-                                      if (substrings.contains("")) {
-                                        substrings.removeAt(1);
-                                        for (var element in substrings) {
-                                          List<String> substring2 = element.split('x');
-                                          //products[index];
-                                          //final newProduct = Product.fromJson(products[index].toJson());
-                                          final newProduct = Product(
-                                            products[index].id,
-                                            products[index].atLeastStock,
-                                            products[index].clientId,
-                                            products[index].code,
-                                            products[index].cost,
-                                            products[index].createBy,
-                                            products[index].details,
-                                            products[index].image,
-                                            products[index].memberId,
-                                            products[index].name,
-                                            products[index].price,
-                                            products[index].profit,
-                                            products[index].status,
-                                            products[index].stock,
-                                            products[index].unit,
-                                            products[index].itemUnitPrices,
-                                            products[index].unitId,
-                                            products[index].updateBy,
-                                          );
-                                          inspect(newProduct);
-                                          newProduct.qty = int.parse(substring2[0]);
-                                          newProduct.qtyPack = int.parse(substring2[1]);
-                                          finalListProducts.add(newProduct);
-                                          _myNumber.clear();
-                                        }
-                                        inspect(finalListProducts);
-                                      } else {
-                                        for (var element in substrings) {
-                                          List<String> substring2 = element.split('x');
-                                          //products[index];
-                                          //final newProduct = Product.fromJson(products[index].toJson());
-                                          final newProduct = Product(
-                                              products[index].id,
-                                              products[index].atLeastStock,
-                                              products[index].clientId,
-                                              products[index].code,
-                                              products[index].cost,
-                                              products[index].createBy,
-                                              products[index].details,
-                                              products[index].image,
-                                              products[index].memberId,
-                                              products[index].name,
-                                              products[index].price,
-                                              products[index].profit,
-                                              products[index].status,
-                                              products[index].stock,
-                                              products[index].unit,
-                                              products[index].itemUnitPrices,
-                                              products[index].unitId,
-                                              products[index].updateBy);
-                                          inspect(newProduct);
-                                          newProduct.qty = int.parse(substring2[0]);
-                                          newProduct.qtyPack = int.parse(substring2[1]);
-                                          finalListProducts.add(newProduct);
-                                          _myNumber.clear();
-                                        }
-                                        inspect(finalListProducts);
-                                      }
-                                    } else {
-                                      print('สุตรใหม่');
-                                      List<String> substrings = addQty.split('/');
+
+                                    List<String> substrings = addQty.split('+');
+                                    for (var element in substrings) {
+                                      inspect(element);
+                                      //products[index];
                                       //final newProduct = Product.fromJson(products[index].toJson());
                                       final newProduct = Product(
-                                          products[index].id,
-                                          products[index].atLeastStock,
-                                          products[index].clientId,
-                                          products[index].code,
-                                          products[index].cost,
-                                          products[index].createBy,
-                                          products[index].details,
-                                          products[index].image,
-                                          products[index].memberId,
-                                          products[index].name,
-                                          products[index].price,
-                                          products[index].profit,
-                                          products[index].status,
-                                          products[index].stock,
-                                          products[index].unit,
-                                          products[index].itemUnitPrices,
-                                          products[index].unitId,
-                                          products[index].updateBy);
-                                      newProduct.qty = int.parse(substrings[0]);
-                                      newProduct.qtyPack = 1;
+                                        products[index].id,
+                                        products[index].atLeastStock,
+                                        products[index].clientId,
+                                        products[index].code,
+                                        products[index].cost,
+                                        products[index].createBy,
+                                        products[index].details,
+                                        products[index].image,
+                                        products[index].memberId,
+                                        products[index].name,
+                                        products[index].price,
+                                        products[index].profit,
+                                        products[index].status,
+                                        products[index].stock,
+                                        products[index].unit,
+                                        products[index].itemUnitPrices,
+                                        products[index].unitId,
+                                        products[index].updateBy,
+                                      );
+                                      inspect(newProduct);
+                                      // newProduct.qty = int.parse(substring2[0]);
+                                      newProduct.qtyPack = double.parse(element);
                                       finalListProducts.add(newProduct);
                                       _myNumber.clear();
-                                      //inspect(substrings);
-                                      // for (var element in substrings) {
-                                      //   List<String> substring2 = element.split(" ");
-                                      //   final newProduct = Product.fromJson(products[index].toJson());
-                                      //   newProduct.qty = int.parse(substring2[0]);
-                                      //   newProduct.qtyPack = 1;
-                                      //   finalListProducts.add(newProduct);
-                                      //   _myNumber.clear();
-                                      // }
-                                      inspect(finalListProducts);
                                     }
                                   } catch (e) {
                                     _myNumber.clear();
@@ -487,6 +455,291 @@ class _ProductPageState extends State<ProductPage> {
                                   _myNumber.clear();
                                 });
                               }
+
+                              // if (addQty != null) {
+                              //   setState(() {
+                              //     //finalListProducts.clear();
+                              //     try {
+                              //       List<String> check = [];
+                              //       for (var character in addQty.runes) {
+                              //         String singleCharacter = String.fromCharCode(character);
+                              //         print(singleCharacter);
+                              //         check.add(singleCharacter);
+                              //       }
+                              //       //inspect(check);
+                              //       final a = check.contains('x');
+                              //       if (a == true) {
+                              //         print('สุตรเดิม');
+                              //         List<String> substrings = addQty.split('/');
+                              //         if (substrings.contains("")) {
+                              //           substrings.removeAt(1);
+                              //           for (var element in substrings) {
+                              //             List<String> substring2 = element.split('x');
+                              //             //products[index];
+                              //             //final newProduct = Product.fromJson(products[index].toJson());
+                              //             final newProduct = Product(
+                              //               products[index].id,
+                              //               products[index].atLeastStock,
+                              //               products[index].clientId,
+                              //               products[index].code,
+                              //               products[index].cost,
+                              //               products[index].createBy,
+                              //               products[index].details,
+                              //               products[index].image,
+                              //               products[index].memberId,
+                              //               products[index].name,
+                              //               products[index].price,
+                              //               products[index].profit,
+                              //               products[index].status,
+                              //               products[index].stock,
+                              //               products[index].unit,
+                              //               products[index].itemUnitPrices,
+                              //               products[index].unitId,
+                              //               products[index].updateBy,
+                              //             );
+                              //             inspect(newProduct);
+                              //             newProduct.qty = int.parse(substring2[0]);
+                              //             newProduct.qtyPack = int.parse(substring2[1]);
+                              //             finalListProducts.add(newProduct);
+                              //             _myNumber.clear();
+                              //           }
+                              //           inspect(finalListProducts);
+                              //         } else {
+                              //           for (var element in substrings) {
+                              //             List<String> substring2 = element.split('x');
+                              //             //products[index];
+                              //             //final newProduct = Product.fromJson(products[index].toJson());
+                              //             final newProduct = Product(
+                              //                 products[index].id,
+                              //                 products[index].atLeastStock,
+                              //                 products[index].clientId,
+                              //                 products[index].code,
+                              //                 products[index].cost,
+                              //                 products[index].createBy,
+                              //                 products[index].details,
+                              //                 products[index].image,
+                              //                 products[index].memberId,
+                              //                 products[index].name,
+                              //                 products[index].price,
+                              //                 products[index].profit,
+                              //                 products[index].status,
+                              //                 products[index].stock,
+                              //                 products[index].unit,
+                              //                 products[index].itemUnitPrices,
+                              //                 products[index].unitId,
+                              //                 products[index].updateBy);
+                              //             inspect(newProduct);
+                              //             newProduct.qty = int.parse(substring2[0]);
+                              //             newProduct.qtyPack = num.parse(substring2[1]);
+                              //             finalListProducts.add(newProduct);
+                              //             _myNumber.clear();
+                              //           }
+                              //           inspect(finalListProducts);
+                              //         }
+                              //       } else {
+                              //         print('สุตรใหม่');
+                              //         List<String> substrings = addQty.split('/');
+                              //         //final newProduct = Product.fromJson(products[index].toJson());
+                              //         final newProduct = Product(
+                              //             products[index].id,
+                              //             products[index].atLeastStock,
+                              //             products[index].clientId,
+                              //             products[index].code,
+                              //             products[index].cost,
+                              //             products[index].createBy,
+                              //             products[index].details,
+                              //             products[index].image,
+                              //             products[index].memberId,
+                              //             products[index].name,
+                              //             products[index].price,
+                              //             products[index].profit,
+                              //             products[index].status,
+                              //             products[index].stock,
+                              //             products[index].unit,
+                              //             products[index].itemUnitPrices,
+                              //             products[index].unitId,
+                              //             products[index].updateBy);
+                              //         newProduct.qty = int.parse(substrings[0]);
+                              //         newProduct.qtyPack = 1;
+                              //         finalListProducts.add(newProduct);
+                              //         _myNumber.clear();
+                              //         //inspect(substrings);
+                              //         // for (var element in substrings) {
+                              //         //   List<String> substring2 = element.split(" ");
+                              //         //   final newProduct = Product.fromJson(products[index].toJson());
+                              //         //   newProduct.qty = int.parse(substring2[0]);
+                              //         //   newProduct.qtyPack = 1;
+                              //         //   finalListProducts.add(newProduct);
+                              //         //   _myNumber.clear();
+                              //         // }
+                              //         inspect(finalListProducts);
+                              //       }
+                              //     } catch (e) {
+                              //       _myNumber.clear();
+                              //       showDialog(
+                              //         context: context,
+                              //         barrierDismissible: false,
+                              //         builder: (BuildContext context) {
+                              //           return AlertDialogYes(
+                              //             title: 'แจ้งเตือน',
+                              //             //description: 'รูปแบบข้อมูลไม่ถูกต้อง',
+                              //             description: e.toString(),
+                              //             pressYes: () {
+                              //               Navigator.pop(context, true);
+                              //             },
+                              //           );
+                              //         },
+                              //       );
+                              //     }
+                              //   });
+                              // } else {
+                              //   setState(() {
+                              //     _myNumber.clear();
+                              //   });
+                              // }
+                              //print(addQty);
+                              //inspect(products[index]);
+                              // if (addQty != null) {
+                              //   setState(() {
+                              //     //finalListProducts.clear();
+                              //     try {
+                              //       List<String> check = [];
+                              //       for (var character in addQty.runes) {
+                              //         String singleCharacter = String.fromCharCode(character);
+                              //         print(singleCharacter);
+                              //         check.add(singleCharacter);
+                              //       }
+                              //       //inspect(check);
+                              //       final a = check.contains('x');
+                              //       if (a == true) {
+                              //         print('สุตรเดิม');
+                              //         List<String> substrings = addQty.split('/');
+                              //         if (substrings.contains("")) {
+                              //           substrings.removeAt(1);
+                              //           for (var element in substrings) {
+                              //             List<String> substring2 = element.split('x');
+                              //             //products[index];
+                              //             //final newProduct = Product.fromJson(products[index].toJson());
+                              //             final newProduct = Product(
+                              //               products[index].id,
+                              //               products[index].atLeastStock,
+                              //               products[index].clientId,
+                              //               products[index].code,
+                              //               products[index].cost,
+                              //               products[index].createBy,
+                              //               products[index].details,
+                              //               products[index].image,
+                              //               products[index].memberId,
+                              //               products[index].name,
+                              //               products[index].price,
+                              //               products[index].profit,
+                              //               products[index].status,
+                              //               products[index].stock,
+                              //               products[index].unit,
+                              //               products[index].itemUnitPrices,
+                              //               products[index].unitId,
+                              //               products[index].updateBy,
+                              //             );
+                              //             inspect(newProduct);
+                              //             newProduct.qty = int.parse(substring2[0]);
+                              //             newProduct.qtyPack = int.parse(substring2[1]);
+                              //             finalListProducts.add(newProduct);
+                              //             _myNumber.clear();
+                              //           }
+                              //           inspect(finalListProducts);
+                              //         } else {
+                              //           for (var element in substrings) {
+                              //             List<String> substring2 = element.split('x');
+                              //             //products[index];
+                              //             //final newProduct = Product.fromJson(products[index].toJson());
+                              //             final newProduct = Product(
+                              //                 products[index].id,
+                              //                 products[index].atLeastStock,
+                              //                 products[index].clientId,
+                              //                 products[index].code,
+                              //                 products[index].cost,
+                              //                 products[index].createBy,
+                              //                 products[index].details,
+                              //                 products[index].image,
+                              //                 products[index].memberId,
+                              //                 products[index].name,
+                              //                 products[index].price,
+                              //                 products[index].profit,
+                              //                 products[index].status,
+                              //                 products[index].stock,
+                              //                 products[index].unit,
+                              //                 products[index].itemUnitPrices,
+                              //                 products[index].unitId,
+                              //                 products[index].updateBy);
+                              //             inspect(newProduct);
+                              //             newProduct.qty = int.parse(substring2[0]);
+                              //             newProduct.qtyPack = num.parse(substring2[1]);
+                              //             finalListProducts.add(newProduct);
+                              //             _myNumber.clear();
+                              //           }
+                              //           inspect(finalListProducts);
+                              //         }
+                              //       } else {
+                              //         print('สุตรใหม่');
+                              //         List<String> substrings = addQty.split('/');
+                              //         //final newProduct = Product.fromJson(products[index].toJson());
+                              //         final newProduct = Product(
+                              //             products[index].id,
+                              //             products[index].atLeastStock,
+                              //             products[index].clientId,
+                              //             products[index].code,
+                              //             products[index].cost,
+                              //             products[index].createBy,
+                              //             products[index].details,
+                              //             products[index].image,
+                              //             products[index].memberId,
+                              //             products[index].name,
+                              //             products[index].price,
+                              //             products[index].profit,
+                              //             products[index].status,
+                              //             products[index].stock,
+                              //             products[index].unit,
+                              //             products[index].itemUnitPrices,
+                              //             products[index].unitId,
+                              //             products[index].updateBy);
+                              //         newProduct.qty = int.parse(substrings[0]);
+                              //         newProduct.qtyPack = 1;
+                              //         finalListProducts.add(newProduct);
+                              //         _myNumber.clear();
+                              //         //inspect(substrings);
+                              //         // for (var element in substrings) {
+                              //         //   List<String> substring2 = element.split(" ");
+                              //         //   final newProduct = Product.fromJson(products[index].toJson());
+                              //         //   newProduct.qty = int.parse(substring2[0]);
+                              //         //   newProduct.qtyPack = 1;
+                              //         //   finalListProducts.add(newProduct);
+                              //         //   _myNumber.clear();
+                              //         // }
+                              //         inspect(finalListProducts);
+                              //       }
+                              //     } catch (e) {
+                              //       _myNumber.clear();
+                              //       showDialog(
+                              //         context: context,
+                              //         barrierDismissible: false,
+                              //         builder: (BuildContext context) {
+                              //           return AlertDialogYes(
+                              //             title: 'แจ้งเตือน',
+                              //             //description: 'รูปแบบข้อมูลไม่ถูกต้อง',
+                              //             description: e.toString(),
+                              //             pressYes: () {
+                              //               Navigator.pop(context, true);
+                              //             },
+                              //           );
+                              //         },
+                              //       );
+                              //     }
+                              //   });
+                              // } else {
+                              //   setState(() {
+                              //     _myNumber.clear();
+                              //   });
+                              // }
                               // final productChange = await showDialog<Product?>(
                               //   context: context,
                               //   barrierDismissible: false,
@@ -527,36 +780,43 @@ class _ProductPageState extends State<ProductPage> {
                             },
                             child: Container(
                               padding: EdgeInsets.all(8),
-                              color: Color.fromARGB(255, 234, 247, 246),
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 234, 247, 246),
+                                borderRadius: BorderRadius.circular(
+                                  15,
+                                ),
+                              ),
                               child: Center(
                                   child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  products[index].image != null
-                                      ? Image.network(
-                                          products[index].image!,
-                                          height: size.height * 0.25,
-                                          fit: BoxFit.fill,
-                                        )
-                                      : Image.asset(
-                                          'assets/images/Screenshot.png',
-                                          height: size.height * 0.25,
-                                          fit: BoxFit.fill,
-                                        ),
+                                  // products[index].image != null
+                                  //     ? Image.network(
+                                  //         products[index].image!,
+                                  //         height: size.height * 0.25,
+                                  //         fit: BoxFit.fill,
+                                  //       )
+                                  //     : Image.asset(
+                                  //         'assets/images/Screenshot.png',
+                                  //         height: size.height * 0.25,
+                                  //         fit: BoxFit.fill,
+                                  //       ),
                                   Text(
                                     "${products[index].name}",
                                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     "${products[index].details}",
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                                   ),
-                                  Text(
-                                    "ราคาต่อถุง ${products[index].price} บาท",
-                                    style: TextStyle(fontSize: 16),
-                                  ),
+                                  // Text(
+                                  //   "ราคาต่อถุง ${products[index].price} บาท",
+                                  //   style: TextStyle(fontSize: 13),
+                                  // ),
                                   Text(
                                     "ราคาต่อกิโล ${products[index].price} บาท",
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(fontSize: 13),
                                   ),
                                 ],
                               )),

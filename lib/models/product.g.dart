@@ -11,14 +11,14 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       json['atLeastStock'] as int?,
       json['clientId'] as String?,
       json['code'] as String?,
-      json['cost'] as int?,
+      json['cost'] as num?,
       json['createBy'] as String?,
       json['details'] as String?,
       json['image'] as String?,
       json['memberId'] as int?,
       json['name'] as String?,
       json['price'] as int?,
-      json['profit'] as int?,
+      json['profit'] as num?,
       json['status'] as bool?,
       json['stock'] as int?,
       json['unit'] as String?,
@@ -29,7 +29,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       json['updateBy'] as String?,
       select: json['select'] as bool? ?? false,
       qty: json['qty'] as int? ?? 1,
-      qtyPack: json['qtyPack'] as int? ?? 1,
+      qtyPack: json['qtyPack'] as num? ?? 1,
     );
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{

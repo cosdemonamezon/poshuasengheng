@@ -6,8 +6,8 @@ part 'itemunitprices.g.dart';
 class ItemUnitPrices {
   int? id;
   String? name;
-  int? value;
-  int? price;
+  num? value;
+  num? price;
 
   ItemUnitPrices(this.id, this.price, this.name, this.value);
 

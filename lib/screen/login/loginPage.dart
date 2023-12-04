@@ -5,6 +5,7 @@ import 'package:poshuasengheng/screen/login/services/loginController.dart';
 import 'package:poshuasengheng/screen/login/widgets/appTextForm.dart';
 import 'package:poshuasengheng/screen/product/customerPage.dart';
 import 'package:poshuasengheng/screen/product/productPage.dart';
+import 'package:poshuasengheng/selectedCustomer.dart';
 import 'package:poshuasengheng/widgets/LoadingDialog.dart';
 import 'package:poshuasengheng/widgets/materialDialog.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       username.text = 'user@S0001';
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -121,7 +123,8 @@ class _LoginPageState extends State<LoginPage> {
                                   await controller.signIn(username: username.text, password: password.text);
                                   if (!mounted) return;
                                   LoadingDialog.close(context);
-                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => CustomerPage()), (route) => false);
+                                  Navigator.pushAndRemoveUntil(context,
+                                      MaterialPageRoute(builder: (context) => SelectedCustomer()), (route) => false);
                                 } on Exception catch (e) {
                                   LoadingDialog.close(context);
                                   showDialog(

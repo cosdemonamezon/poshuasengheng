@@ -6,6 +6,7 @@ import 'package:poshuasengheng/screen/login/loginPage.dart';
 import 'package:poshuasengheng/screen/login/services/loginController.dart';
 import 'package:poshuasengheng/screen/product/customerPage.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
+import 'package:poshuasengheng/selectedCustomer.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,13 +51,14 @@ class MyApp extends StatelessWidget {
             ),
             iconTheme: IconThemeData(color: Colors.black),
           ),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white, onBackground: Colors.white),
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white, onBackground: Colors.white),
           scaffoldBackgroundColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           useMaterial3: true,
           fontFamily: 'Prompt',
         ),
-        home: token == null ? LoginPage() : CustomerPage(),
+        home: token == null ? LoginPage() : SelectedCustomer(),
       ),
     );
   }
@@ -65,6 +67,7 @@ class MyApp extends StatelessWidget {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

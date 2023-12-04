@@ -16,7 +16,7 @@ class InputNumberDialog extends StatefulWidget {
 class _InputNumberDialogState extends State<InputNumberDialog> {
   final TextEditingController? numberPick = TextEditingController();
   int qty = 1;
-  int qtyPack = 1;
+  num qtyPack = 1;
   int id = 1;
   int selectValue = 1;
   final TextEditingController _myNumber = TextEditingController();
@@ -280,7 +280,9 @@ class _InputNumberDialogState extends State<InputNumberDialog> {
       ),
       actions: [
         TextButton(
-          style: ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide(color: Colors.grey, width: 2)))),
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero, side: BorderSide(color: Colors.grey, width: 2)))),
           onPressed: () {
             Navigator.pop(context, null);
           },
@@ -290,7 +292,9 @@ class _InputNumberDialogState extends State<InputNumberDialog> {
           ),
         ),
         TextButton(
-          style: ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide(color: Colors.grey, width: 2)))),
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero, side: BorderSide(color: Colors.grey, width: 2)))),
           onPressed: () {
             setState(() {
               widget.product.select = true;
@@ -410,19 +414,19 @@ class NumPad extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               NumberButton(
+                number: '.',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+              NumberButton(
                 number: '0',
                 size: buttonSize,
                 color: buttonColor,
                 controller: controller,
               ),
               NumberButton(
-                number: '/',
-                size: buttonSize,
-                color: buttonColor,
-                controller: controller,
-              ),
-              NumberButton(
-                number: 'x',
+                number: '+',
                 size: buttonSize,
                 color: buttonColor,
                 controller: controller,
@@ -471,7 +475,8 @@ class NumPad extends StatelessWidget {
               GestureDetector(
                 onTap: () => onSubmit(),
                 child: Container(
-                  decoration: BoxDecoration(color: kSecondaryColor, borderRadius: BorderRadius.all(Radius.circular(20))),
+                  decoration:
+                      BoxDecoration(color: kSecondaryColor, borderRadius: BorderRadius.all(Radius.circular(20))),
                   height: 60,
                   width: 150,
                   child: Center(
@@ -565,7 +570,15 @@ class NumberButton1 extends StatelessWidget {
   final String? price;
   final String? name;
 
-  const NumberButton1({Key? key, required this.number, required this.size, required this.color, required this.controller, this.name, this.price}) : super(key: key);
+  const NumberButton1(
+      {Key? key,
+      required this.number,
+      required this.size,
+      required this.color,
+      required this.controller,
+      this.name,
+      this.price})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
