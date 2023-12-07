@@ -48,7 +48,7 @@ class PrinterService {
     // );
     await SunmiPrinter.setCustomFontSize(22);
     await SunmiPrinter.printText(
-      'โทร  02 112 2222',
+      'โทร 02-225-2387\nโทร 02-225-1587',
     );
     await SunmiPrinter.line();
     // await SunmiPrinter.setCustomFontSize(25);

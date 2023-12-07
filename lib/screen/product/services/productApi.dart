@@ -58,8 +58,8 @@ class ProductApi {
   static Future<OrderDraft> addOrderDarf({
     required List<Item> item,
     required Customer customer,
-    required int price,
-    required int total,
+    required num price,
+    required num total,
   }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');

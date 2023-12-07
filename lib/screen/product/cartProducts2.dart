@@ -441,7 +441,7 @@ class _CartProducts2State extends State<CartProducts2> {
                             child: RepaintBoundary(
                               key: globalKey,
                               child: Container(
-                                width: size.width * 0.65,
+                                width: size.width * 0.61,
                                 color: Colors.white,
                                 child: Column(
                                   children: [
@@ -538,7 +538,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                         children: [
                                                           Text(
-                                                              '= ${num.parse(sumQtyPack(groupProduct[index].value).toString())} x ${groupProduct[index].value[index2].price}'),
+                                                              '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}'),
                                                         ],
                                                       ),
                                                     ),
@@ -585,7 +585,8 @@ class _CartProducts2State extends State<CartProducts2> {
                                                     children: [
                                                       enable == false
                                                           ? Text('')
-                                                          : Text('= ${sumPrice(groupProduct[index].value).toInt()}'),
+                                                          : Text(
+                                                              '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}'),
                                                       // : Text(
                                                       //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
                                                       //Text('${sumPrice(groupProduct[index].value)}'),
@@ -641,7 +642,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 enable == false
                                                     ? Text('0')
                                                     : Text(
-                                                        '${sum(product2).toInt()}',
+                                                        sum(product2).toStringAsFixed(2),
                                                         // : Text(
                                                         //     '${currencyFormat.format(sum(product2))}',
                                                         style: TextStyle(fontSize: 16),
@@ -708,7 +709,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 enable == false
                                                     ? Text('0')
                                                     : Text(
-                                                        '${sum(product2).toInt()}',
+                                                        sum(product2).toStringAsFixed(2),
                                                         style: TextStyle(fontSize: 16),
                                                       )
                                                 // : Text(
@@ -1125,8 +1126,8 @@ class _CartProducts2State extends State<CartProducts2> {
                             final order = await ProductApi.addOrderDarf(
                               item: items,
                               customer: widget.customer,
-                              total: sum(product2).toInt(),
-                              price: sum(product2).toInt(),
+                              total: double.parse(sum(product2).toStringAsFixed(2)),
+                              price: double.parse(sum(product2).toStringAsFixed(2)),
                             );
                             if (!mounted) return;
                             LoadingDialog.close(context);
