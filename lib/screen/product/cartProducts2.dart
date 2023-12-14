@@ -414,9 +414,9 @@ class _CartProducts2State extends State<CartProducts2> {
                 height: size.height * 0.13,
               ),
 
-              SizedBox(
-                height: size.height * 0.13,
-              ),
+              // SizedBox(
+              //   height: size.height * 0.13,
+              // ),
 
               groupProduct.isNotEmpty
                   ? Column(children: [
@@ -517,17 +517,40 @@ class _CartProducts2State extends State<CartProducts2> {
                                                   //     Text(' x ${groupProduct[0].value[0].current_price_per_unit}'),
                                                   //   ],
                                                   // ),
+
                                                   SizedBox(
-                                                    width: size.width * 0.65,
-                                                    child: Row(
-                                                      children: List.generate(
-                                                        groupProduct[index].value.length,
-                                                        (index2) => Text(
-                                                          '${groupProduct[index].value[index2] == groupProduct[index].value[0] ? '' : '+'} ${groupProduct[index].value[index2].qtyPack} ',
-                                                          style: TextStyle(fontSize: 13),
-                                                          maxLines: 5,
+                                                    width: size.width * 0.6,
+                                                    // height: size.height * 0.05,
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: List.generate(
+                                                            groupProduct[index].value.length,
+                                                            (index2) => Flexible(
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    groupProduct[index].value[index2] ==
+                                                                            groupProduct[index].value[0]
+                                                                        ? ''
+                                                                        : '+',
+                                                                    style: TextStyle(fontSize: 8),
+                                                                    maxLines: 4,
+                                                                  ),
+                                                                  Flexible(
+                                                                    child: Text(
+                                                                      '${groupProduct[index].value[index2].qtyPack}',
+                                                                      style: TextStyle(fontSize: 13),
+                                                                      maxLines: 4,
+                                                                      overflow: TextOverflow.ellipsis,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
+                                                      ],
                                                     ),
                                                   ),
 
