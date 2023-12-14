@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:poshuasengheng/models/category.dart';
 import 'package:poshuasengheng/models/customer.dart';
 import 'package:poshuasengheng/models/item.dart';
+import 'package:poshuasengheng/models/itemAll.dart';
 import 'package:poshuasengheng/models/orderdraft.dart';
 import 'package:poshuasengheng/models/priceUint.dart';
 import 'package:poshuasengheng/models/product.dart';
@@ -15,7 +16,7 @@ class ProductApi {
   const ProductApi();
 
   //get Product
-  static Future<List<Product>> getProductCategory({required int categoryId}) async {
+  static Future<List<Product2>> getProductCategory({required int categoryId}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final url = Uri.https(publicUrl, 'api/item', {'clientId': 'S0001', 'categoryId': categoryId.toString()});
@@ -27,7 +28,33 @@ class ProductApi {
     if (response.statusCode == 200) {
       final data = convert.jsonDecode(response.body);
       final list = data['data'] as List;
-      return list.map((e) => Product.fromJson(e)).toList();
+      return list.map((e) => Product2.fromJson(e)).toList();
+    } else {
+      final data = convert.jsonDecode(response.body);
+      throw Exception(data['message']);
+    }
+  }
+
+  //get Product
+  static Future<List<ItemAll>> getProductCategoryall({Category? categoryId}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final url = Uri.https(publicUrl, 'api/item-unit-price/page', {
+      'search': '',
+      'page': '1',
+      'limit': '100000',
+      'sortby': 'Id:DESC',
+      'filter.item.itemCategory': '\$eq:${categoryId!.id}',
+    });
+    final response = await http.get(
+      url,
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = convert.jsonDecode(response.body);
+      final list = data['data'] as List;
+      return list.map((e) => ItemAll.fromJson(e)).toList();
     } else {
       final data = convert.jsonDecode(response.body);
       throw Exception(data['message']);
@@ -80,6 +107,44 @@ class ProductApi {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = convert.jsonDecode(response.body);
       return OrderDraft.fromJson(data['data']);
+    } else {
+      final data = convert.jsonDecode(response.body);
+      throw Exception(data['message']);
+    }
+  }
+
+  //add Order
+  static Future addOrder({
+    required List<Item> item,
+    required Customer customer,
+    required num price,
+    required num total,
+  }) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final url = Uri.https(publicUrl, 'api/transaction');
+    final response = await http.post(url,
+        headers: {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'},
+        body: convert.jsonEncode({
+          "clientId": "S0001",
+          "merchantId": 1,
+          "cardtype": "-",
+          "cc": "-",
+          "qrcode": "-",
+          "price": price,
+          "fee": 0,
+          "payQty": price,
+          "type": "-",
+          "remark": "-",
+          "customerTel": customer.tel,
+          "name": customer.name,
+          "licensePage": customer.licensePage,
+          "paymentType": customer.payMentType,
+          "products": item
+        }));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final data = convert.jsonDecode(response.body);
+      return data['data'];
     } else {
       final data = convert.jsonDecode(response.body);
       throw Exception(data['message']);

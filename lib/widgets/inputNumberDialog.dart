@@ -315,9 +315,9 @@ class NumPad extends StatelessWidget {
   final TextEditingController controller;
   final Function delete;
   final Function onSubmit;
-  final List<ItemUnitPrices> itemUnitPrices;
+  List<ItemUnitPrices>? itemUnitPrices;
 
-  const NumPad(
+  NumPad(
       {Key? key,
       this.buttonSize = 10,
       this.buttonColor = Colors.indigo,
@@ -325,7 +325,7 @@ class NumPad extends StatelessWidget {
       required this.delete,
       required this.onSubmit,
       required this.controller,
-      required this.itemUnitPrices})
+      this.itemUnitPrices})
       : super(key: key);
 
   @override
@@ -446,20 +446,20 @@ class NumPad extends StatelessWidget {
           //     ),),
           // ),
           //ส่วนที่โชว์ ปุ่ม สามปุ่ม
-          Wrap(
-            alignment: WrapAlignment.start,
-            children: List.generate(
-                itemUnitPrices.length,
-                (index) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                      child: NumKeyShortcut(
-                        number: itemUnitPrices[index].value.toString(),
-                        price: itemUnitPrices[index].price.toString(),
-                        name: itemUnitPrices[index].name.toString(),
-                        controller: controller,
-                      ),
-                    )),
-          ),
+          // Wrap(
+          //   alignment: WrapAlignment.start,
+          //   children: List.generate(
+          //       itemUnitPrices.length,
+          //       (index) => Padding(
+          //             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          //             child: NumKeyShortcut(
+          //               number: itemUnitPrices[index].value.toString(),
+          //               price: itemUnitPrices[index].price.toString(),
+          //               name: itemUnitPrices[index].name.toString(),
+          //               controller: controller,
+          //             ),
+          //           )),
+          // ),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,

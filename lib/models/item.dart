@@ -4,22 +4,30 @@ part 'item.g.dart';
 
 @JsonSerializable()
 class Item {
-  int? itemId;
+  int? id;
+  String? name;
+  // int? itemId;
   int? qty;
   int? unitItemId;
   num? bag;
   num? price;
   num? discount;
-  num? total;
+  num? sum;
+  String? type;
+  String? code;
 
   Item(
-    this.itemId,
+    this.id,
+    this.name,
+    // this.itemId,
     this.bag,
     this.qty,
     this.unitItemId,
     this.price,
     this.discount,
-    this.total,
+    this.sum,
+    this.type,
+    this.code,
   );
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);

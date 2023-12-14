@@ -5,7 +5,9 @@ import 'package:poshuasengheng/constants/constants.dart';
 import 'package:poshuasengheng/extension/formattedMessage.dart';
 import 'package:poshuasengheng/models/category.dart';
 import 'package:poshuasengheng/models/customer.dart';
+import 'package:poshuasengheng/models/itemAll.dart';
 import 'package:poshuasengheng/models/product.dart';
+import 'package:poshuasengheng/models/product2.dart';
 import 'package:poshuasengheng/screen/product/cartProducts.dart';
 import 'package:poshuasengheng/screen/product/cartProducts2.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
@@ -29,10 +31,11 @@ class _ProductPageState extends State<ProductPage> {
   int paperSize = 0;
   String serialNumber = "";
   String printerVersion = "";
-  List<Product> listProducts = [];
-  List<Product> finalListProducts = [];
+  List<Product2> listProducts = [];
+  List<Product2> finalListProducts = [];
   List<Product> finalProducts = [];
   Product? selectProduct;
+  List<ItemAll> listProductsNew = [];
   //List<Category> categorys = [];
   Category? dropdownValue;
   String titleProduct = '';
@@ -43,6 +46,7 @@ class _ProductPageState extends State<ProductPage> {
     //inspect(widget.customer);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getListCategory();
+      // getListProductsAll();
       //getListProducts();
     });
 
@@ -77,6 +81,32 @@ class _ProductPageState extends State<ProductPage> {
     return result;
   }
 
+  Future<void> getListProductsAll(Category category) async {
+    LoadingDialog.open(context);
+    try {
+      await context.read<ProductController>().getListProductCategoryAll(categoryId: category);
+      setState(() {
+        listProductsNew = context.read<ProductController>().productsNew;
+        //finalListProducts = listProducts.where((element) => element.select == true).toList();
+      });
+      //inspect(finalListProducts);
+      LoadingDialog.close(context);
+    } on Exception catch (e) {
+      LoadingDialog.close(context);
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialogYes(
+          title: 'แจ้งเตือน',
+          description: '${e.getMessage}',
+          pressYes: () {
+            Navigator.pop(context, true);
+          },
+        ),
+      );
+    }
+  }
+
   Future<void> getListProducts(Category category) async {
     LoadingDialog.open(context);
     try {
@@ -106,7 +136,8 @@ class _ProductPageState extends State<ProductPage> {
   Future<void> reGetListProducts(Category category) async {
     LoadingDialog.open(context);
     try {
-      await context.read<ProductController>().getListProductCategory(category);
+      await context.read<ProductController>().getListProductCategoryAll(categoryId: category);
+      // await context.read<ProductController>().getListProductCategory(category);
       setState(() {
         listProducts = context.read<ProductController>().products;
         titleProduct = category.name!;
@@ -135,7 +166,8 @@ class _ProductPageState extends State<ProductPage> {
         dropdownValue = context.read<ProductController>().categorys[0];
         titleProduct = context.read<ProductController>().categorys[0].name!;
       });
-      getListProducts(dropdownValue!);
+      getListProductsAll(dropdownValue!);
+      // getListProducts(dropdownValue!);
     } on Exception catch (e) {
       if (!mounted) return;
       showDialog(
@@ -155,7 +187,7 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Consumer<ProductController>(builder: (context, controller, child) {
-      final products = controller.products;
+      final products = controller.productsNew;
       final categorys = controller.categorys;
       return Scaffold(
         appBar: AppBar(
@@ -223,7 +255,7 @@ class _ProductPageState extends State<ProductPage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.03,
                 ),
                 // AppTextTowFormField(
                 //   sufIcon: Icons.search,
@@ -367,7 +399,7 @@ class _ProductPageState extends State<ProductPage> {
                                             buttonColor: Colors.grey,
                                             iconColor: Colors.red,
                                             controller: _myNumber,
-                                            itemUnitPrices: products[index].itemUnitPrices!,
+                                            // itemUnitPrices: products[index].itemUnitPrices!,
                                             delete: () {
                                               if (_myNumber.text != null) {
                                                 if (_myNumber.text.length > 0) {
@@ -406,25 +438,48 @@ class _ProductPageState extends State<ProductPage> {
                                       inspect(element);
                                       //products[index];
                                       //final newProduct = Product.fromJson(products[index].toJson());
-                                      final newProduct = Product(
-                                        products[index].id,
-                                        products[index].atLeastStock,
-                                        products[index].clientId,
-                                        products[index].code,
-                                        products[index].cost,
-                                        products[index].createBy,
-                                        products[index].details,
-                                        products[index].image,
-                                        products[index].memberId,
-                                        products[index].name,
+                                      // final newProduct = Product(
+                                      //   products[index].item!.id!,
+                                      //   products[index].item!.atLeastStock,
+                                      //   products[index].item!.clientId,
+                                      //   products[index].item!.code,
+                                      //   products[index].item!.cost,
+                                      //   '', // products[index].createBy,
+                                      //   '', // products[index].details,
+                                      //   '', // products[index].image,
+                                      //   null, //  products[index].memberId,
+                                      //   products[index].item!.name,
+                                      //   products[index].item!.price,
+                                      //   products[index].item!.profit,
+                                      //   products[index].item!.status,
+                                      //   products[index].item!.stock,
+                                      //   products[index].item!.unit,
+                                      //   [], // products[index].itemUnitPrices,
+                                      //   products[index].item!.unitId,
+                                      //   '', // products[index].updateBy,
+                                      // );
+                                      final newProduct = Product2(
+                                        products[index].item!.id!,
+                                        products[index].item!.atLeastStock,
+                                        products[index].item!.clientId,
+                                        products[index].item!.code,
+                                        products[index].item!.cost,
+                                        '', // products[index].createBy,
+                                        '', // products[index].details,
+                                        '', // products[index].image,
+                                        null, //  products[index].memberId,
+                                        products[index].item!.name,
                                         products[index].price,
-                                        products[index].profit,
-                                        products[index].status,
-                                        products[index].stock,
-                                        products[index].unit,
-                                        products[index].itemUnitPrices,
-                                        products[index].unitId,
-                                        products[index].updateBy,
+                                        products[index].item!.profit,
+                                        products[index].item!.status,
+                                        products[index].item!.stock,
+                                        products[index].item!.unit,
+                                        [], // products[index].itemUnitPrices,
+                                        products[index].item!.unitId,
+                                        null, // products[index].updateBy,
+                                        null,
+                                        null,
+                                        null,
                                       );
                                       inspect(newProduct);
                                       // newProduct.qty = int.parse(substring2[0]);
@@ -802,12 +857,12 @@ class _ProductPageState extends State<ProductPage> {
                                   //         fit: BoxFit.fill,
                                   //       ),
                                   Text(
-                                    "${products[index].name}",
+                                    "${products[index].item?.name ?? '-'}",
                                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
-                                    "${products[index].details}",
+                                    "${products[index].name}",
                                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                                   ),
                                   // Text(

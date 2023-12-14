@@ -12,9 +12,9 @@ class Product2 {
   String? unit;
   int? unitId;
   String? name;
-  int? cost;
-  int? profit;
-  int? price;
+  num? cost;
+  num? profit;
+  num? price;
   String? details;
   String? image;
   int? memberId;

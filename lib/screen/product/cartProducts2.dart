@@ -24,7 +24,7 @@ import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class CartProducts2 extends StatefulWidget {
   CartProducts2({super.key, required this.finalListProducts, required this.customer});
-  List<Product> finalListProducts;
+  List<Product2> finalListProducts;
   Customer customer;
 
   @override
@@ -76,15 +76,15 @@ class _CartProducts2State extends State<CartProducts2> {
           serialNumber = serial;
         });
       });
-      final qty2 = await ProductApi.getListPriceUint(
-        item: widget.finalListProducts,
-      );
+      // final qty2 = await ProductApi.getListPriceUint(
+      //   item: widget.finalListProducts,
+      // );
 
       setState(() {
-        product2 = qty2;
+        product2 = widget.finalListProducts;
         inspect(product2);
         printBinded = isBind!;
-        _finalListProducts = widget.finalListProducts;
+        // _finalListProducts = widget.finalListProducts;
         if (product2.isNotEmpty) {
           groupProduct = groupBy(product2, (e) => '${e.name}').entries.toList();
 
@@ -169,10 +169,9 @@ class _CartProducts2State extends State<CartProducts2> {
         previous,
         o,
       ) =>
-          previous + ((o.qty! * o.qtyPack!) * o.current_price_per_unit!));
+          previous + ((o.qty! * o.qtyPack!) * o.price!));
 
-  double newtotal(Product2 orders) =>
-      double.parse(((orders.qty! * orders.qtyPack!) * orders.current_price_per_unit!).toString());
+  double newtotal(Product2 orders) => double.parse(((orders.qty! * orders.qtyPack!) * orders.price!).toString());
   double sumQty(List<Product2> productQty) =>
       productQty.fold(0, (previousValue, element) => previousValue + double.parse(element.qty.toString()));
   double sumQtyPack(List<Product2> productQtyPack) =>
@@ -249,6 +248,11 @@ class _CartProducts2State extends State<CartProducts2> {
                                                       product2[index].image!,
                                                       fit: BoxFit.fill,
                                                       height: size.height * 0.12,
+                                                      errorBuilder: (context, error, stackTrace) => Image.asset(
+                                                        'assets/images/Screenshot.png',
+                                                        height: size.height * 0.12,
+                                                        width: size.height * 0.115,
+                                                      ),
                                                     )
                                                   : Image.asset(
                                                       'assets/images/Screenshot.png',
@@ -376,7 +380,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                               Padding(
                                                 padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
                                                 child: Text(
-                                                    'ราคา ${product2[index].current_price_per_unit} บาท'), //${qtyPrice[index].price_per_unit}
+                                                    'ราคา ${product2[index].price} บาท'), //${qtyPrice[index].price_per_unit}
                                               ),
                                               // Divider(),
                                             ],
@@ -1113,21 +1117,24 @@ class _CartProducts2State extends State<CartProducts2> {
                           items.clear();
                           await PrinterService().print(widget.customer, pngBytes!);
                           for (var i = 0; i < product2.length; i++) {
-                            final item = Item(0, 0, 0, 0, 0, 0, 0);
+                            final item = Item(0, '', 0, 0, 0, 0, 0, 0, '', '');
                             setState(() {
-                              item.itemId = product2[i].id;
+                              item.id = product2[i].id;
+                              item.name = product2[i].name;
                               item.qty = product2[i].qty;
                               item.unitItemId = product2[i].unitId;
                               item.bag = product2[i].qtyPack;
                               item.price = product2[i].price;
-                              item.total = product2[i].price! * product2[i].qtyPack!;
+                              item.sum = product2[i].price! * product2[i].qtyPack!;
+                              item.type = 'product';
+                              item.code = product2[i].code;
                               items.add(item);
                             });
                             inspect(items);
                           }
                           try {
                             LoadingDialog.open(context);
-                            final order = await ProductApi.addOrderDarf(
+                            final order = await ProductApi.addOrder(
                               item: items,
                               customer: widget.customer,
                               total: double.parse(sum(product2).toStringAsFixed(2)),

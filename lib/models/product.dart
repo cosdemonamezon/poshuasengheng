@@ -16,7 +16,7 @@ class Product {
   String? name;
   num? cost;
   num? profit;
-  int? price;
+  num? price;
   String? details;
   String? image;
   int? memberId;
