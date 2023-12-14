@@ -419,359 +419,340 @@ class _CartProducts2State extends State<CartProducts2> {
               // ),
 
               groupProduct.isNotEmpty
-                  ? Column(children: [
-                      Center(
-                        child: Text('ตัวอย่างการพิมพ์'),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                        child: Card(
-                          margin: EdgeInsets.zero,
-                          elevation: 0,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: Color.fromARGB(255, 238, 231, 231),
-                              width: 2.0,
+                  ? SizedBox(
+                      width: size.width * 0.75,
+                      child: Column(children: [
+                        Center(
+                          child: Text('ตัวอย่างการพิมพ์'),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                          child: Card(
+                            margin: EdgeInsets.zero,
+                            elevation: 0,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Color.fromARGB(255, 238, 231, 231),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: RepaintBoundary(
-                              key: globalKey,
-                              child: Container(
-                                width: size.width * 0.61,
-                                color: Colors.white,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 7,
-                                            child: Text(
-                                              'สินค้า',
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                        Expanded(
-                                            flex: 3,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  'ราคา',
-                                                  style: TextStyle(fontSize: 16),
-                                                )
-                                              ],
-                                            ))
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'หน่วย xกิโล/หน่วย xราคา/กิโล',
-                                          style: TextStyle(fontSize: 13),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: List.generate(
-                                          groupProduct.length,
-                                          (index) => Column(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: RepaintBoundary(
+                                key: globalKey,
+                                child: Container(
+                                  width: size.width * 0.61,
+                                  color: Colors.white,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 7,
+                                              child: Text(
+                                                'สินค้า',
+                                                style: TextStyle(fontSize: 16),
+                                              )),
+                                          Expanded(
+                                              flex: 3,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      // ${sumQty(groupProduct[index].value).toInt()} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}
-                                                      Text('${groupProduct[index].key} '),
-                                                    ],
-                                                  ),
-                                                  //  Row(
-                                                  //   children: [
-                                                  //     Row(
-                                                  //       children: List.generate(
-                                                  //         groupProduct[index].value.length,
-                                                  //         (index2) => Row(
-                                                  //           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  //           children: [
-                                                  //             Text(
-                                                  //               ' + (${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack})',
-                                                  //             ),
-                                                  //             // Expanded(
-                                                  //             //     flex: 4,
-                                                  //             //     child: Row(
-                                                  //             //       mainAxisAlignment: MainAxisAlignment.end,
-                                                  //             //       children: [
-                                                  //             //         enable == false
-                                                  //             //             ? Text('')
-                                                  //             //             : Text(
-                                                  //             //                 '${newtotal(groupProduct[index].value[index2]).toInt()}'),
-                                                  //             //         // : Text(
-                                                  //             //         //     '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
-                                                  //             //       ],
-                                                  //             //     )),
-                                                  //           ],
-                                                  //         ),
-                                                  //       ),
-                                                  //     ),
-                                                  //     Text(' x ${groupProduct[0].value[0].current_price_per_unit}'),
-                                                  //   ],
-                                                  // ),
-
-                                                  SizedBox(
-                                                    width: size.width * 0.6,
-                                                    // height: size.height * 0.05,
-                                                    child: Column(
+                                                  Text(
+                                                    'ราคา',
+                                                    style: TextStyle(fontSize: 16),
+                                                  )
+                                                ],
+                                              ))
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'หน่วย xกิโล/หน่วย xราคา/กิโล',
+                                            style: TextStyle(fontSize: 13),
+                                          )
+                                        ],
+                                      ),
+                                      Column(
+                                        children: List.generate(
+                                            groupProduct.length,
+                                            (index) => Column(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
                                                       children: [
-                                                        Row(
-                                                          children: List.generate(
-                                                            groupProduct[index].value.length,
-                                                            (index2) => Flexible(
-                                                              child: Row(
-                                                                children: [
-                                                                  Text(
-                                                                    groupProduct[index].value[index2] ==
-                                                                            groupProduct[index].value[0]
-                                                                        ? ''
-                                                                        : '+',
-                                                                    style: TextStyle(fontSize: 8),
-                                                                    maxLines: 4,
-                                                                  ),
-                                                                  Flexible(
-                                                                    child: Text(
-                                                                      '${groupProduct[index].value[index2].qtyPack}',
-                                                                      style: TextStyle(fontSize: 13),
-                                                                      maxLines: 4,
-                                                                      overflow: TextOverflow.ellipsis,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
+                                                        // ${sumQty(groupProduct[index].value).toInt()} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}
+                                                        Text('${groupProduct[index].key} '),
                                                       ],
                                                     ),
-                                                  ),
+                                                    //  Row(
+                                                    //   children: [
+                                                    //     Row(
+                                                    //       children: List.generate(
+                                                    //         groupProduct[index].value.length,
+                                                    //         (index2) => Row(
+                                                    //           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    //           children: [
+                                                    //             Text(
+                                                    //               ' + (${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack})',
+                                                    //             ),
+                                                    //             // Expanded(
+                                                    //             //     flex: 4,
+                                                    //             //     child: Row(
+                                                    //             //       mainAxisAlignment: MainAxisAlignment.end,
+                                                    //             //       children: [
+                                                    //             //         enable == false
+                                                    //             //             ? Text('')
+                                                    //             //             : Text(
+                                                    //             //                 '${newtotal(groupProduct[index].value[index2]).toInt()}'),
+                                                    //             //         // : Text(
+                                                    //             //         //     '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
+                                                    //             //       ],
+                                                    //             //     )),
+                                                    //           ],
+                                                    //         ),
+                                                    //       ),
+                                                    //     ),
+                                                    //     Text(' x ${groupProduct[0].value[0].current_price_per_unit}'),
+                                                    //   ],
+                                                    // ),
 
-                                                  Column(
-                                                    children: List.generate(
-                                                      1,
-                                                      (index2) => Row(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Text(
-                                                              '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}'),
-                                                        ],
+                                                    Row(
+                                                      children: List.generate(
+                                                        groupProduct[index].value.length,
+                                                        (index2) => Flexible(
+                                                          child: Text(
+                                                            '${groupProduct[index].value[index2] == groupProduct[index].value[0] ? '' : '+'}${groupProduct[index].value[index2].qtyPack}',
+                                                            style: TextStyle(fontSize: 13),
+                                                            maxLines: 10,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  // Row(
-                                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                                  //   children: [
-                                                  //     // ${sumQty(groupProduct[index].value).toInt()} x
-                                                  //     Text(
-                                                  //         '= ${num.parse(sumQtyPack(groupProduct[index].value).toString())} x ${groupProduct[index].value[index].price}'),
-                                                  //   ],
-                                                  // ),
-                                                  //// ผลรวมแยก
-                                                  // Column(
-                                                  //   children: List.generate(
-                                                  //     groupProduct[index].value.length,
-                                                  //     (index2) => Row(
-                                                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  //       children: [
-                                                  //         Expanded(
-                                                  //           flex: 6,
-                                                  //           child: Text(
-                                                  //               '(${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack}) x ${groupProduct[index].value[index2].current_price_per_unit}'), //${groupProduct[index].value[index2].price}${qtyPrice[index2].price_per_unit}
-                                                  //         ),
-                                                  //         Expanded(
-                                                  //             flex: 4,
-                                                  //             child: Row(
-                                                  //               mainAxisAlignment: MainAxisAlignment.end,
-                                                  //               children: [
-                                                  //                 enable == false
-                                                  //                     ? Text('')
-                                                  //                     : Text(
-                                                  //                         '${newtotal(groupProduct[index].value[index2]).toInt()}'),
-                                                  //                 // : Text(
-                                                  //                 //     '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
-                                                  //               ],
-                                                  //             )),
-                                                  //       ],
-                                                  //     ),
-                                                  //   ),
-                                                  // ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      enable == false
-                                                          ? Text('')
-                                                          : Text(
-                                                              '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}'),
-                                                      // : Text(
-                                                      //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
-                                                      //Text('${sumPrice(groupProduct[index].value)}'),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                    ),
-                                    Divider(
-                                      thickness: 2,
-                                      height: 2,
-                                      color: Colors.black,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 5,
-                                            child: Text(
-                                              'รวมรายการ',
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                        // Expanded(
-                                        //     flex: 5,
-                                        //     child: Row(
-                                        //       mainAxisAlignment: MainAxisAlignment.end,
-                                        //       children: [
-                                        //         Text(
-                                        //           '1',
-                                        //           style: TextStyle(fontSize: 16),
-                                        //         )
-                                        //       ],
-                                        //     ))
-                                      ],
-                                    ),
-                                    Divider(
-                                      thickness: 2,
-                                      height: 2,
-                                      color: Colors.black,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 5,
-                                            child: Text(
-                                              'รวมเป็น',
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                        Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                enable == false
-                                                    ? Text('0')
-                                                    : Text(
-                                                        sum(product2).toStringAsFixed(2),
+
+                                                    Column(
+                                                      children: List.generate(
+                                                        1,
+                                                        (index2) => Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            Text(
+                                                                '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}'),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    // Row(
+                                                    //   mainAxisAlignment: MainAxisAlignment.center,
+                                                    //   children: [
+                                                    //     // ${sumQty(groupProduct[index].value).toInt()} x
+                                                    //     Text(
+                                                    //         '= ${num.parse(sumQtyPack(groupProduct[index].value).toString())} x ${groupProduct[index].value[index].price}'),
+                                                    //   ],
+                                                    // ),
+                                                    //// ผลรวมแยก
+                                                    // Column(
+                                                    //   children: List.generate(
+                                                    //     groupProduct[index].value.length,
+                                                    //     (index2) => Row(
+                                                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    //       children: [
+                                                    //         Expanded(
+                                                    //           flex: 6,
+                                                    //           child: Text(
+                                                    //               '(${groupProduct[index].value[index2].qty} x ${groupProduct[index].value[index2].qtyPack}) x ${groupProduct[index].value[index2].current_price_per_unit}'), //${groupProduct[index].value[index2].price}${qtyPrice[index2].price_per_unit}
+                                                    //         ),
+                                                    //         Expanded(
+                                                    //             flex: 4,
+                                                    //             child: Row(
+                                                    //               mainAxisAlignment: MainAxisAlignment.end,
+                                                    //               children: [
+                                                    //                 enable == false
+                                                    //                     ? Text('')
+                                                    //                     : Text(
+                                                    //                         '${newtotal(groupProduct[index].value[index2]).toInt()}'),
+                                                    //                 // : Text(
+                                                    //                 //     '${currencyFormat.format(newtotal(groupProduct[index].value[index2]))}'),
+                                                    //               ],
+                                                    //             )),
+                                                    //       ],
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        enable == false
+                                                            ? Text('')
+                                                            : Text(
+                                                                '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}'),
                                                         // : Text(
-                                                        //     '${currencyFormat.format(sum(product2))}',
-                                                        style: TextStyle(fontSize: 16),
-                                                      )
-                                              ],
-                                            ))
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 5,
-                                            child: Text(
-                                              'ยอดค้าง',
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                        Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  '0',
-                                                  style: TextStyle(fontSize: 16),
-                                                )
-                                              ],
-                                            ))
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 5,
-                                            child: Text(
-                                              'ยอดชำระ',
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                        Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  '0',
-                                                  style: TextStyle(fontSize: 16),
-                                                )
-                                              ],
-                                            ))
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 5,
-                                            child: Text(
-                                              'รวมค้าง',
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                        Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                enable == false
-                                                    ? Text('0')
-                                                    : Text(
-                                                        sum(product2).toStringAsFixed(2),
-                                                        style: TextStyle(fontSize: 16),
-                                                      )
-                                                // : Text(
-                                                //     '${currencyFormat.format(sum(product2))}',
-                                                //     style: TextStyle(fontSize: 16),
-                                                //   )
-                                              ],
-                                            ))
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 5,
-                                            child: Text(
-                                              'ทอน',
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                        Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  '0',
-                                                  style: TextStyle(fontSize: 16),
-                                                )
-                                              ],
-                                            ))
-                                      ],
-                                    ),
-                                  ],
+                                                        //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
+                                                        //Text('${sumPrice(groupProduct[index].value)}'),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )),
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                        height: 2,
+                                        color: Colors.black,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 5,
+                                              child: Text(
+                                                'รวมรายการ',
+                                                style: TextStyle(fontSize: 16),
+                                              )),
+                                          // Expanded(
+                                          //     flex: 5,
+                                          //     child: Row(
+                                          //       mainAxisAlignment: MainAxisAlignment.end,
+                                          //       children: [
+                                          //         Text(
+                                          //           '1',
+                                          //           style: TextStyle(fontSize: 16),
+                                          //         )
+                                          //       ],
+                                          //     ))
+                                        ],
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                        height: 2,
+                                        color: Colors.black,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 5,
+                                              child: Text(
+                                                'รวมเป็น',
+                                                style: TextStyle(fontSize: 16),
+                                              )),
+                                          Expanded(
+                                              flex: 5,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  enable == false
+                                                      ? Text('0')
+                                                      : Text(
+                                                          sum(product2).toStringAsFixed(2),
+                                                          // : Text(
+                                                          //     '${currencyFormat.format(sum(product2))}',
+                                                          style: TextStyle(fontSize: 16),
+                                                        )
+                                                ],
+                                              ))
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 5,
+                                              child: Text(
+                                                'ยอดค้าง',
+                                                style: TextStyle(fontSize: 16),
+                                              )),
+                                          Expanded(
+                                              flex: 5,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    '0',
+                                                    style: TextStyle(fontSize: 16),
+                                                  )
+                                                ],
+                                              ))
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 5,
+                                              child: Text(
+                                                'ยอดชำระ',
+                                                style: TextStyle(fontSize: 16),
+                                              )),
+                                          Expanded(
+                                              flex: 5,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    '0',
+                                                    style: TextStyle(fontSize: 16),
+                                                  )
+                                                ],
+                                              ))
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 5,
+                                              child: Text(
+                                                'รวมค้าง',
+                                                style: TextStyle(fontSize: 16),
+                                              )),
+                                          Expanded(
+                                              flex: 5,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  enable == false
+                                                      ? Text('0')
+                                                      : Text(
+                                                          sum(product2).toStringAsFixed(2),
+                                                          style: TextStyle(fontSize: 16),
+                                                        )
+                                                  // : Text(
+                                                  //     '${currencyFormat.format(sum(product2))}',
+                                                  //     style: TextStyle(fontSize: 16),
+                                                  //   )
+                                                ],
+                                              ))
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              flex: 5,
+                                              child: Text(
+                                                'ทอน',
+                                                style: TextStyle(fontSize: 16),
+                                              )),
+                                          Expanded(
+                                              flex: 5,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    '0',
+                                                    style: TextStyle(fontSize: 16),
+                                                  )
+                                                ],
+                                              ))
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ])
+                      ]),
+                    )
                   : SizedBox(),
 
               ///อันนี้คือรายการสั่งปริ๊น ที่ฟิกขนาดให้พอดีไว้เพื่อแคปรูป ตอนไปปริ๊น
