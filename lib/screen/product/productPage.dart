@@ -280,7 +280,7 @@ class _ProductPageState extends State<ProductPage> {
                               },
                               child: Container(
                                 width: 80,
-                                height: 50,
+                                height: 60,
                                 margin: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                     color: selectIndex == index ? kSecondaryColor : Color.fromARGB(255, 234, 247, 246),
@@ -292,6 +292,7 @@ class _ProductPageState extends State<ProductPage> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
+                                  textAlign: TextAlign.center,
                                 )),
                               ),
                             )),
@@ -381,13 +382,13 @@ class _ProductPageState extends State<ProductPage> {
                                           Padding(
                                             padding: EdgeInsets.all(5),
                                             child: SizedBox(
-                                              height: size.height * 0.05,
+                                              height: size.height * 0.06,
                                               child: Center(
                                                   child: TextField(
                                                 controller: _myNumber,
                                                 textAlign: TextAlign.center,
                                                 showCursor: false,
-                                                style: TextStyle(fontSize: 20),
+                                                style: TextStyle(fontSize: 16.5),
                                                 // Disable the default soft keybaord
                                                 keyboardType: TextInputType.none,
                                               )),

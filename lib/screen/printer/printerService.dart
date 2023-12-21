@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
+import 'package:poshuasengheng/extension/dateExtension.dart';
 import 'package:poshuasengheng/models/customer.dart';
 import 'package:sunmi_printer_plus/enums.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
@@ -62,6 +63,10 @@ class PrinterService {
     await SunmiPrinter.setCustomFontSize(24);
     await SunmiPrinter.printText(
       'ทะเบียนรถ: ${customer.licensePage}',
+    );
+    await SunmiPrinter.setCustomFontSize(24);
+    await SunmiPrinter.printText(
+      'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
     );
     // await SunmiPrinter.setCustomFontSize(24);
     // await SunmiPrinter.printText(

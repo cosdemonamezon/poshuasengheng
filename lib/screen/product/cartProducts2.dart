@@ -38,7 +38,7 @@ class _CartProducts2State extends State<CartProducts2> {
   int paperSize = 0;
   String serialNumber = "";
   String printerVersion = "";
-  List<Product> _finalListProducts = [];
+  List<Product2> _finalListProducts = [];
   List<Product> _newFinalListProducts = [];
   Image? img;
   GlobalKey globalKey = GlobalKey();
@@ -82,9 +82,8 @@ class _CartProducts2State extends State<CartProducts2> {
 
       setState(() {
         product2 = widget.finalListProducts;
-        inspect(product2);
         printBinded = isBind!;
-        // _finalListProducts = widget.finalListProducts;
+        _finalListProducts = widget.finalListProducts;
         if (product2.isNotEmpty) {
           groupProduct = groupBy(product2, (e) => '${e.name}').entries.toList();
 
@@ -188,8 +187,8 @@ class _CartProducts2State extends State<CartProducts2> {
         title: Text('รายการสินค้าในตะกร้า'),
         leading: IconButton(
             onPressed: () {
-              if (widget.finalListProducts.isNotEmpty) {
-                Navigator.pop(context, _finalListProducts);
+              if (product2.isNotEmpty) {
+                Navigator.pop(context, product2);
               } else {
                 Navigator.pop(context, null);
               }
@@ -393,7 +392,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 onPressed: () {
                                                   setState(() {
                                                     product2.removeAt(index);
-                                                    _finalListProducts.removeAt(index);
+                                                    // _finalListProducts.removeAt(index);
                                                     if (product2.isNotEmpty) {
                                                       groupProduct =
                                                           groupBy(product2, (e) => '${e.name}').entries.toList();
@@ -457,7 +456,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                               flex: 7,
                                               child: Text(
                                                 'สินค้า',
-                                                style: TextStyle(fontSize: 16),
+                                                style: TextStyle(fontSize: 14),
                                               )),
                                           Expanded(
                                               flex: 3,
@@ -466,7 +465,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 children: [
                                                   Text(
                                                     'ราคา',
-                                                    style: TextStyle(fontSize: 16),
+                                                    style: TextStyle(fontSize: 14),
                                                   )
                                                 ],
                                               ))
@@ -489,7 +488,10 @@ class _CartProducts2State extends State<CartProducts2> {
                                                       mainAxisAlignment: MainAxisAlignment.start,
                                                       children: [
                                                         // ${sumQty(groupProduct[index].value).toInt()} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}
-                                                        Text('${groupProduct[index].key} '),
+                                                        Text(
+                                                          groupProduct[index].key,
+                                                          style: TextStyle(fontSize: 13),
+                                                        ),
                                                       ],
                                                     ),
                                                     //  Row(
@@ -523,20 +525,45 @@ class _CartProducts2State extends State<CartProducts2> {
                                                     //     Text(' x ${groupProduct[0].value[0].current_price_per_unit}'),
                                                     //   ],
                                                     // ),
-
                                                     Row(
                                                       children: List.generate(
                                                         groupProduct[index].value.length,
                                                         (index2) => Flexible(
+                                                          flex: 7,
                                                           child: Text(
                                                             '${groupProduct[index].value[index2] == groupProduct[index].value[0] ? '' : '+'}${groupProduct[index].value[index2].qtyPack}',
-                                                            style: TextStyle(fontSize: 13),
+                                                            style: TextStyle(fontSize: 9),
                                                             maxLines: 10,
-                                                            overflow: TextOverflow.ellipsis,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
+                                                    // Row(
+                                                    //   children: List.generate(
+                                                    //     groupProduct[index].value.length,
+                                                    //     (index2) => Flexible(
+                                                    //       fit: FlexFit.tight,
+                                                    //       child: Row(
+                                                    //         children: [
+                                                    //           Text(
+                                                    //             groupProduct[index].value[index2] ==
+                                                    //                     groupProduct[index].value[0]
+                                                    //                 ? ''
+                                                    //                 : '+',
+                                                    //             style: TextStyle(fontSize: 9),
+                                                    //           ),
+                                                    //           Flexible(
+                                                    //             child: Text(
+                                                    //               '${groupProduct[index].value[index2].qtyPack}',
+                                                    //               style: TextStyle(fontSize: 10),
+                                                    //               maxLines: 10,
+                                                    //             ),
+                                                    //           ),
+                                                    //         ],
+                                                    //       ),
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
 
                                                     Column(
                                                       children: List.generate(
@@ -545,7 +572,9 @@ class _CartProducts2State extends State<CartProducts2> {
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: [
                                                             Text(
-                                                                '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}'),
+                                                              '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}',
+                                                              style: TextStyle(fontSize: 13),
+                                                            ),
                                                           ],
                                                         ),
                                                       ),
@@ -593,7 +622,9 @@ class _CartProducts2State extends State<CartProducts2> {
                                                         enable == false
                                                             ? Text('')
                                                             : Text(
-                                                                '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}'),
+                                                                '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}',
+                                                                style: TextStyle(fontSize: 13),
+                                                              ),
                                                         // : Text(
                                                         //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
                                                         //Text('${sumPrice(groupProduct[index].value)}'),
@@ -613,7 +644,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                               flex: 5,
                                               child: Text(
                                                 'รวมรายการ',
-                                                style: TextStyle(fontSize: 16),
+                                                style: TextStyle(fontSize: 13),
                                               )),
                                           // Expanded(
                                           //     flex: 5,
@@ -639,7 +670,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                               flex: 5,
                                               child: Text(
                                                 'รวมเป็น',
-                                                style: TextStyle(fontSize: 16),
+                                                style: TextStyle(fontSize: 13),
                                               )),
                                           Expanded(
                                               flex: 5,
@@ -652,7 +683,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                           sum(product2).toStringAsFixed(2),
                                                           // : Text(
                                                           //     '${currencyFormat.format(sum(product2))}',
-                                                          style: TextStyle(fontSize: 16),
+                                                          style: TextStyle(fontSize: 13),
                                                         )
                                                 ],
                                               ))
@@ -664,7 +695,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                               flex: 5,
                                               child: Text(
                                                 'ยอดค้าง',
-                                                style: TextStyle(fontSize: 16),
+                                                style: TextStyle(fontSize: 13),
                                               )),
                                           Expanded(
                                               flex: 5,
@@ -673,7 +704,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 children: [
                                                   Text(
                                                     '0',
-                                                    style: TextStyle(fontSize: 16),
+                                                    style: TextStyle(fontSize: 13),
                                                   )
                                                 ],
                                               ))
@@ -685,7 +716,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                               flex: 5,
                                               child: Text(
                                                 'ยอดชำระ',
-                                                style: TextStyle(fontSize: 16),
+                                                style: TextStyle(fontSize: 13),
                                               )),
                                           Expanded(
                                               flex: 5,
@@ -694,7 +725,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 children: [
                                                   Text(
                                                     '0',
-                                                    style: TextStyle(fontSize: 16),
+                                                    style: TextStyle(fontSize: 13),
                                                   )
                                                 ],
                                               ))
@@ -706,7 +737,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                               flex: 5,
                                               child: Text(
                                                 'รวมค้าง',
-                                                style: TextStyle(fontSize: 16),
+                                                style: TextStyle(fontSize: 13),
                                               )),
                                           Expanded(
                                               flex: 5,
@@ -717,7 +748,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                       ? Text('0')
                                                       : Text(
                                                           sum(product2).toStringAsFixed(2),
-                                                          style: TextStyle(fontSize: 16),
+                                                          style: TextStyle(fontSize: 13),
                                                         )
                                                   // : Text(
                                                   //     '${currencyFormat.format(sum(product2))}',
@@ -733,7 +764,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                               flex: 5,
                                               child: Text(
                                                 'ทอน',
-                                                style: TextStyle(fontSize: 16),
+                                                style: TextStyle(fontSize: 13),
                                               )),
                                           Expanded(
                                               flex: 5,
@@ -742,7 +773,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                                 children: [
                                                   Text(
                                                     '0',
-                                                    style: TextStyle(fontSize: 16),
+                                                    style: TextStyle(fontSize: 13),
                                                   )
                                                 ],
                                               ))
