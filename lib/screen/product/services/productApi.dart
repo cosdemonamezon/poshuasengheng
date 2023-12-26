@@ -10,6 +10,7 @@ import 'package:poshuasengheng/models/orderdraft.dart';
 import 'package:poshuasengheng/models/priceUint.dart';
 import 'package:poshuasengheng/models/product.dart';
 import 'package:poshuasengheng/models/product2.dart';
+import 'package:poshuasengheng/models/transaction.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductApi {
@@ -114,7 +115,7 @@ class ProductApi {
   }
 
   //add Order
-  static Future addOrder({
+  static Future<Transaction> addOrder({
     required List<Item> item,
     required Customer customer,
     required num price,
@@ -144,7 +145,7 @@ class ProductApi {
         }));
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = convert.jsonDecode(response.body);
-      return data['data'];
+      return Transaction.fromJson(data['data']);
     } else {
       final data = convert.jsonDecode(response.body);
       throw Exception(data['message']);

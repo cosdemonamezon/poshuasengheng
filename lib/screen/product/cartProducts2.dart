@@ -1146,9 +1146,9 @@ class _CartProducts2State extends State<CartProducts2> {
                         await _capturePng();
                         if (pngBytes != null) {
                           items.clear();
-                          await PrinterService().print(widget.customer, pngBytes!);
+                          // await PrinterService().print(widget.customer, pngBytes!);
                           for (var i = 0; i < product2.length; i++) {
-                            final item = Item(0, '', 0, 0, 0, 0, 0, 0, '', '');
+                            final item = Item('', 0, 0, true, 0, 0, 0, '', '', 0, 0);
                             setState(() {
                               item.id = product2[i].id;
                               item.name = product2[i].name;
@@ -1174,11 +1174,13 @@ class _CartProducts2State extends State<CartProducts2> {
                             if (!mounted) return;
                             LoadingDialog.close(context);
                             if (order != null) {
+                              await PrinterService().print(widget.customer, pngBytes!, order.refNo!);
                               setState(() {
                                 product2.clear();
                                 _finalListProducts.clear();
                                 groupProduct.clear();
                               });
+                              if (!mounted) return;
                               final ok = await showDialog(
                                 context: context,
                                 barrierDismissible: false,

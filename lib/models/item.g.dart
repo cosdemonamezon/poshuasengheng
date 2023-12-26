@@ -7,29 +7,29 @@ part of 'item.dart';
 // **************************************************************************
 
 Item _$ItemFromJson(Map<String, dynamic> json) => Item(
-      json['id'] as int?,
       json['name'] as String?,
-      // json['itemId'] as int?,
-      json['bag'] as num?,
-      json['qty'] as int?,
-      json['unitItemId'] as int?,
       json['price'] as num?,
-      json['discount'] as num?,
+      json['rate'] as num?,
+      json['status'] as bool?,
       json['sum'] as num?,
+      json['qty'] as int?,
+      json['id'] as int?,
       json['type'] as String?,
       json['code'] as String?,
+      json['bag'] as num?,
+      json['unitItemId'] as int?,
     );
 
 Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
-      'id': instance.id,
       'name': instance.name,
-      // 'itemId': instance.itemId,
-      'qty': instance.qty,
-      'unitItemId': instance.unitItemId,
-      'bag': instance.bag,
       'price': instance.price,
-      'discount': instance.discount,
+      'rate': instance.rate,
+      'status': instance.status,
       'sum': instance.sum,
+      'qty': instance.qty,
+      'id': instance.id,
       'type': instance.type,
       'code': instance.code,
+      'bag': instance.bag,
+      'unitItemId': instance.unitItemId,
     };

@@ -19,7 +19,7 @@ class PrinterService {
     return fileUnit8List;
   }
 
-  Future<void> print(Customer customer, Uint8List pngBytes) async {
+  Future<void> print(Customer customer, Uint8List pngBytes, String refNo) async {
     await SunmiPrinter.initPrinter();
     await SunmiPrinter.startTransactionPrint(true);
     //const utf8Encoder = Utf8Encoder();
@@ -67,6 +67,9 @@ class PrinterService {
     await SunmiPrinter.setCustomFontSize(24);
     await SunmiPrinter.printText(
       'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
+    );
+    await SunmiPrinter.printText(
+      'refNo: $refNo',
     );
     // await SunmiPrinter.setCustomFontSize(24);
     // await SunmiPrinter.printText(
