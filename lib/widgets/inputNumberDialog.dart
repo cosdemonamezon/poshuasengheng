@@ -462,7 +462,7 @@ class NumPad extends StatelessWidget {
           // ),
           SizedBox(height: 10),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 onPressed: () => delete(),

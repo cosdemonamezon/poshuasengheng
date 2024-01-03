@@ -66,11 +66,13 @@ class _ProductPageState extends State<ProductPage> {
       SunmiPrinter.serialNumber().then((String serial) {
         setState(() {
           serialNumber = serial;
+          inspect(serialNumber);
         });
       });
 
       setState(() {
         printBinded = isBind!;
+
         //dropdownValue = list.first;
       });
     });
@@ -107,31 +109,31 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
-  Future<void> getListProducts(Category category) async {
-    LoadingDialog.open(context);
-    try {
-      await context.read<ProductController>().getListProductCategory(category);
-      setState(() {
-        listProducts = context.read<ProductController>().products;
-        //finalListProducts = listProducts.where((element) => element.select == true).toList();
-      });
-      //inspect(finalListProducts);
-      LoadingDialog.close(context);
-    } on Exception catch (e) {
-      LoadingDialog.close(context);
-      if (!mounted) return;
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialogYes(
-          title: 'แจ้งเตือน',
-          description: '${e.getMessage}',
-          pressYes: () {
-            Navigator.pop(context, true);
-          },
-        ),
-      );
-    }
-  }
+  // Future<void> getListProducts(Category category) async {
+  //   LoadingDialog.open(context);
+  //   try {
+  //     await context.read<ProductController>().getListProductCategory(category);
+  //     setState(() {
+  //       listProducts = context.read<ProductController>().products;
+  //       //finalListProducts = listProducts.where((element) => element.select == true).toList();
+  //     });
+  //     //inspect(finalListProducts);
+  //     LoadingDialog.close(context);
+  //   } on Exception catch (e) {
+  //     LoadingDialog.close(context);
+  //     if (!mounted) return;
+  //     showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialogYes(
+  //         title: 'แจ้งเตือน',
+  //         description: '${e.getMessage}',
+  //         pressYes: () {
+  //           Navigator.pop(context, true);
+  //         },
+  //       ),
+  //     );
+  //   }
+  // }
 
   Future<void> reGetListProducts(Category category) async {
     LoadingDialog.open(context);
@@ -186,6 +188,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
     return Consumer<ProductController>(builder: (context, controller, child) {
       final products = controller.productsNew;
       final categorys = controller.categorys;
@@ -210,6 +213,7 @@ class _ProductPageState extends State<ProductPage> {
                                 builder: (context) => CartProducts2(
                                       finalListProducts: finalListProducts,
                                       customer: widget.customer,
+                                      printer: serialNumber,
                                     )));
                         setState(() {
                           if (cartProduct != null) {
@@ -353,7 +357,7 @@ class _ProductPageState extends State<ProductPage> {
                         padding: EdgeInsets.all(10),
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        crossAxisCount: 2,
+                        crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
                         children: List.generate(
                           products.length,
                           (index) => GestureDetector(
@@ -900,6 +904,7 @@ class _ProductPageState extends State<ProductPage> {
                           builder: (context) => CartProducts2(
                                 finalListProducts: finalListProducts,
                                 customer: widget.customer,
+                                printer: serialNumber,
                               )));
                   setState(() {
                     if (cartProduct != null) {

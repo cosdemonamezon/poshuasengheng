@@ -42,13 +42,10 @@ class _LoginPageState extends State<LoginPage> {
                 height: size.height * 0.08,
               ),
               Center(
-                child: Container(
-                    width: size.width * 0.65,
-                    height: size.height * 0.25,
-                    child: Image.asset(
-                      'assets/images/Screenshot.png',
-                      fit: BoxFit.fitWidth,
-                    )),
+                child: Image.asset(
+                  'assets/images/Screenshot.png',
+                  fit: BoxFit.fitWidth,
+                ),
               ),
               SizedBox(
                 height: size.height * 0.06,
