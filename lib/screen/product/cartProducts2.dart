@@ -6,6 +6,8 @@ import 'dart:ui' as ui;
 import 'package:android_id/android_id.dart';
 import 'package:collection/collection.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:esc_pos_printer/esc_pos_printer.dart';
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 // import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +15,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_esc_pos_network/flutter_esc_pos_network.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
+// import 'package:pdf/pdf.dart';
 import 'package:poshuasengheng/constants/constants.dart';
 import 'package:poshuasengheng/extension/dateExtension.dart';
 import 'package:poshuasengheng/models/customer.dart';
@@ -27,11 +29,11 @@ import 'package:poshuasengheng/screen/product/services/productApi.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
 import 'package:poshuasengheng/widgets/LoadingDialog.dart';
 import 'package:poshuasengheng/widgets/materialDialog.dart';
-import 'package:printing/printing.dart';
+// import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
-import 'package:pdf/widgets.dart' as pw;
+// import 'package:pdf/widgets.dart' as pw;
 
 class CartProducts2 extends StatefulWidget {
   CartProducts2({super.key, required this.finalListProducts, required this.customer, required this.printer});
@@ -147,52 +149,52 @@ class _CartProducts2State extends State<CartProducts2> {
     return result;
   }
 
-  // Future<List<int>> testTicket({
-  //   String? refNo,
-  // }) async {
-  //   final profile = await CapabilityProfile.load();
-  //   final generator = Generator(PaperSize.mm58, profile);
-  //   List<int> bytes = [];
+  Future<List<int>> testTicket({
+    String? refNo,
+  }) async {
+    final profile = await CapabilityProfile.load();
+    final generator = Generator(PaperSize.mm58, profile);
+    List<int> bytes = [];
 
-  //   bytes += generator.text('Tel. 02-225-2387\nTel. 02-225-1587', styles: PosStyles(align: PosAlign.center));
-  //   bytes += generator.text('ชื่อ: ${widget.customer.name}', styles: PosStyles(align: PosAlign.center));
-  //   bytes += generator.text('ทะเบียนรถ: ${widget.customer.licensePage}', styles: PosStyles(align: PosAlign.center));
-  //   bytes += generator.text('วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
-  //       styles: PosStyles(align: PosAlign.center));
-  //   bytes += generator.text('refNo: $refNo', styles: PosStyles(align: PosAlign.center));
+    bytes += generator.text('Tel. 02-225-2387\nTel. 02-225-1587', styles: PosStyles(align: PosAlign.center));
+    bytes += generator.text('ชื่อ: ${widget.customer.name}', styles: PosStyles(align: PosAlign.center));
+    bytes += generator.text('ทะเบียนรถ: ${widget.customer.licensePage}', styles: PosStyles(align: PosAlign.center));
+    bytes += generator.text('วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
+        styles: PosStyles(align: PosAlign.center));
+    bytes += generator.text('refNo: $refNo', styles: PosStyles(align: PosAlign.center));
 
-  //   bytes += generator.row([
-  //     PosColumn(
-  //       text: 'col3',
-  //       width: 3,
-  //       styles: const PosStyles(align: PosAlign.center, underline: true),
-  //     ),
-  //     PosColumn(
-  //       text: 'col6',
-  //       width: 6,
-  //       styles: const PosStyles(align: PosAlign.center, underline: true),
-  //     ),
-  //     PosColumn(
-  //       text: 'col3',
-  //       width: 3,
-  //       styles: const PosStyles(align: PosAlign.center, underline: true),
-  //     ),
-  //   ]);
+    bytes += generator.row([
+      PosColumn(
+        text: 'col3',
+        width: 3,
+        styles: const PosStyles(align: PosAlign.center, underline: true),
+      ),
+      PosColumn(
+        text: 'col6',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center, underline: true),
+      ),
+      PosColumn(
+        text: 'col3',
+        width: 3,
+        styles: const PosStyles(align: PosAlign.center, underline: true),
+      ),
+    ]);
 
-  //   bytes += generator.text('Text size 200%',
-  //       styles: const PosStyles(
-  //         height: PosTextSize.size2,
-  //         width: PosTextSize.size2,
-  //       ));
+    bytes += generator.text('Text size 200%',
+        styles: const PosStyles(
+          height: PosTextSize.size2,
+          width: PosTextSize.size2,
+        ));
 
-  //   // Print barcode
-  //   final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
-  //   bytes += generator.barcode(Barcode.upcA(barData));
+    // Print barcode
+    final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
+    bytes += generator.barcode(Barcode.upcA(barData));
 
-  //   bytes += generator.feed(2);
-  //   bytes += generator.cut();
-  //   return bytes;
-  // }
+    bytes += generator.feed(2);
+    bytes += generator.cut();
+    return bytes;
+  }
 
   // Future<List<int>> testTicket(
   //   // NetworkPrinter printer,
@@ -309,28 +311,55 @@ class _CartProducts2State extends State<CartProducts2> {
   //   }
   // }
 
-  // void testPrint(
-  //   String printerIp,
-  //   String refNo,
-  // ) async {
-  //   // TODO Don't forget to choose printer's paper size
-  //   const PaperSize paper = PaperSize.mm80;
-  //   final profile = await CapabilityProfile.load();
-  //   final printer = NetworkPrinter(paper, profile);
+  Future<void> testReceipt(NetworkPrinter printer, String refNo, Widget bill) async {
+    const title = 'รายการจัดส่งสินค้า';
+    const store = 'ร้านค้า เล้าเซี่ยงเฮง';
+    const tel = 'Tel. 02-225-2387\nTel. 02-225-1587';
+    final customername = 'ชื่อ: ${widget.customer.name}';
+    final customerlicensePage = 'ทะเบียนรถ: ${widget.customer.licensePage}';
+    final date = 'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}';
+    final _refNo = 'refNo: $refNo';
+    printer.text('Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
+    printer.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ', styles: PosStyles(codeTable: 'CP1252'));
+    printer.text('Special 2: blåbærgrød', styles: PosStyles(codeTable: 'CP1252'));
 
-  //   final PosPrintResult res = await printer.connect(printerIp, port: 9100);
+    printer.text('Bold text', styles: PosStyles(bold: true));
+    printer.text('Reverse text', styles: PosStyles(reverse: true));
+    printer.text('Underlined text', styles: PosStyles(underline: true), linesAfter: 1);
+    printer.text('Align left', styles: PosStyles(align: PosAlign.left));
+    printer.text('Align center', styles: PosStyles(align: PosAlign.center));
+    printer.text('Align right', styles: PosStyles(align: PosAlign.right), linesAfter: 1);
 
-  //   if (res == PosPrintResult.success) {
-  //     // DEMO RECEIPT
-  //     await printDemoReceipt(printer, refNo);
-  //     // TEST PRINT
-  //     // await testReceipt(printer);
-  //     printer.disconnect();
-  //   }
+    printer.text('Text size 200%',
+        styles: PosStyles(
+          height: PosTextSize.size2,
+          width: PosTextSize.size2,
+        ));
 
-  //   final snackBar = SnackBar(content: Text(res.msg, textAlign: TextAlign.center));
-  //   // Scaffold.of(ctx).showSnackBar(snackBar);
-  // }
+    printer.feed(2);
+    printer.cut();
+  }
+
+  void testPrint(String printerIp, String refNo, Widget bill) async {
+    // TODO Don't forget to choose printer's paper size
+    const PaperSize paper = PaperSize.mm80;
+    final profile = await CapabilityProfile.load();
+    final printer = NetworkPrinter(paper, profile);
+
+    final PosPrintResult res = await printer.connect(printerIp, port: 9100);
+
+    if (res == PosPrintResult.success) {
+      // DEMO RECEIPT
+      // await printDemoReceipt(printer, refNo);
+      // TEST PRINT
+      await testReceipt(printer, refNo, bill);
+      print('Print result: ${res.msg}');
+      printer.disconnect();
+    }
+
+    final snackBar = SnackBar(content: Text(res.msg, textAlign: TextAlign.center));
+    // Scaffold.of(ctx).showSnackBar(snackBar);
+  }
 
   Future<Uint8List?> _capturePngPag() async {
     try {
@@ -384,110 +413,114 @@ class _CartProducts2State extends State<CartProducts2> {
     return await readFileBytes(iconPath);
   }
 
-  Future<void> printCapturedWidget(
-    Uint8List capturedImage,
-    String refNo,
-  ) async {
-    final font = await rootBundle.load("fonts/Prompt-Regular.ttf");
-    final ttf = pw.Font.ttf(font);
-    final doc = pw.Document();
-    // final directory = (await getApplicationDocumentsDirectory()).path;
-    const title = 'รายการจัดส่งสินค้า';
-    const store = 'ร้านค้า เล้าเซี่ยงเฮง';
-    const tel = 'Tel. 02-225-2387\nTel. 02-225-1587';
-    final customername = 'ชื่อ: ${widget.customer.name}';
-    final customerlicensePage = 'ทะเบียนรถ: ${widget.customer.licensePage}';
-    final date = 'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}';
-    final _refNo = 'refNo: $refNo';
-    // File myfile = File('$directory/qr.png');
-    // final Uint8List byteList = await myfile.readAsBytes();
-    Uint8List byte = await _getImageFromAsset('assets/images/logo44.png');
-    doc.addPage(pw.Page(build: (pw.Context context) {
-      return pw.Expanded(
-        child: pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          mainAxisAlignment: pw.MainAxisAlignment.start,
-          mainAxisSize: pw.MainAxisSize.min,
-          children: [
-            pw.Center(
-              child: pw.Image(
-                pw.MemoryImage(byte),
-                width: 80,
-                height: 80,
-              ),
-            ),
-            pw.Center(
-              child: pw.Text(
-                title,
-                style: pw.TextStyle(
-                  font: ttf,
-                  fontSize: 10,
-                ),
-              ),
-            ),
-            pw.Text(
-              store,
-              style: pw.TextStyle(
-                font: ttf,
-                fontSize: 10,
-              ),
-            ),
-            pw.Text(
-              tel,
-              style: pw.TextStyle(
-                font: ttf,
-                fontSize: 10,
-              ),
-            ),
-            pw.Divider(),
-            pw.Text(
-              customername,
-              style: pw.TextStyle(
-                font: ttf,
-                fontSize: 10,
-              ),
-            ),
-            pw.Text(
-              customerlicensePage,
-              style: pw.TextStyle(
-                font: ttf,
-                fontSize: 10,
-              ),
-            ),
-            pw.Text(
-              date,
-              style: pw.TextStyle(
-                font: ttf,
-                fontSize: 10,
-              ),
-            ),
-            pw.Text(
-              _refNo,
-              style: pw.TextStyle(
-                font: ttf,
-                fontSize: 10,
-              ),
-            ),
-            pw.Divider(),
-            pw.Image(
-              pw.MemoryImage(
-                capturedImage,
-              ),
-              // fit: pw.BoxFit.cover,
-            ),
-          ],
-        ),
-      );
-    }));
-    await Printing.layoutPdf(
-      format: PdfPageFormat.roll57,
-      usePrinterSettings: true,
-      dynamicLayout: false,
-      onLayout: (PdfPageFormat format) async {
-        return doc.save();
-      },
-    );
-  }
+  // Future<void> printCapturedWidget(
+  //   Uint8List capturedImage,
+  //   String refNo,
+  // ) async {
+  //   final font = await rootBundle.load("fonts/Prompt-Regular.ttf");
+  //   final ttf = pw.Font.ttf(font);
+  //   final doc = pw.Document(version: PdfVersion.pdf_1_4, verbose: true, pageMode: PdfPageMode.outlines);
+  //   // final directory = (await getApplicationDocumentsDirectory()).path;
+  //   const title = 'รายการจัดส่งสินค้า';
+  //   const store = 'ร้านค้า เล้าเซี่ยงเฮง';
+  //   const tel = 'Tel. 02-225-2387\nTel. 02-225-1587';
+  //   final customername = 'ชื่อ: ${widget.customer.name}';
+  //   final customerlicensePage = 'ทะเบียนรถ: ${widget.customer.licensePage}';
+  //   final date = 'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}';
+  //   final _refNo = 'refNo: $refNo';
+  //   // File myfile = File('$directory/qr.png');
+  //   // final Uint8List byteList = await myfile.readAsBytes();
+  //   // Uint8List byte = await _getImageFromAsset('assets/images/logo44.png');
+  //   final image = await imageFromAssetBundle('assets/images/logo44.png');
+  //   doc.addPage(
+  //     pw.Page(
+  //       build: (pw.Context context) {
+  //         return pw.Column(
+  //           crossAxisAlignment: pw.CrossAxisAlignment.start,
+  //           mainAxisAlignment: pw.MainAxisAlignment.start,
+  //           mainAxisSize: pw.MainAxisSize.min,
+  //           children: [
+  //             pw.Center(
+  //               child: pw.Image(
+  //                 image,
+  //                 width: 80,
+  //                 height: 80,
+  //               ),
+  //             ),
+  //             pw.Center(
+  //               child: pw.Text(
+  //                 title,
+  //                 style: pw.TextStyle(
+  //                   font: ttf,
+  //                   fontSize: 10,
+  //                 ),
+  //               ),
+  //             ),
+  //             pw.Text(
+  //               store,
+  //               style: pw.TextStyle(
+  //                 font: ttf,
+  //                 fontSize: 10,
+  //               ),
+  //             ),
+  //             pw.Text(
+  //               tel,
+  //               style: pw.TextStyle(
+  //                 font: ttf,
+  //                 fontSize: 10,
+  //               ),
+  //             ),
+  //             pw.Divider(),
+  //             pw.Text(
+  //               customername,
+  //               style: pw.TextStyle(
+  //                 font: ttf,
+  //                 fontSize: 10,
+  //               ),
+  //             ),
+  //             pw.Text(
+  //               customerlicensePage,
+  //               style: pw.TextStyle(
+  //                 font: ttf,
+  //                 fontSize: 10,
+  //               ),
+  //             ),
+  //             pw.Text(
+  //               date,
+  //               style: pw.TextStyle(
+  //                 font: ttf,
+  //                 fontSize: 10,
+  //               ),
+  //             ),
+  //             pw.Text(
+  //               _refNo,
+  //               style: pw.TextStyle(
+  //                 font: ttf,
+  //                 fontSize: 10,
+  //               ),
+  //             ),
+  //             pw.Divider(),
+  //             pw.Image(
+  //               pw.MemoryImage(
+  //                 capturedImage,
+  //               ),
+  //               // fit: pw.BoxFit.cover,
+  //             ),
+  //           ],
+  //         );
+  //       },
+  //       // pageFormat: PdfPageFormat.legal,
+  //     ),
+  //   );
+  //   await Printing.layoutPdf(
+  //     format: PdfPageFormat.roll57,
+  //     usePrinterSettings: true,
+  //     dynamicLayout: false,
+  //     onLayout: (PdfPageFormat format) async {
+  //       return doc.save();
+  //     },
+  //   );
+  // }
 
   // Create a NumberFormat instance for Thai Baht currency formatting
   NumberFormat currencyFormat = NumberFormat.currency(
@@ -1115,104 +1148,105 @@ class _CartProducts2State extends State<CartProducts2> {
                       onTap: () async {
                         await _capturePng();
                         if (pngBytes != null) {
-                          items.clear();
-                          // testPrint('192.168.1.122', 'fsdfsdfds');
+                          // await printCapturedWidget(pngBytes!, ' order.refNo!');
+                          testPrint('192.168.1.122', 'fsdfsdfds', buildBill2());
                           // printTicket(testTicket(refNo: 'fdsfsdf'));
                           // printCapturedWidget(pngBytes!, 'order.refNo!');
-                          for (var i = 0; i < product2.length; i++) {
-                            final item = Item('', 0, 0, true, 0, 0, 0, '', '', 0, 0);
-                            setState(() {
-                              item.id = product2[i].id;
-                              item.name = product2[i].name;
-                              item.qty = product2[i].qty;
-                              item.unitItemId = product2[i].unitId;
-                              item.bag = product2[i].qtyPack;
-                              item.price = product2[i].price;
-                              item.sum = product2[i].price! * product2[i].qtyPack!;
-                              item.type = 'product';
-                              item.code = product2[i].code;
-                              items.add(item);
-                            });
-                            inspect(items);
-                          }
-                          try {
-                            LoadingDialog.open(context);
-                            final order = await ProductApi.addOrder(
-                              item: items,
-                              customer: widget.customer,
-                              total: double.parse(sum(product2).toStringAsFixed(2)),
-                              price: double.parse(sum(product2).toStringAsFixed(2)),
-                            );
-                            if (!mounted) return;
-                            LoadingDialog.close(context);
-                            if (order != null) {
-                              if (!mounted) return;
-                              final ok = await showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return AlertDialogYes(
-                                    title: 'แจ้งเตือน',
-                                    description: 'สร้างออร์เดอร์สำเร็จ',
-                                    pressYes: () {
-                                      Navigator.pop(context, true);
-                                    },
-                                  );
-                                },
-                              );
-                              if (widget.printer != 'NOT FOUND') {
-                                await PrinterService().print(widget.customer, pngBytes!, order.refNo!);
-                              } else {
-                                await printCapturedWidget(pngBytes!, order.refNo!);
-                                // final qrCode = await controller.captureFromWidget(buildBill());
-                                // printCapturedWidget(qrCode);
-                              }
-                              setState(() {
-                                product2.clear();
-                                _finalListProducts.clear();
-                                groupProduct.clear();
-                              });
-                              if (ok == true) {
-                                if (_finalListProducts.isNotEmpty) {
-                                  Navigator.pop(context, _finalListProducts);
-                                } else {
-                                  Navigator.pop(context, null);
-                                }
-                              }
-                            } else {
-                              if (!mounted) return;
-                              LoadingDialog.close(context);
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return AlertDialogYes(
-                                    title: 'แจ้งเตือน',
-                                    description: 'เกิดข้อผิดพลาด',
-                                    pressYes: () {
-                                      Navigator.pop(context, true);
-                                    },
-                                  );
-                                },
-                              );
-                            }
-                          } on Exception catch (e) {
-                            if (!mounted) return;
-                            LoadingDialog.close(context);
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return AlertDialogYes(
-                                  title: 'แจ้งเตือน',
-                                  description: '${e}',
-                                  pressYes: () {
-                                    Navigator.pop(context, true);
-                                  },
-                                );
-                              },
-                            );
-                          }
+                          // items.clear();
+                          // for (var i = 0; i < product2.length; i++) {
+                          //   final item = Item('', 0, 0, true, 0, 0, 0, '', '', 0, 0);
+                          //   setState(() {
+                          //     item.id = product2[i].id;
+                          //     item.name = product2[i].name;
+                          //     item.qty = product2[i].qty;
+                          //     item.unitItemId = product2[i].unitId;
+                          //     item.bag = product2[i].qtyPack;
+                          //     item.price = product2[i].price;
+                          //     item.sum = product2[i].price! * product2[i].qtyPack!;
+                          //     item.type = 'product';
+                          //     item.code = product2[i].code;
+                          //     items.add(item);
+                          //   });
+                          //   inspect(items);
+                          // }
+                          // try {
+                          //   LoadingDialog.open(context);
+                          //   final order = await ProductApi.addOrder(
+                          //     item: items,
+                          //     customer: widget.customer,
+                          //     total: double.parse(sum(product2).toStringAsFixed(2)),
+                          //     price: double.parse(sum(product2).toStringAsFixed(2)),
+                          //   );
+                          //   if (!mounted) return;
+                          //   LoadingDialog.close(context);
+                          //   if (order != null) {
+                          //     if (!mounted) return;
+                          //     final ok = await showDialog(
+                          //       context: context,
+                          //       barrierDismissible: false,
+                          //       builder: (BuildContext context) {
+                          //         return AlertDialogYes(
+                          //           title: 'แจ้งเตือน',
+                          //           description: 'สร้างออร์เดอร์สำเร็จ',
+                          //           pressYes: () {
+                          //             Navigator.pop(context, true);
+                          //           },
+                          //         );
+                          //       },
+                          //     );
+                          //     if (widget.printer != 'NOT FOUND') {
+                          //       await PrinterService().print(widget.customer, pngBytes!, order.refNo!);
+                          //     } else {
+                          //       // await printCapturedWidget(pngBytes!, order.refNo!);
+                          //       // final qrCode = await controller.captureFromWidget(buildBill());
+                          //       // printCapturedWidget(qrCode);
+                          //     }
+                          //     setState(() {
+                          //       product2.clear();
+                          //       _finalListProducts.clear();
+                          //       groupProduct.clear();
+                          //     });
+                          //     if (ok == true) {
+                          //       if (_finalListProducts.isNotEmpty) {
+                          //         Navigator.pop(context, _finalListProducts);
+                          //       } else {
+                          //         Navigator.pop(context, null);
+                          //       }
+                          //     }
+                          //   } else {
+                          //     if (!mounted) return;
+                          //     LoadingDialog.close(context);
+                          //     showDialog(
+                          //       context: context,
+                          //       barrierDismissible: false,
+                          //       builder: (BuildContext context) {
+                          //         return AlertDialogYes(
+                          //           title: 'แจ้งเตือน',
+                          //           description: 'เกิดข้อผิดพลาด',
+                          //           pressYes: () {
+                          //             Navigator.pop(context, true);
+                          //           },
+                          //         );
+                          //       },
+                          //     );
+                          //   }
+                          // } on Exception catch (e) {
+                          //   if (!mounted) return;
+                          //   LoadingDialog.close(context);
+                          //   showDialog(
+                          //     context: context,
+                          //     barrierDismissible: false,
+                          //     builder: (BuildContext context) {
+                          //       return AlertDialogYes(
+                          //         title: 'แจ้งเตือน',
+                          //         description: '${e}',
+                          //         pressYes: () {
+                          //           Navigator.pop(context, true);
+                          //         },
+                          //       );
+                          //     },
+                          //   );
+                          // }
 
                           //inspect(items);
                         }
@@ -1372,13 +1406,59 @@ class _CartProducts2State extends State<CartProducts2> {
                             (index) => Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment: orientation == Orientation.portrait
+                                          ? MainAxisAlignment.start
+                                          : MainAxisAlignment.spaceBetween,
                                       children: [
                                         // ${sumQty(groupProduct[index].value).toInt()} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}
-                                        Text(
-                                          groupProduct[index].key,
-                                          style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                        SizedBox(
+                                          width: 220,
+                                          child: Text(
+                                            groupProduct[index].key,
+                                            style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                          ),
                                         ),
+                                        orientation != Orientation.portrait
+                                            ? SizedBox(
+                                                width: 200,
+                                                child: Column(
+                                                  children: List.generate(
+                                                    1,
+                                                    (index2) => Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          '${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}',
+                                                          style: TextStyle(
+                                                              fontSize: orientation == Orientation.portrait ? 13 : 18),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : SizedBox.shrink(),
+                                        orientation != Orientation.portrait
+                                            ? SizedBox(
+                                                width: 200,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    enable == false
+                                                        ? Text('')
+                                                        : Text(
+                                                            '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}',
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    orientation == Orientation.portrait ? 13 : 18),
+                                                          ),
+                                                    // : Text(
+                                                    //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
+                                                    //Text('${sumPrice(groupProduct[index].value)}'),
+                                                  ],
+                                                ),
+                                              )
+                                            : SizedBox.shrink(),
                                       ],
                                     ),
                                     //  Row(
@@ -1451,21 +1531,23 @@ class _CartProducts2State extends State<CartProducts2> {
                                     //     ),
                                     //   ),
                                     // ),
-
-                                    Column(
-                                      children: List.generate(
-                                        1,
-                                        (index2) => Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}',
-                                              style: TextStyle(fontSize: orientation == Orientation.portrait ? 13 : 18),
+                                    orientation == Orientation.portrait
+                                        ? Column(
+                                            children: List.generate(
+                                              1,
+                                              (index2) => Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}',
+                                                    style: TextStyle(
+                                                        fontSize: orientation == Orientation.portrait ? 13 : 18),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                          )
+                                        : SizedBox.shrink(),
                                     // Row(
                                     //   mainAxisAlignment: MainAxisAlignment.center,
                                     //   children: [
@@ -1503,21 +1585,23 @@ class _CartProducts2State extends State<CartProducts2> {
                                     //     ),
                                     //   ),
                                     // ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        enable == false
-                                            ? Text('')
-                                            : Text(
-                                                '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}',
-                                                style:
-                                                    TextStyle(fontSize: orientation == Orientation.portrait ? 13 : 18),
-                                              ),
-                                        // : Text(
-                                        //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
-                                        //Text('${sumPrice(groupProduct[index].value)}'),
-                                      ],
-                                    ),
+                                    orientation == Orientation.portrait
+                                        ? Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              enable == false
+                                                  ? Text('')
+                                                  : Text(
+                                                      '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}',
+                                                      style: TextStyle(
+                                                          fontSize: orientation == Orientation.portrait ? 13 : 18),
+                                                    ),
+                                              // : Text(
+                                              //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
+                                              //Text('${sumPrice(groupProduct[index].value)}'),
+                                            ],
+                                          )
+                                        : SizedBox.shrink(),
                                   ],
                                 )),
                       ),
