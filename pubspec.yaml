@@ -50,10 +50,11 @@ dependencies:
   screenshot: ^2.1.0
   # printing: ^5.11.1
   # pdf: ^3.10.7
+  # esc_pos_printer: ^4.1.0
   esc_pos_printer: ^4.1.0
-  flutter_esc_pos_network: ^1.0.2
   esc_pos_utils: ^1.1.0
-  # image: ^3.3.0
+  # flutter_esc_pos_network: ^1.0.2
+  image: ^3.3.0
 
 dev_dependencies:
   flutter_test:

@@ -8,14 +8,11 @@ import 'package:collection/collection.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
-// import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_esc_pos_network/flutter_esc_pos_network.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:pdf/pdf.dart';
 import 'package:poshuasengheng/constants/constants.dart';
 import 'package:poshuasengheng/extension/dateExtension.dart';
 import 'package:poshuasengheng/models/customer.dart';
@@ -29,11 +26,12 @@ import 'package:poshuasengheng/screen/product/services/productApi.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
 import 'package:poshuasengheng/widgets/LoadingDialog.dart';
 import 'package:poshuasengheng/widgets/materialDialog.dart';
-// import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
+// import 'package:printing/printing.dart';
 // import 'package:pdf/widgets.dart' as pw;
+// import 'package:pdf/pdf.dart';
 
 class CartProducts2 extends StatefulWidget {
   CartProducts2({super.key, required this.finalListProducts, required this.customer, required this.printer});
@@ -149,215 +147,28 @@ class _CartProducts2State extends State<CartProducts2> {
     return result;
   }
 
-  Future<List<int>> testTicket({
-    String? refNo,
-  }) async {
-    final profile = await CapabilityProfile.load();
-    final generator = Generator(PaperSize.mm58, profile);
-    List<int> bytes = [];
-
-    bytes += generator.text('Tel. 02-225-2387\nTel. 02-225-1587', styles: PosStyles(align: PosAlign.center));
-    bytes += generator.text('ชื่อ: ${widget.customer.name}', styles: PosStyles(align: PosAlign.center));
-    bytes += generator.text('ทะเบียนรถ: ${widget.customer.licensePage}', styles: PosStyles(align: PosAlign.center));
-    bytes += generator.text('วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
-        styles: PosStyles(align: PosAlign.center));
-    bytes += generator.text('refNo: $refNo', styles: PosStyles(align: PosAlign.center));
-
-    bytes += generator.row([
-      PosColumn(
-        text: 'col3',
-        width: 3,
-        styles: const PosStyles(align: PosAlign.center, underline: true),
-      ),
-      PosColumn(
-        text: 'col6',
-        width: 6,
-        styles: const PosStyles(align: PosAlign.center, underline: true),
-      ),
-      PosColumn(
-        text: 'col3',
-        width: 3,
-        styles: const PosStyles(align: PosAlign.center, underline: true),
-      ),
-    ]);
-
-    bytes += generator.text('Text size 200%',
-        styles: const PosStyles(
-          height: PosTextSize.size2,
-          width: PosTextSize.size2,
-        ));
-
-    // Print barcode
-    final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
-    bytes += generator.barcode(Barcode.upcA(barData));
-
-    bytes += generator.feed(2);
-    bytes += generator.cut();
-    return bytes;
+  Future<void> testReceipt(NetworkPrinter printer, Uint8List bill, Uint8List customer) async {
+    await PrinterService.printPOS(printer, customer, bill);
   }
 
-  // Future<List<int>> testTicket(
-  //   // NetworkPrinter printer,
-  //   String refNo,
-  // ) async {
-  //   // Print image
-  //   List<int> bytes2 = [];
-  //   final profile = await CapabilityProfile.load();
-  //   final generator = Generator(PaperSize.mm80, profile);
-  //   final ByteData data = await rootBundle.load('assets/images/Screenshot.png');
-  //   final Uint8List bytes = data.buffer.asUint8List();
-  //   Image image = Image.memory(bytes);
-  //   // printer.image(image!);
-  //   // bytes2 += generator.image(image);
-
-  //   bytes2 += generator.text('ร้านค้า เล้าเซี่ยงเฮง',
-  //       styles: PosStyles(
-  //         align: PosAlign.center,
-  //         height: PosTextSize.size2,
-  //         width: PosTextSize.size2,
-  //       ),
-  //       linesAfter: 1);
-
-  //   bytes2 += generator.text('Tel. 02-225-2387\nTel. 02-225-1587', styles: PosStyles(align: PosAlign.center));
-  //   bytes2 += generator.text('ชื่อ: ${widget.customer.name}', styles: PosStyles(align: PosAlign.center));
-  //   bytes2 += generator.text('ทะเบียนรถ: ${widget.customer.licensePage}', styles: PosStyles(align: PosAlign.center));
-  //   bytes2 += generator.text('วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
-  //       styles: PosStyles(align: PosAlign.center));
-  //   bytes2 += generator.text('refNo: $refNo', styles: PosStyles(align: PosAlign.center));
-  //   // bytes2 += generator.text('Web: www.example.com', styles: PosStyles(align: PosAlign.center), linesAfter: 1);
-
-  //   bytes2 += generator.hr();
-  //   bytes2 += generator.row([
-  //     PosColumn(text: 'Qty', width: 1),
-  //     PosColumn(text: 'Item', width: 7),
-  //     PosColumn(text: 'Price', width: 2, styles: PosStyles(align: PosAlign.right)),
-  //     PosColumn(text: 'Total', width: 2, styles: PosStyles(align: PosAlign.right)),
-  //   ]);
-
-  //   bytes2 += generator.hr();
-
-  //   // bytes2 += generator.row([
-  //   //   PosColumn(
-  //   //       text: 'TOTAL',
-  //   //       width: 6,
-  //   //       styles: PosStyles(
-  //   //         height: PosTextSize.size2,
-  //   //         width: PosTextSize.size2,
-  //   //       )),
-  //   //   PosColumn(
-  //   //       text: '\$10.97',
-  //   //       width: 6,
-  //   //       styles: PosStyles(
-  //   //         align: PosAlign.right,
-  //   //         height: PosTextSize.size2,
-  //   //         width: PosTextSize.size2,
-  //   //       )),
-  //   // ]);
-
-  //   bytes2 += generator.hr(ch: '=', linesAfter: 1);
-
-  //   // bytes2 += generator.row([
-  //   //   PosColumn(text: 'Cash', width: 8, styles: PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
-  //   //   PosColumn(text: '\$15.00', width: 4, styles: PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
-  //   // ]);
-  //   // bytes2 += generator.row([
-  //   //   PosColumn(text: 'Change', width: 8, styles: PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
-  //   //   PosColumn(text: '\$4.03', width: 4, styles: PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
-  //   // ]);
-
-  //   bytes2 += generator.feed(2);
-  //   bytes2 += generator.text('Thank you!', styles: PosStyles(align: PosAlign.center, bold: true));
-
-  //   // final now = DateTime.now();
-  //   // final formatter = DateFormat('MM/dd/yyyy H:m');
-  //   // final String timestamp = formatter.format(now);
-  //   // bytes2 += generator.text(timestamp, styles: PosStyles(align: PosAlign.center), linesAfter: 2);
-
-  //   // Print QR Code from image
-  //   // try {
-  //   //   const String qrData = 'example.com';
-  //   //   const double qrSize = 200;
-  //   //   final uiImg = await QrPainter(
-  //   //     data: qrData,
-  //   //     version: QrVersions.auto,
-  //   //     gapless: false,
-  //   //   ).toImageData(qrSize);
-  //   //   final dir = await getTemporaryDirectory();
-  //   //   final pathName = '${dir.path}/qr_tmp.png';
-  //   //   final qrFile = File(pathName);
-  //   //   final imgFile = await qrFile.writeAsBytes(uiImg.buffer.asUint8List());
-  //   //   final img = decodeImage(imgFile.readAsBytesSync());
-
-  //   //      bytes2 += generator.image(img);
-  //   // } catch (e) {
-  //   //   print(e);
-  //   // }
-
-  //   // Print QR Code using native function
-  //   //    bytes2 += generator.qrcode('example.com');
-
-  //   bytes2 += generator.feed(1);
-  //   bytes2 += generator.cut();
-  // }
-
-  // Future<void> printTicket(List<int> ticket) async {
-  //   final printer = PrinterNetworkManager('192.168.1.122');
-  //   PosPrintResult connect = await printer.connect();
-  //   if (connect == PosPrintResult.success) {
-  //     PosPrintResult printing = await printer.printTicket(ticket);
-
-  //     print(printing.msg);
-  //     printer.disconnect();
-  //   }
-  // }
-
-  Future<void> testReceipt(NetworkPrinter printer, String refNo, Widget bill) async {
-    const title = 'รายการจัดส่งสินค้า';
-    const store = 'ร้านค้า เล้าเซี่ยงเฮง';
-    const tel = 'Tel. 02-225-2387\nTel. 02-225-1587';
-    final customername = 'ชื่อ: ${widget.customer.name}';
-    final customerlicensePage = 'ทะเบียนรถ: ${widget.customer.licensePage}';
-    final date = 'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}';
-    final _refNo = 'refNo: $refNo';
-    printer.text('Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
-    printer.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ', styles: PosStyles(codeTable: 'CP1252'));
-    printer.text('Special 2: blåbærgrød', styles: PosStyles(codeTable: 'CP1252'));
-
-    printer.text('Bold text', styles: PosStyles(bold: true));
-    printer.text('Reverse text', styles: PosStyles(reverse: true));
-    printer.text('Underlined text', styles: PosStyles(underline: true), linesAfter: 1);
-    printer.text('Align left', styles: PosStyles(align: PosAlign.left));
-    printer.text('Align center', styles: PosStyles(align: PosAlign.center));
-    printer.text('Align right', styles: PosStyles(align: PosAlign.right), linesAfter: 1);
-
-    printer.text('Text size 200%',
-        styles: PosStyles(
-          height: PosTextSize.size2,
-          width: PosTextSize.size2,
-        ));
-
-    printer.feed(2);
-    printer.cut();
-  }
-
-  void testPrint(String printerIp, String refNo, Widget bill) async {
-    // TODO Don't forget to choose printer's paper size
+  Future<void> testPrint(Uint8List bill, Uint8List customer) async {
     const PaperSize paper = PaperSize.mm80;
-    final profile = await CapabilityProfile.load();
+    // final profiles = await CapabilityProfile.getAvailableProfiles();
+    final profile = await CapabilityProfile.load(name: 'XP-N160I');
     final printer = NetworkPrinter(paper, profile);
+    // inspect(profiles);
 
-    final PosPrintResult res = await printer.connect(printerIp, port: 9100);
+    final PosPrintResult res = await printer.connect('192.168.1.200', port: 9100);
 
     if (res == PosPrintResult.success) {
       // DEMO RECEIPT
       // await printDemoReceipt(printer, refNo);
       // TEST PRINT
-      await testReceipt(printer, refNo, bill);
-      print('Print result: ${res.msg}');
-      printer.disconnect();
+      // await testTicket(refNo: refNo);
+      await testReceipt(printer, bill, customer);
     }
 
-    final snackBar = SnackBar(content: Text(res.msg, textAlign: TextAlign.center));
+    // final snackBar = SnackBar(content: Text(res.msg, textAlign: TextAlign.center));
     // Scaffold.of(ctx).showSnackBar(snackBar);
   }
 
@@ -419,7 +230,7 @@ class _CartProducts2State extends State<CartProducts2> {
   // ) async {
   //   final font = await rootBundle.load("fonts/Prompt-Regular.ttf");
   //   final ttf = pw.Font.ttf(font);
-  //   final doc = pw.Document(version: PdfVersion.pdf_1_4, verbose: true, pageMode: PdfPageMode.outlines);
+  //   final doc = pw.Document();
   //   // final directory = (await getApplicationDocumentsDirectory()).path;
   //   const title = 'รายการจัดส่งสินค้า';
   //   const store = 'ร้านค้า เล้าเซี่ยงเฮง';
@@ -513,7 +324,7 @@ class _CartProducts2State extends State<CartProducts2> {
   //     ),
   //   );
   //   await Printing.layoutPdf(
-  //     format: PdfPageFormat.roll57,
+  //     format: PdfPageFormat.roll80,
   //     usePrinterSettings: true,
   //     dynamicLayout: false,
   //     onLayout: (PdfPageFormat format) async {
@@ -1149,104 +960,107 @@ class _CartProducts2State extends State<CartProducts2> {
                         await _capturePng();
                         if (pngBytes != null) {
                           // await printCapturedWidget(pngBytes!, ' order.refNo!');
-                          testPrint('192.168.1.122', 'fsdfsdfds', buildBill2());
+                          // final qrCode = await controller.captureFromWidget(order('fsdfds'));
+                          // testPrint( pngBytes!, qrCode);
                           // printTicket(testTicket(refNo: 'fdsfsdf'));
                           // printCapturedWidget(pngBytes!, 'order.refNo!');
                           // items.clear();
-                          // for (var i = 0; i < product2.length; i++) {
-                          //   final item = Item('', 0, 0, true, 0, 0, 0, '', '', 0, 0);
-                          //   setState(() {
-                          //     item.id = product2[i].id;
-                          //     item.name = product2[i].name;
-                          //     item.qty = product2[i].qty;
-                          //     item.unitItemId = product2[i].unitId;
-                          //     item.bag = product2[i].qtyPack;
-                          //     item.price = product2[i].price;
-                          //     item.sum = product2[i].price! * product2[i].qtyPack!;
-                          //     item.type = 'product';
-                          //     item.code = product2[i].code;
-                          //     items.add(item);
-                          //   });
-                          //   inspect(items);
-                          // }
-                          // try {
-                          //   LoadingDialog.open(context);
-                          //   final order = await ProductApi.addOrder(
-                          //     item: items,
-                          //     customer: widget.customer,
-                          //     total: double.parse(sum(product2).toStringAsFixed(2)),
-                          //     price: double.parse(sum(product2).toStringAsFixed(2)),
-                          //   );
-                          //   if (!mounted) return;
-                          //   LoadingDialog.close(context);
-                          //   if (order != null) {
-                          //     if (!mounted) return;
-                          //     final ok = await showDialog(
-                          //       context: context,
-                          //       barrierDismissible: false,
-                          //       builder: (BuildContext context) {
-                          //         return AlertDialogYes(
-                          //           title: 'แจ้งเตือน',
-                          //           description: 'สร้างออร์เดอร์สำเร็จ',
-                          //           pressYes: () {
-                          //             Navigator.pop(context, true);
-                          //           },
-                          //         );
-                          //       },
-                          //     );
-                          //     if (widget.printer != 'NOT FOUND') {
-                          //       await PrinterService().print(widget.customer, pngBytes!, order.refNo!);
-                          //     } else {
-                          //       // await printCapturedWidget(pngBytes!, order.refNo!);
-                          //       // final qrCode = await controller.captureFromWidget(buildBill());
-                          //       // printCapturedWidget(qrCode);
-                          //     }
-                          //     setState(() {
-                          //       product2.clear();
-                          //       _finalListProducts.clear();
-                          //       groupProduct.clear();
-                          //     });
-                          //     if (ok == true) {
-                          //       if (_finalListProducts.isNotEmpty) {
-                          //         Navigator.pop(context, _finalListProducts);
-                          //       } else {
-                          //         Navigator.pop(context, null);
-                          //       }
-                          //     }
-                          //   } else {
-                          //     if (!mounted) return;
-                          //     LoadingDialog.close(context);
-                          //     showDialog(
-                          //       context: context,
-                          //       barrierDismissible: false,
-                          //       builder: (BuildContext context) {
-                          //         return AlertDialogYes(
-                          //           title: 'แจ้งเตือน',
-                          //           description: 'เกิดข้อผิดพลาด',
-                          //           pressYes: () {
-                          //             Navigator.pop(context, true);
-                          //           },
-                          //         );
-                          //       },
-                          //     );
-                          //   }
-                          // } on Exception catch (e) {
-                          //   if (!mounted) return;
-                          //   LoadingDialog.close(context);
-                          //   showDialog(
-                          //     context: context,
-                          //     barrierDismissible: false,
-                          //     builder: (BuildContext context) {
-                          //       return AlertDialogYes(
-                          //         title: 'แจ้งเตือน',
-                          //         description: '${e}',
-                          //         pressYes: () {
-                          //           Navigator.pop(context, true);
-                          //         },
-                          //       );
-                          //     },
-                          //   );
-                          // }
+                          for (var i = 0; i < product2.length; i++) {
+                            final item = Item('', 0, 0, true, 0, 0, 0, '', '', 0, 0);
+                            setState(() {
+                              item.id = product2[i].id;
+                              item.name = product2[i].name;
+                              item.qty = product2[i].qty;
+                              item.unitItemId = product2[i].unitId;
+                              item.bag = product2[i].qtyPack;
+                              item.price = product2[i].price;
+                              item.sum = product2[i].price! * product2[i].qtyPack!;
+                              item.type = 'product';
+                              item.code = product2[i].code;
+                              items.add(item);
+                            });
+                            inspect(items);
+                          }
+                          try {
+                            LoadingDialog.open(context);
+                            final order = await ProductApi.addOrder(
+                              item: items,
+                              customer: widget.customer,
+                              total: double.parse(sum(product2).toStringAsFixed(2)),
+                              price: double.parse(sum(product2).toStringAsFixed(2)),
+                            );
+                            if (!mounted) return;
+                            LoadingDialog.close(context);
+                            if (order != null) {
+                              if (!mounted) return;
+                              final ok = await showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return AlertDialogYes(
+                                    title: 'แจ้งเตือน',
+                                    description: 'สร้างออร์เดอร์สำเร็จ',
+                                    pressYes: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                  );
+                                },
+                              );
+                              if (widget.printer != 'NOT FOUND') {
+                                await PrinterService().print(widget.customer, pngBytes!, order.refNo!);
+                              } else {
+                                // await printCapturedWidget(pngBytes!, order.refNo!);
+                                // final qrCode = await controller.captureFromWidget(buildBill());
+                                // printCapturedWidget(qrCode);
+                                final qrCode = await controller.captureFromWidget(orderWidget(order.refNo!));
+                                testPrint(pngBytes!, qrCode);
+                              }
+                              setState(() {
+                                product2.clear();
+                                _finalListProducts.clear();
+                                groupProduct.clear();
+                              });
+                              if (ok == true) {
+                                if (_finalListProducts.isNotEmpty) {
+                                  Navigator.pop(context, _finalListProducts);
+                                } else {
+                                  Navigator.pop(context, null);
+                                }
+                              }
+                            } else {
+                              if (!mounted) return;
+                              LoadingDialog.close(context);
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return AlertDialogYes(
+                                    title: 'แจ้งเตือน',
+                                    description: 'เกิดข้อผิดพลาด',
+                                    pressYes: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                  );
+                                },
+                              );
+                            }
+                          } on Exception catch (e) {
+                            if (!mounted) return;
+                            LoadingDialog.close(context);
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return AlertDialogYes(
+                                  title: 'แจ้งเตือน',
+                                  description: '${e}',
+                                  pressYes: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                );
+                              },
+                            );
+                          }
 
                           //inspect(items);
                         }
@@ -1348,7 +1162,7 @@ class _CartProducts2State extends State<CartProducts2> {
     return Screenshot(
       controller: controller,
       child: SizedBox(
-        width: orientation == Orientation.portrait ? size.width * 0.75 : size.width * 1,
+        width: size.width * 0.43,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
           child: Card(
@@ -1367,7 +1181,7 @@ class _CartProducts2State extends State<CartProducts2> {
               child: RepaintBoundary(
                 key: globalKey,
                 child: Container(
-                  width: orientation == Orientation.portrait ? size.width * 0.61 : size.width * 1,
+                  // width: size.width * 0.5,
                   color: Colors.white,
                   child: Column(
                     children: [
@@ -1377,7 +1191,7 @@ class _CartProducts2State extends State<CartProducts2> {
                               flex: 7,
                               child: Text(
                                 'สินค้า',
-                                style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                style: TextStyle(fontSize: 14),
                               )),
                           Expanded(
                               flex: 3,
@@ -1386,7 +1200,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                 children: [
                                   Text(
                                     'ราคา',
-                                    style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                    style: TextStyle(fontSize: 14),
                                   )
                                 ],
                               ))
@@ -1396,7 +1210,7 @@ class _CartProducts2State extends State<CartProducts2> {
                         children: [
                           Text(
                             'หน่วย xกิโล/หน่วย xราคา/กิโล',
-                            style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                            style: TextStyle(fontSize: 14),
                           )
                         ],
                       ),
@@ -1406,59 +1220,53 @@ class _CartProducts2State extends State<CartProducts2> {
                             (index) => Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment: orientation == Orientation.portrait
-                                          ? MainAxisAlignment.start
-                                          : MainAxisAlignment.spaceBetween,
+                                      // mainAxisAlignment: orientation == Orientation.portrait
+                                      //     ? MainAxisAlignment.start
+                                      //     : MainAxisAlignment.spaceBetween,
                                       children: [
                                         // ${sumQty(groupProduct[index].value).toInt()} x ${int.parse(sumQtyPack(groupProduct[index].value).round().toString())}
-                                        SizedBox(
-                                          width: 220,
-                                          child: Text(
-                                            groupProduct[index].key,
-                                            style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
-                                          ),
+                                        Text(
+                                          groupProduct[index].key,
+                                          style: TextStyle(fontSize: 14),
                                         ),
-                                        orientation != Orientation.portrait
-                                            ? SizedBox(
-                                                width: 200,
-                                                child: Column(
-                                                  children: List.generate(
-                                                    1,
-                                                    (index2) => Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          '${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}',
-                                                          style: TextStyle(
-                                                              fontSize: orientation == Orientation.portrait ? 13 : 18),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            : SizedBox.shrink(),
-                                        orientation != Orientation.portrait
-                                            ? SizedBox(
-                                                width: 200,
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  children: [
-                                                    enable == false
-                                                        ? Text('')
-                                                        : Text(
-                                                            '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}',
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    orientation == Orientation.portrait ? 13 : 18),
-                                                          ),
-                                                    // : Text(
-                                                    //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
-                                                    //Text('${sumPrice(groupProduct[index].value)}'),
-                                                  ],
-                                                ),
-                                              )
-                                            : SizedBox.shrink(),
+                                        // orientation != Orientation.portrait
+                                        //     ? SizedBox(
+                                        //         width: 100,
+                                        //         child: Column(
+                                        //           children: List.generate(
+                                        //             1,
+                                        //             (index2) => Row(
+                                        //               mainAxisAlignment: MainAxisAlignment.start,
+                                        //               children: [
+                                        //                 Text(
+                                        //                   '${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}',
+                                        //                   style: TextStyle(fontSize: 13),
+                                        //                 ),
+                                        //               ],
+                                        //             ),
+                                        //           ),
+                                        //         ),
+                                        //       )
+                                        //     : SizedBox.shrink(),
+                                        // orientation != Orientation.portrait
+                                        //     ? SizedBox(
+                                        //         width: 100,
+                                        //         child: Row(
+                                        //           mainAxisAlignment: MainAxisAlignment.end,
+                                        //           children: [
+                                        //             enable == false
+                                        //                 ? Text('')
+                                        //                 : Text(
+                                        //                     '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}',
+                                        //                     style: TextStyle(fontSize: 13),
+                                        //                   ),
+                                        //             // : Text(
+                                        //             //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
+                                        //             //Text('${sumPrice(groupProduct[index].value)}'),
+                                        //           ],
+                                        //         ),
+                                        //       )
+                                        //     : SizedBox.shrink(),
                                       ],
                                     ),
                                     //  Row(
@@ -1499,7 +1307,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                           flex: 7,
                                           child: Text(
                                             '${groupProduct[index].value[index2] == groupProduct[index].value[0] ? '' : '+'}${groupProduct[index].value[index2].qtyPack}',
-                                            style: TextStyle(fontSize: orientation == Orientation.portrait ? 9 : 18),
+                                            style: TextStyle(fontSize: 9),
                                             maxLines: 10,
                                           ),
                                         ),
@@ -1531,23 +1339,20 @@ class _CartProducts2State extends State<CartProducts2> {
                                     //     ),
                                     //   ),
                                     // ),
-                                    orientation == Orientation.portrait
-                                        ? Column(
-                                            children: List.generate(
-                                              1,
-                                              (index2) => Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}',
-                                                    style: TextStyle(
-                                                        fontSize: orientation == Orientation.portrait ? 13 : 18),
-                                                  ),
-                                                ],
-                                              ),
+                                    Column(
+                                      children: List.generate(
+                                        1,
+                                        (index2) => Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '= ${num.parse(sumQtyPack(groupProduct[index].value).toString()).toStringAsFixed(2)} x ${groupProduct[index].value[index2].price}',
+                                              style: TextStyle(fontSize: 13),
                                             ),
-                                          )
-                                        : SizedBox.shrink(),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                     // Row(
                                     //   mainAxisAlignment: MainAxisAlignment.center,
                                     //   children: [
@@ -1585,23 +1390,20 @@ class _CartProducts2State extends State<CartProducts2> {
                                     //     ),
                                     //   ),
                                     // ),
-                                    orientation == Orientation.portrait
-                                        ? Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              enable == false
-                                                  ? Text('')
-                                                  : Text(
-                                                      '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}',
-                                                      style: TextStyle(
-                                                          fontSize: orientation == Orientation.portrait ? 13 : 18),
-                                                    ),
-                                              // : Text(
-                                              //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
-                                              //Text('${sumPrice(groupProduct[index].value)}'),
-                                            ],
-                                          )
-                                        : SizedBox.shrink(),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        enable == false
+                                            ? Text('')
+                                            : Text(
+                                                '= ${sumPrice(groupProduct[index].value).toStringAsFixed(2)}',
+                                                style: TextStyle(fontSize: 13),
+                                              ),
+                                        // : Text(
+                                        //     'รวม ${currencyFormat.format(sumPrice(groupProduct[index].value))}'),
+                                        //Text('${sumPrice(groupProduct[index].value)}'),
+                                      ],
+                                    )
                                   ],
                                 )),
                       ),
@@ -1616,7 +1418,7 @@ class _CartProducts2State extends State<CartProducts2> {
                               flex: 5,
                               child: Text(
                                 'รวมรายการ',
-                                style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                style: TextStyle(fontSize: 14),
                               )),
                           // Expanded(
                           //     flex: 5,
@@ -1642,7 +1444,7 @@ class _CartProducts2State extends State<CartProducts2> {
                               flex: 5,
                               child: Text(
                                 'รวมเป็น',
-                                style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                style: TextStyle(fontSize: 14),
                               )),
                           Expanded(
                               flex: 5,
@@ -1652,13 +1454,13 @@ class _CartProducts2State extends State<CartProducts2> {
                                   enable == false
                                       ? Text(
                                           '0',
-                                          style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                          style: TextStyle(fontSize: 14),
                                         )
                                       : Text(
                                           sum(product2).toStringAsFixed(2),
                                           // : Text(
                                           //     '${currencyFormat.format(sum(product2))}',
-                                          style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                          style: TextStyle(fontSize: 14),
                                         )
                                 ],
                               ))
@@ -1670,7 +1472,7 @@ class _CartProducts2State extends State<CartProducts2> {
                               flex: 5,
                               child: Text(
                                 'ยอดค้าง',
-                                style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                style: TextStyle(fontSize: 14),
                               )),
                           Expanded(
                               flex: 5,
@@ -1679,7 +1481,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                 children: [
                                   Text(
                                     '0',
-                                    style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                    style: TextStyle(fontSize: 14),
                                   )
                                 ],
                               ))
@@ -1691,7 +1493,7 @@ class _CartProducts2State extends State<CartProducts2> {
                               flex: 5,
                               child: Text(
                                 'ยอดชำระ',
-                                style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                style: TextStyle(fontSize: 14),
                               )),
                           Expanded(
                               flex: 5,
@@ -1700,7 +1502,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                 children: [
                                   Text(
                                     '0',
-                                    style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                    style: TextStyle(fontSize: 14),
                                   )
                                 ],
                               ))
@@ -1712,7 +1514,7 @@ class _CartProducts2State extends State<CartProducts2> {
                               flex: 5,
                               child: Text(
                                 'รวมค้าง',
-                                style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                style: TextStyle(fontSize: 14),
                               )),
                           Expanded(
                               flex: 5,
@@ -1722,11 +1524,11 @@ class _CartProducts2State extends State<CartProducts2> {
                                   enable == false
                                       ? Text(
                                           '0',
-                                          style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                          style: TextStyle(fontSize: 14),
                                         )
                                       : Text(
                                           sum(product2).toStringAsFixed(2),
-                                          style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                          style: TextStyle(fontSize: 14),
                                         )
                                   // : Text(
                                   //     '${currencyFormat.format(sum(product2))}',
@@ -1742,7 +1544,7 @@ class _CartProducts2State extends State<CartProducts2> {
                               flex: 5,
                               child: Text(
                                 'ทอน',
-                                style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                style: TextStyle(fontSize: 14),
                               )),
                           Expanded(
                               flex: 5,
@@ -1751,7 +1553,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                 children: [
                                   Text(
                                     '0',
-                                    style: TextStyle(fontSize: orientation == Orientation.portrait ? 14 : 18),
+                                    style: TextStyle(fontSize: 14),
                                   )
                                 ],
                               ))
@@ -1764,6 +1566,57 @@ class _CartProducts2State extends State<CartProducts2> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget orderWidget(String refNo) {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width * 0.3,
+      height: size.width * 0.21,
+      // color: Colors.green,
+      // padding: EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Text(
+              'รายการจัดส่งสินค้า',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+          ),
+          Text(
+            'ร้านค้า เล้าเซี่ยงเฮง',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Text(
+            'โทร 02-225-2387\nโทร 02-225-1587',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Divider(
+            color: Colors.black,
+          ),
+          Text(
+            'ชื่อ: ${widget.customer.name}',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Text(
+            'ทะเบียนรถ: ${widget.customer.licensePage}',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Text(
+            'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Text(
+            'refNo: $refNo',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Divider(
+            color: Colors.black,
+          ),
+        ],
       ),
     );
   }

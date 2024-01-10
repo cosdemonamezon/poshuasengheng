@@ -11,6 +11,7 @@ import 'package:poshuasengheng/models/product2.dart';
 import 'package:poshuasengheng/screen/product/cartProducts.dart';
 import 'package:poshuasengheng/screen/product/cartProducts2.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
+import 'package:poshuasengheng/screen/test.dart';
 import 'package:poshuasengheng/widgets/LoadingDialog.dart';
 import 'package:poshuasengheng/widgets/inputNumberDialog.dart';
 import 'package:poshuasengheng/widgets/materialDialog.dart';
@@ -309,6 +310,7 @@ class _ProductPageState extends State<ProductPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 // SizedBox(
                 //   height: size.height * 0.10,
                 //   width: size.width * 0.65,
