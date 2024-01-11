@@ -28,6 +28,7 @@ import 'package:poshuasengheng/widgets/LoadingDialog.dart';
 import 'package:poshuasengheng/widgets/materialDialog.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 // import 'package:printing/printing.dart';
 // import 'package:pdf/widgets.dart' as pw;
@@ -68,6 +69,7 @@ class _CartProducts2State extends State<CartProducts2> {
   String? deviceNo;
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   final controller = ScreenshotController();
+  String ipAddress = '';
 
   @override
   void initState() {
@@ -111,6 +113,15 @@ class _CartProducts2State extends State<CartProducts2> {
         }
         // inspect(groupProduct);
       });
+    });
+    getIp();
+  }
+
+  Future getIp() async {
+    final prefs = await SharedPreferences.getInstance();
+    final ip = prefs.getString('ipAddress');
+    setState(() {
+      ipAddress = ip!;
     });
   }
 
@@ -158,7 +169,7 @@ class _CartProducts2State extends State<CartProducts2> {
     final printer = NetworkPrinter(paper, profile);
     // inspect(profiles);
 
-    final PosPrintResult res = await printer.connect('192.168.1.200', port: 9100);
+    final PosPrintResult res = await printer.connect(ipAddress, port: 9100);
 
     if (res == PosPrintResult.success) {
       // DEMO RECEIPT
@@ -380,27 +391,29 @@ class _CartProducts2State extends State<CartProducts2> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              Center(
-                child: Text('ทะเบียนรถ: ${widget.customer.licensePage}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ),
-              Center(
-                child: Text('ชื่อลูกค้า: ${widget.customer.name}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ),
-              Center(
-                child: Text('เบอร์โทรศัพท์: ${widget.customer.tel}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ),
+              groupProduct.isNotEmpty ? orderWidget('-') : SizedBox.shrink(),
+
+              // Center(
+              //   child: Text('ทะเบียนรถ: ${widget.customer.licensePage}',
+              //       style: TextStyle(
+              //         fontSize: 16,
+              //         fontWeight: FontWeight.bold,
+              //       )),
+              // ),
+              // Center(
+              //   child: Text('ชื่อลูกค้า: ${widget.customer.name}',
+              //       style: TextStyle(
+              //         fontSize: 16,
+              //         fontWeight: FontWeight.bold,
+              //       )),
+              // ),
+              // Center(
+              //   child: Text('เบอร์โทรศัพท์: ${widget.customer.tel}',
+              //       style: TextStyle(
+              //         fontSize: 16,
+              //         fontWeight: FontWeight.bold,
+              //       )),
+              // ),
               SizedBox(
                 height: size.height * 0.02,
               ),
@@ -1162,7 +1175,7 @@ class _CartProducts2State extends State<CartProducts2> {
     return Screenshot(
       controller: controller,
       child: SizedBox(
-        width: size.width * 0.43,
+        width: orientation == Orientation.portrait ? size.width * 0.53 : size.width * 0.43,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
           child: Card(
@@ -1572,11 +1585,18 @@ class _CartProducts2State extends State<CartProducts2> {
 
   Widget orderWidget(String refNo) {
     final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
     return Container(
-      width: size.width * 0.3,
-      height: size.width * 0.21,
+      width: orientation == Orientation.portrait ? size.width * 0.37 : size.width * 0.3,
+      height: orientation == Orientation.portrait ? size.width * 0.28 : size.width * 0.21,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Color.fromARGB(255, 238, 231, 231),
+        ),
+      ),
       // color: Colors.green,
-      // padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

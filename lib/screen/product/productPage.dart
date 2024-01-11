@@ -10,17 +10,19 @@ import 'package:poshuasengheng/models/product.dart';
 import 'package:poshuasengheng/models/product2.dart';
 import 'package:poshuasengheng/screen/product/cartProducts.dart';
 import 'package:poshuasengheng/screen/product/cartProducts2.dart';
+import 'package:poshuasengheng/screen/product/SettingPrinter.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
 import 'package:poshuasengheng/screen/test.dart';
 import 'package:poshuasengheng/widgets/LoadingDialog.dart';
 import 'package:poshuasengheng/widgets/inputNumberDialog.dart';
 import 'package:poshuasengheng/widgets/materialDialog.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class ProductPage extends StatefulWidget {
   ProductPage({super.key, required this.customer});
-  Customer customer;
+  final Customer customer;
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -41,6 +43,7 @@ class _ProductPageState extends State<ProductPage> {
   Category? dropdownValue;
   String titleProduct = '';
   int selectIndex = 0;
+  String ipAddress = '';
   @override
   void initState() {
     super.initState();
@@ -76,6 +79,15 @@ class _ProductPageState extends State<ProductPage> {
 
         //dropdownValue = list.first;
       });
+    });
+    getIp();
+  }
+
+  Future getIp() async {
+    final prefs = await SharedPreferences.getInstance();
+    final ip = prefs.getString('ipAddress');
+    setState(() {
+      ipAddress = ip!;
     });
   }
 
@@ -203,36 +215,70 @@ class _ProductPageState extends State<ProductPage> {
               },
               icon: Icon(Icons.arrow_back_ios)),
           actions: [
+            serialNumber == 'NOT FOUND'
+                ? IconButton(
+                    onPressed: () async {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return Settingprinter();
+                      }));
+                    },
+                    icon: Icon(
+                      Icons.print,
+                      size: 30,
+                    ))
+                : SizedBox.shrink(),
             Stack(
               children: [
                 IconButton(
                     onPressed: () async {
-                      if (finalListProducts.isNotEmpty) {
-                        final cartProduct = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CartProducts2(
-                                      finalListProducts: finalListProducts,
-                                      customer: widget.customer,
-                                      printer: serialNumber,
-                                    )));
-                        setState(() {
-                          if (cartProduct != null) {
-                            finalListProducts = cartProduct;
-                            //listProducts = finalListProducts;
-                            //products = finalListProducts;
-                          } else {
-                            finalListProducts.clear();
-                            for (var i = 0; i < listProducts.length; i++) {
-                              if (listProducts[i].select == true) {
-                                listProducts[i].select = false;
-                                listProducts[i].qty = 1;
-                                listProducts[i].qtyPack = 1;
+                      if (ipAddress != '') {
+                        if (finalListProducts.isNotEmpty) {
+                          final cartProduct = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CartProducts2(
+                                        finalListProducts: finalListProducts,
+                                        customer: widget.customer,
+                                        printer: serialNumber,
+                                      )));
+                          setState(() {
+                            if (cartProduct != null) {
+                              finalListProducts = cartProduct;
+                              //listProducts = finalListProducts;
+                              //products = finalListProducts;
+                            } else {
+                              finalListProducts.clear();
+                              for (var i = 0; i < listProducts.length; i++) {
+                                if (listProducts[i].select == true) {
+                                  listProducts[i].select = false;
+                                  listProducts[i].qty = 1;
+                                  listProducts[i].qtyPack = 1;
+                                }
                               }
                             }
-                          }
-                          //inspect(listProducts);
-                        });
+                            //inspect(listProducts);
+                          });
+                        }
+                      } else {
+                        final ok = await showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialogYes(
+                              title: 'แจ้งเตือน',
+                              description: 'กรุณาตั้งค่า IP Address',
+                              pressYes: () {
+                                Navigator.pop(context, true);
+                              },
+                            );
+                          },
+                        );
+                        if (ok == true) {
+                          if (!mounted) return;
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return Settingprinter();
+                          }));
+                        }
                       }
                     },
                     icon: Icon(
@@ -284,7 +330,7 @@ class _ProductPageState extends State<ProductPage> {
                                 });
                               },
                               child: Container(
-                                width: 80,
+                                width: 100,
                                 height: 60,
                                 margin: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
@@ -899,32 +945,54 @@ class _ProductPageState extends State<ProductPage> {
             elevation: 25,
             child: InkWell(
               onTap: () async {
-                if (finalListProducts.isNotEmpty) {
-                  final cartProduct = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CartProducts2(
-                                finalListProducts: finalListProducts,
-                                customer: widget.customer,
-                                printer: serialNumber,
-                              )));
-                  setState(() {
-                    if (cartProduct != null) {
-                      finalListProducts = cartProduct;
-                      //listProducts = finalListProducts;
-                      //products = finalListProducts;
-                    } else {
-                      finalListProducts.clear();
-                      for (var i = 0; i < listProducts.length; i++) {
-                        if (listProducts[i].select == true) {
-                          listProducts[i].select = false;
-                          listProducts[i].qty = 1;
-                          listProducts[i].qtyPack = 1;
+                if (ipAddress != '') {
+                  if (finalListProducts.isNotEmpty) {
+                    final cartProduct = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CartProducts2(
+                                  finalListProducts: finalListProducts,
+                                  customer: widget.customer,
+                                  printer: serialNumber,
+                                )));
+                    setState(() {
+                      if (cartProduct != null) {
+                        finalListProducts = cartProduct;
+                        //listProducts = finalListProducts;
+                        //products = finalListProducts;
+                      } else {
+                        finalListProducts.clear();
+                        for (var i = 0; i < listProducts.length; i++) {
+                          if (listProducts[i].select == true) {
+                            listProducts[i].select = false;
+                            listProducts[i].qty = 1;
+                            listProducts[i].qtyPack = 1;
+                          }
                         }
                       }
-                    }
-                    inspect(listProducts);
-                  });
+                      inspect(listProducts);
+                    });
+                  }
+                } else {
+                  final ok = await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialogYes(
+                        title: 'แจ้งเตือน',
+                        description: 'กรุณาตั้งค่า IP Address',
+                        pressYes: () {
+                          Navigator.pop(context, true);
+                        },
+                      );
+                    },
+                  );
+                  if (ok == true) {
+                    if (!mounted) return;
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return Settingprinter();
+                    }));
+                  }
                 }
               },
               child: Container(

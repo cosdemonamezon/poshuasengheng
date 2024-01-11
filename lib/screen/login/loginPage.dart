@@ -3,6 +3,8 @@ import 'package:poshuasengheng/constants/constants.dart';
 import 'package:poshuasengheng/screen/login/services/loginApi.dart';
 import 'package:poshuasengheng/screen/login/services/loginController.dart';
 import 'package:poshuasengheng/screen/login/widgets/appTextForm.dart';
+import 'package:poshuasengheng/screen/product/SettingPrinter.dart';
+import 'package:poshuasengheng/screen/product/Settingprinter/SettingprinterFirst.dart';
 import 'package:poshuasengheng/screen/product/customerPage.dart';
 import 'package:poshuasengheng/screen/product/productPage.dart';
 import 'package:poshuasengheng/selectedCustomer.dart';
@@ -121,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if (!mounted) return;
                                   LoadingDialog.close(context);
                                   Navigator.pushAndRemoveUntil(context,
-                                      MaterialPageRoute(builder: (context) => SelectedCustomer()), (route) => false);
+                                      MaterialPageRoute(builder: (context) => SettingprinterFirst()), (route) => false);
                                 } on Exception catch (e) {
                                   LoadingDialog.close(context);
                                   showDialog(

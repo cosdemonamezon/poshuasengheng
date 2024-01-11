@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:poshuasengheng/screen/login/loginPage.dart';
 import 'package:poshuasengheng/screen/login/services/loginController.dart';
-import 'package:poshuasengheng/screen/product/customerPage.dart';
+import 'package:poshuasengheng/screen/product/Settingprinter/SettingprinterFirst.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
 import 'package:poshuasengheng/selectedCustomer.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String? token;
+String? ipAddress;
 late SharedPreferences prefs;
 
 void main() async {
@@ -18,7 +19,8 @@ void main() async {
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   prefs = await SharedPreferences.getInstance();
-  token = await prefs.getString('token');
+  token = prefs.getString('token');
+  ipAddress = prefs.getString('ipAddress');
 
   runApp(const MyApp());
 }
@@ -58,7 +60,11 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'Prompt',
         ),
-        home: token == null ? LoginPage() : SelectedCustomer(),
+        home: token == null
+            ? LoginPage()
+            : ipAddress == null
+                ? SettingprinterFirst()
+                : SelectedCustomer(),
       ),
     );
   }
