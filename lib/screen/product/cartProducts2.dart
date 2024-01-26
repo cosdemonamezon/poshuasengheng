@@ -184,10 +184,11 @@ class _CartProducts2State extends State<CartProducts2> {
   }
 
   Future<Uint8List?> _capturePngPag() async {
+    final orientation = MediaQuery.of(context).orientation;
     try {
       print('inside');
       RenderRepaintBoundary boundary1 = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary1.toImage(pixelRatio: 1.75);
+      ui.Image image = await boundary1.toImage(pixelRatio: orientation == Orientation.portrait ? 1.5 : 1.25);
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       pngBytesPag = byteData!.buffer.asUint8List();
       bs64 = base64Encode(pngBytesPag!);
@@ -205,10 +206,11 @@ class _CartProducts2State extends State<CartProducts2> {
   }
 
   Future<Uint8List?> _capturePng() async {
+    final orientation = MediaQuery.of(context).orientation;
     try {
       print('inside');
       RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 1.75);
+      ui.Image image = await boundary.toImage(pixelRatio: orientation == Orientation.portrait ? 1.5 : 1.25);
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       pngBytes = byteData!.buffer.asUint8List();
       bs64 = base64Encode(pngBytes!);
@@ -391,7 +393,7 @@ class _CartProducts2State extends State<CartProducts2> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              groupProduct.isNotEmpty ? orderWidget('-') : SizedBox.shrink(),
+              groupProduct.isNotEmpty ? orderWidgetPrint('-') : SizedBox.shrink(),
 
               // Center(
               //   child: Text('ทะเบียนรถ: ${widget.customer.licensePage}',
@@ -1190,42 +1192,31 @@ class _CartProducts2State extends State<CartProducts2> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: RepaintBoundary(
                 key: globalKey,
                 child: Container(
                   // width: size.width * 0.5,
                   color: Colors.white,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        children: [
-                          Expanded(
-                              flex: 7,
-                              child: Text(
-                                'สินค้า',
-                                style: TextStyle(fontSize: 14),
-                              )),
-                          Expanded(
-                              flex: 3,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'ราคา',
-                                    style: TextStyle(fontSize: 14),
-                                  )
-                                ],
-                              ))
-                        ],
-                      ),
-                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'หน่วย xกิโล/หน่วย xราคา/กิโล',
+                            'สินค้า',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            'ราคา',
                             style: TextStyle(fontSize: 14),
                           )
                         ],
+                      ),
+                      Text(
+                        'หน่วย xกิโล/หน่วย xราคา/กิโล',
+                        style: TextStyle(fontSize: 14),
                       ),
                       Column(
                         children: List.generate(
@@ -1587,8 +1578,8 @@ class _CartProducts2State extends State<CartProducts2> {
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
     return Container(
-      width: orientation == Orientation.portrait ? size.width * 0.37 : size.width * 0.3,
-      height: orientation == Orientation.portrait ? size.width * 0.28 : size.width * 0.21,
+      width: orientation == Orientation.portrait ? size.width * 0.45 : size.width * 0.3,
+      height: orientation == Orientation.portrait ? size.width * 0.28 : size.width * 0.18,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
@@ -1603,35 +1594,93 @@ class _CartProducts2State extends State<CartProducts2> {
           Center(
             child: Text(
               'รายการจัดส่งสินค้า',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
           ),
           Text(
             'ร้านค้า เล้าเซี่ยงเฮง',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
           ),
           Text(
             'โทร 02-225-2387\nโทร 02-225-1587',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
           ),
           Divider(
             color: Colors.black,
           ),
           Text(
             'ชื่อ: ${widget.customer.name}',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
           ),
           Text(
             'ทะเบียนรถ: ${widget.customer.licensePage}',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
           ),
           Text(
             'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
           ),
           Text(
             'refNo: $refNo',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Divider(
+            color: Colors.black,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget orderWidgetPrint(String refNo) {
+    final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
+    return Container(
+      width: orientation == Orientation.portrait ? size.width * 0.37 : size.width * 0.3,
+      height: orientation == Orientation.portrait ? size.width * 0.35 : size.width * 0.22,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Color.fromARGB(255, 238, 231, 231),
+        ),
+      ),
+      // color: Colors.green,
+      padding: EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Text(
+              'รายการจัดส่งสินค้า',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+          ),
+          Text(
+            'ร้านค้า เล้าเซี่ยงเฮง',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Text(
+            'โทร 02-225-2387\nโทร 02-225-1587',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Divider(
+            color: Colors.black,
+          ),
+          Text(
+            'ชื่อ: ${widget.customer.name}',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Text(
+            'ทะเบียนรถ: ${widget.customer.licensePage}',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Text(
+            'วันที่: ${DateTime.now().formatTo('dd LLL y HH:mm น.')}',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
+          Text(
+            'refNo: $refNo',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
           ),
           Divider(
             color: Colors.black,
