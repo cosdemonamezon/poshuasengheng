@@ -1267,7 +1267,7 @@ class _CartProducts2State extends State<CartProducts2> {
     return Screenshot(
       controller: controller,
       child: SizedBox(
-        width: size.width * 0.61,
+        width: size.width * 0.75,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
           child: Card(
@@ -1703,7 +1703,7 @@ class _CartProducts2State extends State<CartProducts2> {
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
     return Container(
-      width: size.width * 0.61,
+      width: size.width * 0.75,
       // height: orientation == Orientation.portrait ? size.width * 0.28 : size.width * 0.18,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -1761,7 +1761,7 @@ class _CartProducts2State extends State<CartProducts2> {
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
     return Container(
-      width: size.width * 0.61,
+      width: size.width * 0.75,
       // height: orientation == Orientation.portrait ? size.width * 0.35 : size.width * 0.22,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
