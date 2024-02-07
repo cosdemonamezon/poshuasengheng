@@ -495,6 +495,210 @@ class NumPad extends StatelessWidget {
   }
 }
 
+class NumPad2 extends StatelessWidget {
+  final double buttonSize;
+  final Color buttonColor;
+  final Color iconColor;
+  final TextEditingController controller;
+  final Function delete;
+  final Function onSubmit;
+  List<ItemUnitPrices>? itemUnitPrices;
+
+  NumPad2(
+      {Key? key,
+      this.buttonSize = 10,
+      this.buttonColor = Colors.indigo,
+      this.iconColor = Colors.amber,
+      required this.delete,
+      required this.onSubmit,
+      required this.controller,
+      this.itemUnitPrices})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    //final size = MediaQuery.of(context).size;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        //const SizedBox(height: 40),
+        SizedBox(
+          width: 300,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              NumberButton2(
+                number: '1',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+              NumberButton2(
+                number: '2',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+              NumberButton2(
+                number: '3',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15),
+        SizedBox(
+          width: 300,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              NumberButton2(
+                number: '4',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+              NumberButton2(
+                number: '5',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+              NumberButton2(
+                number: '6',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15),
+        SizedBox(
+          width: 300,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              NumberButton2(
+                number: '7',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+              NumberButton2(
+                number: '8',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+              NumberButton2(
+                number: '9',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+            ],
+          ),
+        ),
+        // const SizedBox(height: 15),
+        // SizedBox(
+        //   width: 300,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       // NumberButton2(
+        //       //   number: '.',
+        //       //   size: buttonSize,
+        //       //   color: buttonColor,
+        //       //   controller: controller,
+        //       // ),
+        //       // NumberButton2(
+        //       //   number: '0',
+        //       //   size: buttonSize,
+        //       //   color: buttonColor,
+        //       //   controller: controller,
+        //       // ),
+        //       // NumberButton2(
+        //       //   number: '+',
+        //       //   size: buttonSize,
+        //       //   color: buttonColor,
+        //       //   controller: controller,
+        //       // ),
+        //     ],
+        //   ),
+        // ),
+        // const SizedBox(height: 15),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //   children: List.generate(itemUnitPrices.length, (index) => NumberButton1(
+        //       number: '${itemUnitPrices[index].value}',
+        //       size: buttonSize,
+        //       color: buttonColor,
+        //       controller: controller,
+        //       name: '${itemUnitPrices[index].name}',
+        //       price: '${itemUnitPrices[index].price}',
+        //     ),),
+        // ),
+        //ส่วนที่โชว์ ปุ่ม สามปุ่ม
+        // Wrap(
+        //   alignment: WrapAlignment.start,
+        //   children: List.generate(
+        //       itemUnitPrices.length,
+        //       (index) => Padding(
+        //             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        //             child: NumKeyShortcut(
+        //               number: itemUnitPrices[index].value.toString(),
+        //               price: itemUnitPrices[index].price.toString(),
+        //               name: itemUnitPrices[index].name.toString(),
+        //               controller: controller,
+        //             ),
+        //           )),
+        // ),
+        SizedBox(height: 10),
+        SizedBox(
+          width: 320,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () => delete(),
+                icon: Icon(
+                  Icons.delete,
+                  color: iconColor,
+                ),
+                iconSize: buttonSize,
+              ),
+              NumberButton2(
+                number: '0',
+                size: buttonSize,
+                color: buttonColor,
+                controller: controller,
+              ),
+              GestureDetector(
+                onTap: () => onSubmit(),
+                child: Container(
+                  decoration:
+                      BoxDecoration(color: kSecondaryColor, borderRadius: BorderRadius.all(Radius.circular(20))),
+                  height: 50,
+                  width: 80,
+                  child: Center(
+                    child: Text(
+                      'ยืนยัน',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class NumKeyShortcut extends StatelessWidget {
   const NumKeyShortcut({super.key, required this.number, required this.controller, this.name, this.price});
   final String number;
@@ -556,6 +760,44 @@ class NumberButton extends StatelessWidget {
             number.toString(),
             style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 25),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class NumberButton2 extends StatelessWidget {
+  final String number;
+  final double size;
+  final Color color;
+  final TextEditingController controller;
+
+  const NumberButton2({
+    Key? key,
+    required this.number,
+    required this.size,
+    required this.color,
+    required this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(size / 2),
+          ),
+        ),
+        onPressed: () {
+          controller.text += number.toString();
+        },
+        child: Text(
+          number.toString(),
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 15),
         ),
       ),
     );

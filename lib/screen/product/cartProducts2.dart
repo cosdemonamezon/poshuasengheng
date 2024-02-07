@@ -25,6 +25,7 @@ import 'package:poshuasengheng/screen/printer/printerService.dart';
 import 'package:poshuasengheng/screen/product/services/productApi.dart';
 import 'package:poshuasengheng/screen/product/services/productController.dart';
 import 'package:poshuasengheng/widgets/LoadingDialog.dart';
+import 'package:poshuasengheng/widgets/inputNumberDialog.dart';
 import 'package:poshuasengheng/widgets/materialDialog.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -45,6 +46,7 @@ class CartProducts2 extends StatefulWidget {
 }
 
 class _CartProducts2State extends State<CartProducts2> {
+  final TextEditingController _myNumber = TextEditingController();
   int qty = 1;
   int qtyPack = 1;
   bool printBinded = false;
@@ -70,6 +72,9 @@ class _CartProducts2State extends State<CartProducts2> {
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   final controller = ScreenshotController();
   String ipAddress = '';
+  String payQTY = '0';
+  String payQTY2 = '';
+  List<String> substrings = [];
 
   @override
   void initState() {
@@ -609,12 +614,86 @@ class _CartProducts2State extends State<CartProducts2> {
                 height: size.height * 0.13,
               ),
               groupProduct.isNotEmpty
-                  ? Column(
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Center(
-                          child: Text('ตัวอย่างการพิมพ์'),
+                        Column(
+                          children: [
+                            Text(
+                              'ยอดชำระ',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              height: size.height * 0.05,
+                              width: size.width * 0.3,
+                              child: Center(
+                                  child: TextField(
+                                controller: _myNumber,
+                                textAlign: TextAlign.center,
+                                showCursor: false,
+                                style: TextStyle(fontSize: 16.5),
+                                // Disable the default soft keybaord
+                                keyboardType: TextInputType.none,
+                              )),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            NumPad2(
+                              buttonSize: 60,
+                              buttonColor: Colors.grey,
+                              iconColor: Colors.red,
+                              controller: _myNumber,
+                              // itemUnitPrices: products[index].itemUnitPrices!,
+                              delete: () {
+                                if (_myNumber.text != '') {
+                                  if (_myNumber.text.length > 0) {
+                                    _myNumber.text = _myNumber.text.substring(0, _myNumber.text.length - 1);
+                                  }
+                                }
+                              },
+                              // do something with the input numbers
+                              onSubmit: () {
+                                _myNumber.text != ''
+                                    ? setState(() {
+                                        payQTY = _myNumber.text;
+                                        _myNumber.clear();
+                                        enable = true;
+                                        final qty = (int.parse(payQTY) - sum(product2));
+                                        payQTY2 = qty.toStringAsFixed(2);
+                                        List<String> _substrings = payQTY2.split('');
+                                        substrings = _substrings;
+                                        inspect(substrings);
+                                      })
+                                    : setState(() {
+                                        enable = true;
+                                        final qty = (int.parse(payQTY) - sum(product2));
+                                        payQTY2 = qty.toStringAsFixed(2);
+                                        List<String> _substrings = payQTY2.split('');
+                                        substrings = _substrings;
+                                        inspect(substrings);
+                                      });
+                                // debugPrint('Your code: ${_myNumber.text}');
+                                // Navigator.pop(context, _myNumber.text);
+                              },
+                            ),
+                          ],
                         ),
-                        buildBill2(),
+                        Column(
+                          children: [
+                            Center(
+                              child: Text('ตัวอย่างการพิมพ์'),
+                            ),
+                            buildBill2(),
+                          ],
+                        ),
                       ],
                     )
                   : SizedBox(),
@@ -947,6 +1026,11 @@ class _CartProducts2State extends State<CartProducts2> {
                           // await PrinterService().print(widget.customer, pngBytesPag!);
                           setState(() {
                             enable = true;
+                            final qty = (int.parse(payQTY) - sum(product2));
+                            payQTY2 = qty.toStringAsFixed(2);
+                            List<String> _substrings = payQTY2.split('');
+                            substrings = _substrings;
+                            inspect(substrings);
                           });
                         } else {}
                       },
@@ -1000,6 +1084,7 @@ class _CartProducts2State extends State<CartProducts2> {
                             LoadingDialog.open(context);
                             final order = await ProductApi.addOrder(
                               item: items,
+                              pay: int.parse(payQTY),
                               customer: widget.customer,
                               total: double.parse(sum(product2).toStringAsFixed(2)),
                               price: double.parse(sum(product2).toStringAsFixed(2)),
@@ -1068,7 +1153,7 @@ class _CartProducts2State extends State<CartProducts2> {
                               builder: (BuildContext context) {
                                 return AlertDialogYes(
                                   title: 'แจ้งเตือน',
-                                  description: '${e}',
+                                  description: '$e',
                                   pressYes: () {
                                     Navigator.pop(context, true);
                                   },
@@ -1457,7 +1542,7 @@ class _CartProducts2State extends State<CartProducts2> {
                                 children: [
                                   enable == false
                                       ? Text(
-                                          '0',
+                                          int.parse('0').toStringAsFixed(2),
                                           style: TextStyle(fontSize: 14),
                                         )
                                       : Text(
@@ -1475,27 +1560,6 @@ class _CartProducts2State extends State<CartProducts2> {
                           Expanded(
                               flex: 5,
                               child: Text(
-                                'ยอดค้าง',
-                                style: TextStyle(fontSize: 14),
-                              )),
-                          Expanded(
-                              flex: 5,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    '0',
-                                    style: TextStyle(fontSize: 14),
-                                  )
-                                ],
-                              ))
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                              flex: 5,
-                              child: Text(
                                 'ยอดชำระ',
                                 style: TextStyle(fontSize: 14),
                               )),
@@ -1504,20 +1568,55 @@ class _CartProducts2State extends State<CartProducts2> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    '0',
-                                    style: TextStyle(fontSize: 14),
-                                  )
+                                  payQTY == ''
+                                      ? Text(
+                                          int.parse('0').toStringAsFixed(2),
+                                          style: TextStyle(fontSize: 14),
+                                        )
+                                      : Text(
+                                          int.parse(payQTY).toStringAsFixed(2),
+                                          style: TextStyle(fontSize: 14),
+                                        )
                                 ],
                               ))
                         ],
                       ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //         flex: 5,
+                      //         child: Text(
+                      //           'รวมค้าง',
+                      //           style: TextStyle(fontSize: 14),
+                      //         )),
+                      //     Expanded(
+                      //         flex: 5,
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.end,
+                      //           children: [
+                      //             enable == false
+                      //                 ? Text(
+                      //                     '0',
+                      //                     style: TextStyle(fontSize: 14),
+                      //                   )
+                      //                 : Text(
+                      //                     sum(product2).toStringAsFixed(2),
+                      //                     style: TextStyle(fontSize: 14),
+                      //                   )
+                      //             // : Text(
+                      //             //     '${currencyFormat.format(sum(product2))}',
+                      //             //     style: TextStyle(fontSize: 16),
+                      //             //   )
+                      //           ],
+                      //         ))
+                      //   ],
+                      // ),
                       Row(
                         children: [
                           Expanded(
                               flex: 5,
                               child: Text(
-                                'รวมค้าง',
+                                'ยอดค้าง',
                                 style: TextStyle(fontSize: 14),
                               )),
                           Expanded(
@@ -1525,19 +1624,25 @@ class _CartProducts2State extends State<CartProducts2> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  enable == false
-                                      ? Text(
-                                          '0',
-                                          style: TextStyle(fontSize: 14),
-                                        )
+                                  substrings.isNotEmpty
+                                      ? substrings[0] != '-'
+                                          ? Text(
+                                              int.parse('0').toStringAsFixed(2),
+                                              style: TextStyle(fontSize: 14),
+                                            )
+                                          : payQTY2 == ''
+                                              ? Text(
+                                                  int.parse('0').toStringAsFixed(2),
+                                                  style: TextStyle(fontSize: 14),
+                                                )
+                                              : Text(
+                                                  payQTY2,
+                                                  style: TextStyle(fontSize: 14),
+                                                )
                                       : Text(
-                                          sum(product2).toStringAsFixed(2),
+                                          int.parse('0').toStringAsFixed(2),
                                           style: TextStyle(fontSize: 14),
                                         )
-                                  // : Text(
-                                  //     '${currencyFormat.format(sum(product2))}',
-                                  //     style: TextStyle(fontSize: 16),
-                                  //   )
                                 ],
                               ))
                         ],
@@ -1555,10 +1660,25 @@ class _CartProducts2State extends State<CartProducts2> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    '0',
-                                    style: TextStyle(fontSize: 14),
-                                  )
+                                  substrings.isNotEmpty
+                                      ? substrings[0] == '-'
+                                          ? Text(
+                                              int.parse('0').toStringAsFixed(2),
+                                              style: TextStyle(fontSize: 14),
+                                            )
+                                          : payQTY2 == ''
+                                              ? Text(
+                                                  int.parse('0').toStringAsFixed(2),
+                                                  style: TextStyle(fontSize: 14),
+                                                )
+                                              : Text(
+                                                  payQTY2,
+                                                  style: TextStyle(fontSize: 14),
+                                                )
+                                      : Text(
+                                          int.parse('0').toStringAsFixed(2),
+                                          style: TextStyle(fontSize: 14),
+                                        )
                                 ],
                               ))
                         ],

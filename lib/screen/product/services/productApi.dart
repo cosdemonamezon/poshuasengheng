@@ -118,6 +118,7 @@ class ProductApi {
   static Future<Transaction> addOrder({
     required List<Item> item,
     required Customer customer,
+    required num pay,
     required num price,
     required num total,
   }) async {
@@ -134,7 +135,7 @@ class ProductApi {
           "qrcode": "-",
           "price": price,
           "fee": 0,
-          "payQty": price,
+          "payQty": pay,
           "type": "-",
           "remark": "-",
           "customerTel": customer.tel,
