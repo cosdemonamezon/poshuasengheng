@@ -193,7 +193,7 @@ class _CartProducts2State extends State<CartProducts2> {
     try {
       print('inside');
       RenderRepaintBoundary boundary1 = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary1.toImage(pixelRatio: orientation == Orientation.portrait ? 1.5 : 1.25);
+      ui.Image image = await boundary1.toImage(pixelRatio: 1.75);
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       pngBytesPag = byteData!.buffer.asUint8List();
       bs64 = base64Encode(pngBytesPag!);
@@ -215,7 +215,7 @@ class _CartProducts2State extends State<CartProducts2> {
     try {
       print('inside');
       RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: orientation == Orientation.portrait ? 1.5 : 1.25);
+      ui.Image image = await boundary.toImage(pixelRatio: 1.75);
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       pngBytes = byteData!.buffer.asUint8List();
       bs64 = base64Encode(pngBytes!);
@@ -614,10 +614,23 @@ class _CartProducts2State extends State<CartProducts2> {
                 height: size.height * 0.13,
               ),
               groupProduct.isNotEmpty
-                  ? Row(
+                  ? Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Column(
+                          children: [
+                            Center(
+                              child: Text('ตัวอย่างการพิมพ์'),
+                            ),
+                            buildBill2(),
+                          ],
+                        ),
+                        Divider(
+                          thickness: 2,
+                          height: 2,
+                          color: Colors.black,
+                        ),
                         Column(
                           children: [
                             Text(
@@ -684,14 +697,6 @@ class _CartProducts2State extends State<CartProducts2> {
                                 // Navigator.pop(context, _myNumber.text);
                               },
                             ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Center(
-                              child: Text('ตัวอย่างการพิมพ์'),
-                            ),
-                            buildBill2(),
                           ],
                         ),
                       ],
@@ -1262,7 +1267,7 @@ class _CartProducts2State extends State<CartProducts2> {
     return Screenshot(
       controller: controller,
       child: SizedBox(
-        width: orientation == Orientation.portrait ? size.width * 0.53 : size.width * 0.43,
+        width: size.width * 0.61,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
           child: Card(
@@ -1698,8 +1703,8 @@ class _CartProducts2State extends State<CartProducts2> {
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
     return Container(
-      width: orientation == Orientation.portrait ? size.width * 0.45 : size.width * 0.3,
-      height: orientation == Orientation.portrait ? size.width * 0.28 : size.width * 0.18,
+      width: size.width * 0.61,
+      // height: orientation == Orientation.portrait ? size.width * 0.28 : size.width * 0.18,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
@@ -1756,8 +1761,8 @@ class _CartProducts2State extends State<CartProducts2> {
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
     return Container(
-      width: orientation == Orientation.portrait ? size.width * 0.37 : size.width * 0.3,
-      height: orientation == Orientation.portrait ? size.width * 0.35 : size.width * 0.22,
+      width: size.width * 0.61,
+      // height: orientation == Orientation.portrait ? size.width * 0.35 : size.width * 0.22,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
