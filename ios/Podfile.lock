@@ -1,14 +1,10 @@
 PODS:
-  - device_info_plus (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - image_picker_ios (0.0.1):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - printing (1.0.0):
-    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -16,39 +12,31 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
-  - printing (from `.symlinks/plugins/printing/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sunmi_printer_plus (from `.symlinks/plugins/sunmi_printer_plus/ios`)
 
 EXTERNAL SOURCES:
-  device_info_plus:
-    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
-  printing:
-    :path: ".symlinks/plugins/printing/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sunmi_printer_plus:
     :path: ".symlinks/plugins/sunmi_printer_plus/ios"
 
 SPEC CHECKSUMS:
-  device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
-  printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sunmi_printer_plus: 4ab3f09a655a47913c53ff5219323cbb04ebfbd7
 
-PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
 COCOAPODS: 1.14.3
