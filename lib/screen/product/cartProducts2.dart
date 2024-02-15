@@ -667,18 +667,40 @@ class _CartProducts2State extends State<CartProducts2> {
                                         _myNumber.clear();
                                         enable = true;
                                         final qty = (int.parse(payQTY) - sum(product2));
-                                        payQTY2 = qty.toStringAsFixed(2);
-                                        List<String> _substrings = payQTY2.split('');
+                                        final payQTYe = qty.toStringAsFixed(2);
+                                        List<String> _substrings = payQTYe.split('');
                                         substrings = _substrings;
                                         inspect(substrings);
+                                        if (substrings[0] == '-') {
+                                          payQTY2 = payQTYe.substring(1);
+                                          inspect(payQTY2);
+                                        } else {
+                                          payQTY2 = qty.toStringAsFixed(2);
+                                        }
+                                        // final qty = (int.parse(payQTY) - sum(product2));
+                                        // payQTY2 = qty.toStringAsFixed(2);
+                                        // List<String> _substrings = payQTY2.split('');
+                                        // substrings = _substrings;
+                                        // inspect(substrings);
                                       })
                                     : setState(() {
                                         enable = true;
                                         final qty = (int.parse(payQTY) - sum(product2));
-                                        payQTY2 = qty.toStringAsFixed(2);
-                                        List<String> _substrings = payQTY2.split('');
+                                        final payQTYe = qty.toStringAsFixed(2);
+                                        List<String> _substrings = payQTYe.split('');
                                         substrings = _substrings;
                                         inspect(substrings);
+                                        if (substrings[0] == '-') {
+                                          payQTY2 = payQTYe.substring(1);
+                                          inspect(payQTY2);
+                                        } else {
+                                          payQTY2 = qty.toStringAsFixed(2);
+                                        }
+                                        // final qty = (int.parse(payQTY) - sum(product2));
+                                        // payQTY2 = qty.toStringAsFixed(2);
+                                        // List<String> _substrings = payQTY2.split('');
+                                        // substrings = _substrings;
+                                        // inspect(substrings);
                                       });
                                 // debugPrint('Your code: ${_myNumber.text}');
                                 // Navigator.pop(context, _myNumber.text);
@@ -1027,10 +1049,21 @@ class _CartProducts2State extends State<CartProducts2> {
                           setState(() {
                             enable = true;
                             final qty = (int.parse(payQTY) - sum(product2));
-                            payQTY2 = qty.toStringAsFixed(2);
-                            List<String> _substrings = payQTY2.split('');
+                            final payQTYe = qty.toStringAsFixed(2);
+                            List<String> _substrings = payQTYe.split('');
                             substrings = _substrings;
                             inspect(substrings);
+                            if (substrings[0] == '-') {
+                              payQTY2 = payQTYe.substring(1);
+                              inspect(payQTY2);
+                            } else {
+                              payQTY2 = qty.toStringAsFixed(2);
+                            }
+                            // final qty = (int.parse(payQTY) - sum(product2));
+                            // payQTY2 = qty.toStringAsFixed(2);
+                            // List<String> _substrings = payQTY2.split('');
+                            // substrings = _substrings;
+                            // inspect(substrings);
                           });
                         } else {}
                       },
