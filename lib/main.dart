@@ -62,9 +62,9 @@ class MyApp extends StatelessWidget {
         ),
         home: token == null
             ? LoginPage()
-            : ipAddress == null
-                ? SettingprinterFirst()
-                : SelectedCustomer(),
+            // : ipAddress == null
+            //     ? SettingprinterFirst()
+            : SelectedCustomer(),
       ),
     );
   }
