@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if (!mounted) return;
                                   LoadingDialog.close(context);
                                   Navigator.pushAndRemoveUntil(context,
-                                      MaterialPageRoute(builder: (context) => SettingprinterFirst()), (route) => false);
+                                      MaterialPageRoute(builder: (context) => SelectedCustomer()), (route) => false);
                                 } on Exception catch (e) {
                                   LoadingDialog.close(context);
                                   showDialog(
