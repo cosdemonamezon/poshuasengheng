@@ -231,55 +231,55 @@ class _ProductPageState extends State<ProductPage> {
               children: [
                 IconButton(
                     onPressed: () async {
-                      if (ipAddress != '') {
-                        if (finalListProducts.isNotEmpty) {
-                          final cartProduct = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CartProducts2(
-                                        finalListProducts: finalListProducts,
-                                        customer: widget.customer,
-                                        printer: serialNumber,
-                                      )));
-                          setState(() {
-                            if (cartProduct != null) {
-                              finalListProducts = cartProduct;
-                              //listProducts = finalListProducts;
-                              //products = finalListProducts;
-                            } else {
-                              finalListProducts.clear();
-                              for (var i = 0; i < listProducts.length; i++) {
-                                if (listProducts[i].select == true) {
-                                  listProducts[i].select = false;
-                                  listProducts[i].qty = 1;
-                                  listProducts[i].qtyPack = 1;
-                                }
+                      // if (ipAddress != '') {
+                      if (finalListProducts.isNotEmpty) {
+                        final cartProduct = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CartProducts2(
+                                      finalListProducts: finalListProducts,
+                                      customer: widget.customer,
+                                      printer: serialNumber,
+                                    )));
+                        setState(() {
+                          if (cartProduct != null) {
+                            finalListProducts = cartProduct;
+                            //listProducts = finalListProducts;
+                            //products = finalListProducts;
+                          } else {
+                            finalListProducts.clear();
+                            for (var i = 0; i < listProducts.length; i++) {
+                              if (listProducts[i].select == true) {
+                                listProducts[i].select = false;
+                                listProducts[i].qty = 1;
+                                listProducts[i].qtyPack = 1;
                               }
                             }
-                            //inspect(listProducts);
-                          });
-                        }
-                      } else {
-                        final ok = await showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialogYes(
-                              title: 'แจ้งเตือน',
-                              description: 'กรุณาตั้งค่า IP Address',
-                              pressYes: () {
-                                Navigator.pop(context, true);
-                              },
-                            );
-                          },
-                        );
-                        if (ok == true) {
-                          if (!mounted) return;
-                          Navigator.push(context, MaterialPageRoute(builder: (context) {
-                            return Settingprinter();
-                          }));
-                        }
+                          }
+                          //inspect(listProducts);
+                        });
                       }
+                      // } else {
+                      //   final ok = await showDialog(
+                      //     context: context,
+                      //     barrierDismissible: false,
+                      //     builder: (BuildContext context) {
+                      //       return AlertDialogYes(
+                      //         title: 'แจ้งเตือน',
+                      //         description: 'กรุณาตั้งค่า IP Address',
+                      //         pressYes: () {
+                      //           Navigator.pop(context, true);
+                      //         },
+                      //       );
+                      //     },
+                      //   );
+                      //   if (ok == true) {
+                      //     if (!mounted) return;
+                      //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      //       return Settingprinter();
+                      //     }));
+                      //   }
+                      // }
                     },
                     icon: Icon(
                       Icons.shopping_cart,
